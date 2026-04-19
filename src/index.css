@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans overflow-x-hidden;
+    /* Base Night Blue Gradient */
+    background: radial-gradient(circle at 50% -20%, #0f172a 0%, #020617 100%);
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-bold tracking-tight;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-800 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-700;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-slate-900/40 backdrop-blur-xl border border-slate-800/50 rounded-2xl;
+  }
+
+  .nav-blur {
+    @apply backdrop-blur-lg bg-slate-950/60 border-b border-slate-800/50;
+  }
+
+  .button-primary {
+    @apply px-8 py-3 bg-primary text-primary-foreground font-bold rounded-full 
+           transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(56,189,248,0.4)]
+           active:scale-95;
+  }
+
+  .button-secondary {
+    @apply px-8 py-3 bg-transparent text-slate-100 font-bold rounded-full 
+           border border-slate-700 transition-all duration-300 
+           hover:bg-slate-800/50 hover:border-slate-500 hover:scale-105 
+           active:scale-95;
+  }
+
+  /* Layered Background System */
+  .bg-layer {
+    @apply fixed inset-0 w-full h-full object-cover transition-opacity duration-1000 -z-20;
+    pointer-events: none;
+  }
+
+  .bg-overlay {
+    @apply fixed inset-0 w-full h-full bg-[#020617]/70 backdrop-blur-[2px] -z-10;
+    pointer-events: none;
+  }
+
+  .pix-world {
+    @apply opacity-30 mix-blend-screen grayscale contrast-125;
+  }
+
+  .nebula-mix {
+    @apply opacity-20 mix-blend-color-dodge;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent;
+  }
+
+  .canvas-container {
+    @apply fixed inset-0 pointer-events-none -z-10;
+  }
+}
