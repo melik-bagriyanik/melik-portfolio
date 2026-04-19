@@ -125,6 +125,6 @@ export function VideoText({
         </video>
       </div>
       <span className="sr-only">{content}</span>
-    </Component>
+    </Tag>
   )
 }

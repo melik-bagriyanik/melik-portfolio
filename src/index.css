@@ -1,95 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    color-scheme: dark;
-  }
-  
-  html {
-    scroll-behavior: smooth;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+:root {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --primary: 221.2 83.2% 53.3%;
+  --secondary: 217.2 91.2% 59.8%;
+  --accent: 217.2 32.6% 17.5%;
+}
 
+@layer base {
   body {
-    @apply bg-background text-foreground font-sans overflow-x-hidden;
-    /* Base Night Blue Gradient */
-    background: radial-gradient(circle at 50% -20%, #0f172a 0%, #020617 100%);
-    background-attachment: fixed;
+    @apply bg-[#020617] text-slate-100 font-sans selection:bg-blue-500/30 selection:text-blue-200;
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display font-bold tracking-tight;
-  }
-
-  /* Custom Scrollbar */
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  ::-webkit-scrollbar-track {
-    @apply bg-background;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    @apply bg-slate-800 rounded-full;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-slate-700;
+    @apply font-display font-extrabold tracking-tight;
   }
 }
 
 @layer components {
-  .glass-card {
-    @apply bg-slate-900/40 backdrop-blur-xl border border-slate-800/50 rounded-2xl;
-  }
-
-  .nav-blur {
-    @apply backdrop-blur-lg bg-slate-950/60 border-b border-slate-800/50;
-  }
-
-  .button-primary {
-    @apply px-8 py-3 bg-primary text-primary-foreground font-bold rounded-full 
-           transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(56,189,248,0.4)]
-           active:scale-95;
-  }
-
-  .button-secondary {
-    @apply px-8 py-3 bg-transparent text-slate-100 font-bold rounded-full 
-           border border-slate-700 transition-all duration-300 
-           hover:bg-slate-800/50 hover:border-slate-500 hover:scale-105 
-           active:scale-95;
-  }
-
-  /* Layered Background System */
   .bg-layer {
-    @apply fixed inset-0 w-full h-full object-cover transition-opacity duration-1000 -z-20;
-    pointer-events: none;
+    @apply fixed inset-0 w-full h-full object-cover pointer-events-none;
+    z-index: -20;
+    transition: opacity 1s ease-in-out, transform 0.5s ease-out;
   }
 
   .bg-overlay {
-    @apply fixed inset-0 w-full h-full bg-[#020617]/70 backdrop-blur-[2px] -z-10;
-    pointer-events: none;
-  }
-
-  .pix-world {
-    @apply opacity-30 mix-blend-screen grayscale contrast-125;
-  }
-
-  .nebula-mix {
-    @apply opacity-20 mix-blend-color-dodge;
-  }
-}
-
-@layer utilities {
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent;
+    @apply fixed inset-0 w-full h-full pointer-events-none;
+    z-index: -10;
+    background: radial-gradient(circle at 50% 50%, rgba(2, 6, 23, 0.4) 0%, rgba(2, 6, 23, 0.8) 100%);
   }
 
   .canvas-container {
-    @apply fixed inset-0 pointer-events-none -z-10;
+    @apply fixed inset-0 pointer-events-none;
+    z-index: -15;
+    opacity: 0.6;
   }
+
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:border-white/20 transition-all duration-300;
+  }
+
+  .nav-blur {
+    @apply backdrop-blur-2xl bg-black/20;
+  }
+
+  .button-primary {
+    @apply px-8 py-3 bg-blue-600 text-white font-bold rounded-full 
+           transition-all duration-300 hover:scale-105 hover:bg-blue-500
+           hover:shadow-[0_0_30px_rgba(37,99,235,0.4)];
+  }
+
+  .button-secondary {
+    @apply px-8 py-3 bg-white/5 text-white font-bold rounded-full 
+           border border-white/10 transition-all duration-300 
+           hover:bg-white/10 hover:border-white/20 hover:scale-105;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-blue-600 to-blue-800;
+  }
+}
+
+.pix-world {
+  filter: saturate(0.5) brightness(0.6);
+  mix-blend-mode: plus-lighter;
+}
+
+.nebula-mix {
+  mix-blend-mode: screen;
 }

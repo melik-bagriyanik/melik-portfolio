@@ -14,28 +14,28 @@ export default {
           100: "#e0f2fe",
           200: "#bae6fd",
           300: "#7dd3fc",
-          400: "#38bdf8",
-          500: "#0ea5e9",
-          600: "#0284c7",
-          700: "#0369a1",
-          800: "#075985",
-          900: "#0c4a6e",
-          950: "#082f49",
+          400: "#60a5fa",
+          500: "#3b82f6",
+          600: "#2563eb",
+          700: "#1d4ed8",
+          800: "#1e40af",
+          900: "#1e3a8a",
+          950: "#172554",
         },
         primary: {
-          DEFAULT: "#38bdf8", // sky-400
-          foreground: "#000000",
+          DEFAULT: "#2563eb", // blue-600 (Royal Night Blue)
+          foreground: "#ffffff",
         },
         secondary: {
-          DEFAULT: "#818cf8", // indigo-400
+          DEFAULT: "#1e40af", // blue-800
           foreground: "#ffffff",
         },
         muted: {
-          DEFAULT: "#1e293b", // slate-800
+          DEFAULT: "#0f172a", // slate-900
           foreground: "#94a3b8", // slate-400
         },
         accent: {
-          DEFAULT: "#c084fc", // purple-400
+          DEFAULT: "#3b82f6", // blue-500
           foreground: "#ffffff",
         },
       },
