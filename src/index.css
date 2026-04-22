@@ -13,6 +13,10 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-[#020617] text-slate-100 font-sans selection:bg-blue-500/30 selection:text-blue-200;
     overflow-x: hidden;
