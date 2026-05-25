@@ -6,7 +6,6 @@ import { PerspectiveCamera, Environment, Float } from '@react-three/drei';
 import { animate } from 'animejs';
 import * as THREE from 'three';
 import { Globe } from './components/Globe';
-import { VideoText } from "@/components/ui/video-text";
 import { AnimatedText } from "@/components/ui/animated-underline-text-one";
 import {
   ContainerScroll,
@@ -14,8 +13,7 @@ import {
   GalleryCol,
   GalleryContainer,
 } from "@/components/ui/animated-gallery";
-import { InteractiveRobotSpline } from "@/components/ui/interactive-3d-robot";
-import { InteractiveNeuralVortex } from "@/components/ui/interactive-neural-vortex-background";
+import { MouseFollowingEyes } from "@/components/ui/mouse-following-eyes";
 
 // Types
 interface NavLink {
@@ -45,12 +43,12 @@ const Navbar = () => {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'nav-blur py-3' : 'bg-transparent py-8'}`}>
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
-          className="text-2xl font-display font-black tracking-tighter"
+          className="text-2xl font-display font-black tracking-tighter text-stone-900"
         >
-          MELİK<span className="text-primary italic">.AI</span>
+          MELİK<span className="text-gold-600 italic">.AI</span>
         </motion.div>
 
         <div className="hidden md:flex items-center gap-10">
@@ -61,7 +59,7 @@ const Navbar = () => {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="text-[11px] font-bold uppercase tracking-widest text-slate-300 hover:text-primary transition-colors"
+              className="text-[11px] font-bold uppercase tracking-widest text-stone-600 hover:text-gold-600 transition-colors"
             >
               {link.name}
             </motion.a>
@@ -69,13 +67,13 @@ const Navbar = () => {
           <motion.button
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="px-6 py-2 bg-blue-600/20 border border-blue-500/30 text-blue-400 text-[10px] font-bold uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all rounded-lg"
+            className="px-6 py-2 bg-gold-500/15 border border-gold-500/40 text-gold-700 text-[10px] font-bold uppercase tracking-widest hover:bg-gold-500 hover:text-white transition-all rounded-lg"
           >
             Sinyal Gönder
           </motion.button>
         </div>
 
-        <button className="md:hidden text-slate-100" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+        <button className="md:hidden text-stone-800" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
@@ -86,14 +84,14 @@ const Navbar = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="md:hidden absolute top-full left-0 right-0 bg-[#020617]/95 backdrop-blur-xl border border-blue-500/20 rounded-2xl mx-4 mt-2 overflow-hidden z-50 shadow-2xl shadow-blue-500/10"
+            className="md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl border border-stone-200 rounded-2xl mx-4 mt-2 overflow-hidden z-50 shadow-2xl shadow-gold-500/10"
           >
             <div className="flex flex-col p-8 gap-6">
               {navLinks.map((link) => (
-                <a 
-                  key={link.name} 
-                  href={link.href} 
-                  className="text-lg font-bold uppercase tracking-widest text-slate-100 hover:text-primary transition-colors"
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className="text-lg font-bold uppercase tracking-widest text-stone-800 hover:text-gold-600 transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {link.name}
@@ -121,7 +119,7 @@ const Hero = () => {
         delay: 500
       });
     }
-    
+
     if (textRef.current) {
       animate(textRef.current, {
         opacity: [0, 1],
@@ -140,36 +138,28 @@ const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
-          className="inline-block px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-[10px] font-black tracking-[0.3em] text-blue-400 mb-8 uppercase"
+          className="inline-block px-4 py-1.5 rounded-full bg-gold-500/10 border border-gold-500/30 text-[10px] font-black tracking-[0.3em] text-gold-700 mb-8 uppercase"
         >
           System Initialized // Core Node Alpha
         </motion.div>
 
-        <h1 
+        <h1
           ref={headingRef}
-          className="text-6xl md:text-8xl font-display font-black mb-8 tracking-tighter leading-[0.85] opacity-0"
+          className="text-6xl md:text-8xl font-display font-black mb-8 tracking-tighter leading-[0.85] opacity-0 text-stone-900"
         >
           Limitlerin <br />
-          <div className="relative h-[80px] md:h-[120px] w-full flex items-center justify-center overflow-hidden">
-            <VideoText 
-              src="https://cdn.magicui.design/ocean-small.webm"
-              className="bg-transparent"
-              fontSize={14}
-              fontWeight={900}
-              fontFamily="Outfit"
-            >
-              ÖTESİNDE
-            </VideoText>
-          </div>
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-gold-400 via-gold-600 to-gold-700 italic">
+            ÖTESİNDE
+          </span>
         </h1>
 
-        <p 
+        <p
           ref={textRef}
-          className="max-w-2xl mx-auto text-slate-400 text-lg md:text-xl mb-12 leading-relaxed opacity-0"
+          className="max-w-2xl mx-auto text-stone-600 text-lg md:text-xl mb-12 leading-relaxed opacity-0"
         >
-          Global ölçekli sistemler, derin veri yapıları ve kusursuz 3D 
-          arayüzlerle dijital dünyayı yeniden şekillendiriyorum. 
-          <span className="text-blue-200"> Gece mavisi estetiğiyle fütüristik bir dokunuş.</span>
+          Global ölçekli sistemler, derin veri yapıları ve kusursuz 3D
+          arayüzlerle dijital dünyayı yeniden şekillendiriyorum.
+          <span className="text-gold-700"> Aydınlık altın estetiğiyle modern bir dokunuş.</span>
         </p>
 
         <div className="flex flex-col sm:flex-row gap-5 justify-center">
@@ -186,38 +176,19 @@ const Hero = () => {
 export default function App() {
   const globeRef = useRef<THREE.Group>(null!);
   const worldBgRef = useRef<HTMLImageElement>(null);
-  const nebulaBgRef = useRef<HTMLImageElement>(null);
-  const spaceBgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      const vh = window.innerHeight;
-      
+
       // Globe Parallax
       if (globeRef.current) {
         globeRef.current.position.y = scrollY * 0.002;
         globeRef.current.rotation.y = scrollY * 0.0005;
       }
 
-      // Background Opacities and Parallax
       if (worldBgRef.current) {
-        worldBgRef.current.style.transform = `translateY(${scrollY * 0.1}px) scale(${1 + scrollY * 0.0001})`;
-        worldBgRef.current.style.opacity = `${Math.max(0, 0.6 - scrollY / (vh * 0.8))}`;
-      }
-
-      if (nebulaBgRef.current) {
-        const nebulaStart = 0;
-        const opacity = Math.min(0.5, (scrollY - nebulaStart) / vh);
-        nebulaBgRef.current.style.opacity = `${opacity}`;
-        nebulaBgRef.current.style.transform = `translateY(${(scrollY) * -0.05}px) scale(1.15)`;
-      }
-
-      if (spaceBgRef.current) {
-        const spaceStart = vh;
-        const opacity = Math.min(0.4, (scrollY - spaceStart) / vh);
-        spaceBgRef.current.style.opacity = `${opacity}`;
-        spaceBgRef.current.style.transform = `translateY(${(scrollY - vh) * -0.02}px)`;
+        worldBgRef.current.style.transform = `translateY(${scrollY * 0.05}px)`;
       }
     };
     window.addEventListener('scroll', handleScroll);
@@ -226,20 +197,17 @@ export default function App() {
   }, []);
 
   return (
-    <div className="antialiased selection:bg-primary/40 selection:text-white bg-[#020617]">
-      {/* Cinematic Background Layers */}
-      <img ref={worldBgRef} src="/backgrounds/world.jpg" className="bg-layer pix-world" alt="" style={{ opacity: 0.6 }} />
-      <img ref={nebulaBgRef} src="/backgrounds/nebula.png" className="bg-layer nebula-mix" alt="" style={{ opacity: 0 }} />
-      <img ref={spaceBgRef} src="/backgrounds/space.png" className="bg-layer" alt="" style={{ opacity: 0 }} />
+    <div className="antialiased bg-[#fafaf6]">
+      {/* Soft light backdrop */}
+      <img ref={worldBgRef} src="/backgrounds/world.jpg" className="bg-layer pix-world" alt="" />
       <div className="bg-overlay" />
-      <InteractiveNeuralVortex className="!z-[1]" opacity={0.9} />
 
       {/* 3D Background */}
       <div className="canvas-container">
         <Canvas dpr={[1, 2]}>
           <PerspectiveCamera makeDefault position={[0, 0, 8]} fov={50} />
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} color="#3b82f6" intensity={1} />
+          <ambientLight intensity={0.7} />
+          <pointLight position={[10, 10, 10]} color="#c9a44b" intensity={1.2} />
           <Environment preset="city" />
           <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
             <group ref={globeRef}>
@@ -252,14 +220,14 @@ export default function App() {
       <Navbar />
       <main className="relative z-10">
         <Hero />
-        
+
         <section id="about" className="py-32 relative overflow-hidden">
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex flex-col items-center mb-16">
               <AnimatedText
                 text="Hakkımda"
-                textClassName="text-4xl md:text-5xl font-black text-white"
-                underlineClassName="text-blue-500"
+                textClassName="text-4xl md:text-5xl font-black text-stone-900"
+                underlineClassName="text-gold-500"
               />
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-12 items-center">
@@ -270,16 +238,16 @@ export default function App() {
                 transition={{ duration: 0.8 }}
                 className="order-2 lg:order-1"
               >
-                <p className="text-slate-400 text-xl md:text-2xl leading-relaxed font-light">
-                  Ben Melik, <span className="text-blue-400 font-medium">Yapay Zeka Mimarı</span> ve <span className="text-blue-400 font-medium">Full-Stack Geliştirici</span> olarak dijital sınırları zorluyorum.
+                <p className="text-stone-700 text-xl md:text-2xl leading-relaxed font-light">
+                  Ben Melik, <span className="text-gold-700 font-medium">Yapay Zeka Mimarı</span> ve <span className="text-gold-700 font-medium">Full-Stack Geliştirici</span> olarak dijital sınırları zorluyorum.
                   Karmaşık veri yapılarını estetik 3D dünyalarla birleştirerek, sadece çalışan değil, ilham veren sistemler inşa ediyorum.
                 </p>
-                <div className="mt-8 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-blue-500/20 bg-blue-500/5">
+                <div className="mt-8 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-gold-500/30 bg-gold-500/10">
                   <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold-500 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-gold-600" />
                   </span>
-                  <span className="text-[10px] uppercase tracking-widest text-blue-300 font-bold">
+                  <span className="text-[10px] uppercase tracking-widest text-gold-700 font-bold">
                     Whobee ile etkileşime geç →
                   </span>
                 </div>
@@ -296,14 +264,13 @@ export default function App() {
                   className="absolute inset-0 pointer-events-none"
                   style={{
                     background:
-                      'radial-gradient(circle at center, rgba(37,99,235,0.18) 0%, rgba(2,6,23,0) 70%)',
+                      'radial-gradient(circle at center, rgba(201,164,75,0.18) 0%, rgba(250,250,246,0) 70%)',
                     filter: 'blur(40px)',
                   }}
                 />
-                <InteractiveRobotSpline
-                  scene="https://prod.spline.design/PyzDhpQ9E5f1E3MT/scene.splinecode"
-                  className="absolute inset-0 w-full h-full"
-                />
+                <div className="absolute inset-0 w-full h-full">
+                  <MouseFollowingEyes />
+                </div>
               </motion.div>
             </div>
           </div>
@@ -312,7 +279,7 @@ export default function App() {
         <Skills />
         <Projects />
       </main>
-      
+
       <Contact />
     </div>
   );
@@ -323,17 +290,17 @@ const Skills = () => {
   const skillCategories = [
     {
       title: 'Architectures',
-      icon: <Layout className="text-blue-400" size={24} />,
+      icon: <Layout className="text-gold-500" size={24} />,
       skills: ['React 19', 'Next.js 15', 'Three.js', 'PostgreSQL', 'Node.js'],
     },
     {
       title: 'Intelligence',
-      icon: <Database className="text-blue-500" size={24} />,
+      icon: <Database className="text-gold-600" size={24} />,
       skills: ['Prisma', 'GraphQL', 'AWS Cloud', 'Docker', 'Redis', 'Tailwind'],
     },
     {
       title: 'Interactions',
-      icon: <Cpu className="text-blue-600" size={24} />,
+      icon: <Cpu className="text-gold-700" size={24} />,
       skills: ['Anime.js', 'Framer Motion', 'React Native', 'Expo', 'Python'],
     },
   ];
@@ -342,10 +309,10 @@ const Skills = () => {
     <section id="skills" className="py-32 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col items-center mb-24">
-          <AnimatedText 
-            text="Teknolojik Yığın" 
-            textClassName="text-4xl md:text-6xl font-black text-white"
-            underlineClassName="text-blue-500"
+          <AnimatedText
+            text="Teknolojik Yığın"
+            textClassName="text-4xl md:text-6xl font-black text-stone-900"
+            underlineClassName="text-gold-500"
           />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -356,15 +323,15 @@ const Skills = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.15, duration: 0.8 }}
-              className="glass-card p-10 group hover:-translate-y-2 transition-all duration-500 border-white/5"
+              className="glass-card p-10 group hover:-translate-y-2 transition-all duration-500"
             >
-              <div className="mb-8 w-14 h-14 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20 group-hover:border-blue-500/50 transition-colors">
+              <div className="mb-8 w-14 h-14 rounded-xl bg-gold-500/10 flex items-center justify-center border border-gold-500/30 group-hover:border-gold-500 transition-colors">
                 {cat.icon}
               </div>
-              <h3 className="text-xl mb-6 uppercase tracking-widest font-black text-white">{cat.title}</h3>
+              <h3 className="text-xl mb-6 uppercase tracking-widest font-black text-stone-900">{cat.title}</h3>
               <div className="flex flex-wrap gap-2">
                 {cat.skills.map(skill => (
-                  <span key={skill} className="px-3 py-1.5 bg-white/5 rounded-md text-[10px] font-bold tracking-wider text-slate-400 group-hover:text-blue-400 transition-colors border border-white/5">
+                  <span key={skill} className="px-3 py-1.5 bg-cream-100 rounded-md text-[10px] font-bold tracking-wider text-stone-600 group-hover:text-gold-700 transition-colors border border-stone-200">
                     {skill}
                   </span>
                 ))}
@@ -404,11 +371,11 @@ const Projects = () => {
           <div className="max-w-3xl">
             <AnimatedText
               text="Seçilmiş Operasyonlar"
-              textClassName="text-4xl md:text-7xl font-black text-white text-left"
-              underlineClassName="text-blue-500"
+              textClassName="text-4xl md:text-7xl font-black text-stone-900 text-left"
+              underlineClassName="text-gold-500"
               className="items-start"
             />
-            <p className="text-slate-400 text-xl mt-8 leading-relaxed">Projelerim sadece kod değil, birer dijital sanat eseri ve çözüm protokolüdür.</p>
+            <p className="text-stone-600 text-xl mt-8 leading-relaxed">Projelerim sadece kod değil, birer dijital sanat eseri ve çözüm protokolüdür.</p>
           </div>
         </div>
       </div>
@@ -419,7 +386,7 @@ const Projects = () => {
             className="pointer-events-none absolute inset-0 z-0"
             style={{
               background:
-                'radial-gradient(ellipse at center, rgba(37,99,235,0.25) 0%, rgba(2,6,23,0) 70%)',
+                'radial-gradient(ellipse at center, rgba(201,164,75,0.18) 0%, rgba(250,250,246,0) 70%)',
               filter: 'blur(64px)',
             }}
           />
@@ -428,7 +395,7 @@ const Projects = () => {
               {PROJECT_IMAGES_1.map((imageUrl, index) => (
                 <img
                   key={index}
-                  className="aspect-video block h-auto max-h-full w-full rounded-md object-cover shadow-2xl shadow-blue-500/10 border border-white/5"
+                  className="aspect-video block h-auto max-h-full w-full rounded-md object-cover shadow-xl shadow-gold-700/10 border border-stone-200"
                   src={imageUrl}
                   alt="Proje görseli"
                 />
@@ -438,7 +405,7 @@ const Projects = () => {
               {PROJECT_IMAGES_2.map((imageUrl, index) => (
                 <img
                   key={index}
-                  className="aspect-video block h-auto max-h-full w-full rounded-md object-cover shadow-2xl shadow-blue-500/10 border border-white/5"
+                  className="aspect-video block h-auto max-h-full w-full rounded-md object-cover shadow-xl shadow-gold-700/10 border border-stone-200"
                   src={imageUrl}
                   alt="Proje görseli"
                 />
@@ -448,7 +415,7 @@ const Projects = () => {
               {PROJECT_IMAGES_3.map((imageUrl, index) => (
                 <img
                   key={index}
-                  className="aspect-video block h-auto max-h-full w-full rounded-md object-cover shadow-2xl shadow-blue-500/10 border border-white/5"
+                  className="aspect-video block h-auto max-h-full w-full rounded-md object-cover shadow-xl shadow-gold-700/10 border border-stone-200"
                   src={imageUrl}
                   alt="Proje görseli"
                 />
@@ -496,7 +463,7 @@ const Contact = () => {
   return (
     <footer id="contact" className="min-h-screen relative flex items-center justify-center overflow-hidden py-32">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/10 blur-[140px] rounded-full" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gold-300/20 blur-[140px] rounded-full" />
       </div>
 
       <div className="max-w-5xl w-full mx-auto px-6 relative z-10">
@@ -512,21 +479,21 @@ const Contact = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="inline-flex items-center gap-2 mb-8 px-4 py-1.5 rounded-full border border-blue-500/20 bg-blue-500/5"
+            className="inline-flex items-center gap-2 mb-8 px-4 py-1.5 rounded-full border border-gold-500/30 bg-gold-500/10"
           >
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold-500 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-gold-600" />
             </span>
-            <span className="text-[10px] uppercase tracking-widest text-blue-300 font-bold">
+            <span className="text-[10px] uppercase tracking-widest text-gold-700 font-bold">
               Yeni projelere açık
             </span>
           </motion.div>
 
-          <h2 className="text-5xl md:text-7xl font-black tracking-tighter text-white mb-6">
-            Hadi bir şey <span className="italic font-light text-blue-400">inşa edelim</span>
+          <h2 className="text-5xl md:text-7xl font-black tracking-tighter text-stone-900 mb-6">
+            Hadi bir şey <span className="italic font-light text-gold-600">inşa edelim</span>
           </h2>
-          <p className="text-slate-400 text-lg md:text-xl max-w-xl mx-auto leading-relaxed font-light">
+          <p className="text-stone-600 text-lg md:text-xl max-w-xl mx-auto leading-relaxed font-light">
             Aklınızdaki fikri birlikte somutlaştıralım. Mesajınızı bırakın, en kısa sürede dönüş yapayım.
           </p>
         </motion.div>
@@ -539,24 +506,24 @@ const Contact = () => {
           transition={{ delay: 0.2 }}
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.99 }}
-          className="group block relative mb-6 p-6 md:p-8 rounded-2xl bg-gradient-to-br from-blue-600/10 via-blue-500/5 to-transparent border border-blue-500/20 hover:border-blue-400/50 transition-all overflow-hidden"
+          className="group block relative mb-6 p-6 md:p-8 rounded-2xl bg-gradient-to-br from-gold-300/30 via-gold-200/20 to-transparent border border-gold-500/30 hover:border-gold-500 transition-all overflow-hidden"
         >
-          <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/10 blur-[80px] rounded-full group-hover:bg-blue-500/20 transition-all duration-700" />
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-gold-300/30 blur-[80px] rounded-full group-hover:bg-gold-400/40 transition-all duration-700" />
           <div className="relative flex items-center justify-between gap-4">
             <div className="flex items-center gap-5 min-w-0">
-              <div className="shrink-0 w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center group-hover:bg-blue-500 group-hover:border-blue-500 transition-all">
-                <Mail className="w-5 h-5 text-blue-400 group-hover:text-white transition-colors" />
+              <div className="shrink-0 w-12 h-12 rounded-xl bg-gold-500/15 border border-gold-500/40 flex items-center justify-center group-hover:bg-gold-500 group-hover:border-gold-500 transition-all">
+                <Mail className="w-5 h-5 text-gold-700 group-hover:text-white transition-colors" />
               </div>
               <div className="min-w-0">
-                <div className="text-[10px] uppercase tracking-widest text-blue-400 font-bold mb-1">
+                <div className="text-[10px] uppercase tracking-widest text-gold-700 font-bold mb-1">
                   E-posta gönder
                 </div>
-                <div className="text-lg md:text-2xl font-bold text-white truncate">
+                <div className="text-lg md:text-2xl font-bold text-stone-900 truncate">
                   {email}
                 </div>
               </div>
             </div>
-            <ArrowUpRight className="shrink-0 w-6 h-6 text-slate-400 group-hover:text-blue-400 group-hover:-translate-y-1 group-hover:translate-x-1 transition-all" />
+            <ArrowUpRight className="shrink-0 w-6 h-6 text-stone-500 group-hover:text-gold-600 group-hover:-translate-y-1 group-hover:translate-x-1 transition-all" />
           </div>
         </motion.a>
 
@@ -568,23 +535,23 @@ const Contact = () => {
           transition={{ delay: 0.3 }}
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.99 }}
-          className="group block mb-10 p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/20 hover:bg-white/[0.04] transition-all"
+          className="group block mb-10 p-6 rounded-2xl bg-white/70 border border-stone-200 hover:border-gold-400 hover:bg-white transition-all"
         >
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-5 min-w-0">
-              <div className="shrink-0 w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-all">
-                <Phone className="w-5 h-5 text-slate-300" />
+              <div className="shrink-0 w-12 h-12 rounded-xl bg-cream-100 border border-stone-200 flex items-center justify-center group-hover:bg-cream-200 transition-all">
+                <Phone className="w-5 h-5 text-stone-700" />
               </div>
               <div className="min-w-0">
-                <div className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">
+                <div className="text-[10px] uppercase tracking-widest text-stone-500 font-bold mb-1">
                   Telefon
                 </div>
-                <div className="text-lg md:text-xl font-bold text-white">
+                <div className="text-lg md:text-xl font-bold text-stone-900">
                   {phone}
                 </div>
               </div>
             </div>
-            <ArrowUpRight className="shrink-0 w-5 h-5 text-slate-600 group-hover:text-slate-300 group-hover:-translate-y-1 group-hover:translate-x-1 transition-all" />
+            <ArrowUpRight className="shrink-0 w-5 h-5 text-stone-400 group-hover:text-stone-700 group-hover:-translate-y-1 group-hover:translate-x-1 transition-all" />
           </div>
         </motion.a>
 
@@ -601,22 +568,22 @@ const Contact = () => {
               transition={{ delay: 0.4 + i * 0.1 }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="group flex items-center justify-between gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/20 hover:bg-white/[0.04] transition-all"
+              className="group flex items-center justify-between gap-4 p-5 rounded-2xl bg-white/70 border border-stone-200 hover:border-gold-400 hover:bg-white transition-all"
             >
               <div className="flex items-center gap-4 min-w-0">
-                <div className="shrink-0 w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 group-hover:text-white group-hover:bg-white/10 transition-all">
+                <div className="shrink-0 w-10 h-10 rounded-lg bg-cream-100 border border-stone-200 flex items-center justify-center text-stone-700 group-hover:text-gold-700 group-hover:bg-cream-200 transition-all">
                   {s.icon}
                 </div>
                 <div className="min-w-0">
-                  <div className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-0.5">
+                  <div className="text-[10px] uppercase tracking-widest text-stone-500 font-bold mb-0.5">
                     {s.label}
                   </div>
-                  <div className="text-sm font-bold text-white truncate">
+                  <div className="text-sm font-bold text-stone-900 truncate">
                     {s.handle}
                   </div>
                 </div>
               </div>
-              <ArrowUpRight className="shrink-0 w-4 h-4 text-slate-600 group-hover:text-slate-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all" />
+              <ArrowUpRight className="shrink-0 w-4 h-4 text-stone-400 group-hover:text-stone-700 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all" />
             </motion.a>
           ))}
         </div>
@@ -626,10 +593,10 @@ const Contact = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.7 }}
-          className="mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] uppercase tracking-widest text-slate-500"
+          className="mt-20 pt-8 border-t border-stone-200 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] uppercase tracking-widest text-stone-500"
         >
           <div>© {new Date().getFullYear()} Melik Bağrıyanık</div>
-          <div className="font-bold text-slate-400">MELİK<span className="text-blue-400 italic">.AI</span></div>
+          <div className="font-bold text-stone-700">MELİK<span className="text-gold-600 italic">.AI</span></div>
         </motion.div>
       </div>
     </footer>

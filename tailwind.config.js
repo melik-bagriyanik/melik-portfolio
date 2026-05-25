@@ -7,36 +7,48 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "#020617", // slate-950 (Midnight)
-        foreground: "#f8fafc", // slate-50
-        night: {
-          50: "#f0f9ff",
-          100: "#e0f2fe",
-          200: "#bae6fd",
-          300: "#7dd3fc",
-          400: "#60a5fa",
-          500: "#3b82f6",
-          600: "#2563eb",
-          700: "#1d4ed8",
-          800: "#1e40af",
-          900: "#1e3a8a",
-          950: "#172554",
+        background: "#fafaf6", // warm off-white
+        foreground: "#1c1917", // stone-900
+        cream: {
+          50: "#fdfcf8",
+          100: "#faf6ec",
+          200: "#f3ead4",
+          300: "#e9dbb4",
+          400: "#dcc78c",
+          500: "#cbb069",
+          600: "#b89549",
+          700: "#917339",
+          800: "#65522b",
+          900: "#3f3319",
+        },
+        gold: {
+          DEFAULT: "#c9a44b",
+          50: "#fdfaf1",
+          100: "#fbf3da",
+          200: "#f4e3ad",
+          300: "#ebcf7d",
+          400: "#dbb74f",
+          500: "#c9a44b",
+          600: "#a98438",
+          700: "#84682d",
+          800: "#5b4820",
+          900: "#3a2e15",
         },
         primary: {
-          DEFAULT: "#2563eb", // blue-600 (Royal Night Blue)
+          DEFAULT: "#c9a44b", // soft champagne gold
           foreground: "#ffffff",
         },
         secondary: {
-          DEFAULT: "#1e40af", // blue-800
-          foreground: "#ffffff",
+          DEFAULT: "#dcc78c", // pale gold
+          foreground: "#3a2e15",
         },
         muted: {
-          DEFAULT: "#0f172a", // slate-900
-          foreground: "#94a3b8", // slate-400
+          DEFAULT: "#f5f1e8",
+          foreground: "#78716c", // stone-500
         },
         accent: {
-          DEFAULT: "#3b82f6", // blue-500
-          foreground: "#ffffff",
+          DEFAULT: "#dbb74f",
+          foreground: "#3a2e15",
         },
       },
       fontFamily: {

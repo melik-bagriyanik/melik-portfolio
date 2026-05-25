@@ -31,7 +31,7 @@ const GlobePoints = () => {
     <Points ref={pointsRef} positions={positions} stride={3} frustumCulled={false}>
       <PointMaterial
         transparent
-        color="#2563eb"
+        color="#c9a44b"
         size={0.015}
         sizeAttenuation={true}
         depthWrite={false}
@@ -45,7 +45,7 @@ const GlobeAtmosphere = () => {
   return (
     <Sphere args={[2.55, 64, 64]}>
       <meshBasicMaterial
-        color="#1e40af"
+        color="#dcc78c"
         transparent
         opacity={0.05}
         side={THREE.BackSide}
@@ -58,11 +58,11 @@ const GlowCore = () => {
   return (
     <Sphere args={[2.45, 64, 64]}>
       <MeshDistortMaterial
-        color="#0f172a"
+        color="#f5f1e8"
         speed={2}
         distort={0.4}
         transparent
-        opacity={0.3}
+        opacity={0.15}
       />
     </Sphere>
   );
@@ -76,8 +76,8 @@ export const Globe = () => {
       <GlowCore />
       
       {/* Dynamic Lighting */}
-      <pointLight position={[10, 10, 10]} intensity={2} color="#2563eb" />
-      <pointLight position={[-10, -10, -10]} intensity={1} color="#1e40af" />
+      <pointLight position={[10, 10, 10]} intensity={2} color="#c9a44b" />
+      <pointLight position={[-10, -10, -10]} intensity={1} color="#dcc78c" />
     </group>
   );
 };
