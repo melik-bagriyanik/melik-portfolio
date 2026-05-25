@@ -95,6 +95,28 @@
   }
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes arcade-card-in {
+  0%   { opacity: 0; transform: scale(0.9) translateY(12px); }
+  60%  { opacity: 1; transform: scale(1.02) translateY(0); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+.arcade-card-anim {
+  animation: arcade-card-in 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes arcade-ring-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201, 164, 75, 0.55); }
+  50%      { box-shadow: 0 0 0 14px rgba(201, 164, 75, 0); }
+}
+.arcade-card-ring {
+  animation: arcade-ring-pulse 1.6s ease-out infinite;
+}
+
 .pix-world {
   filter: saturate(0.4) brightness(1.15) contrast(0.9);
   mix-blend-mode: lighten;

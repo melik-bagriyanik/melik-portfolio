@@ -108,8 +108,8 @@ export const GalleryContainer = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement> & HTMLMotionProps<"div">) => {
   const { scrollYProgress } = useContainerScrollContext()
-  const rotateX = useTransform(scrollYProgress, [0, 0.5], [75, 0])
-  const scale = useTransform(scrollYProgress, [0.5, 0.9], [1.2, 1])
+  const rotateX = useTransform(scrollYProgress, [0, 0.5], [40, 0])
+  const scale = useTransform(scrollYProgress, [0.5, 0.9], [1.08, 1])
 
   return (
     <motion.div
@@ -122,6 +122,7 @@ export const GalleryContainer = ({
         scale,
         transformStyle: "preserve-3d",
         perspective: "1000px",
+        willChange: "transform",
         ...style,
       }}
       {...props}
@@ -146,6 +147,7 @@ export const GalleryCol = ({
       className={cn("relative flex w-full flex-col gap-2 ", className)}
       style={{
         y,
+        willChange: "transform",
         ...style,
       }}
       {...props}

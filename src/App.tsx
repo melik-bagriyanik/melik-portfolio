@@ -14,6 +14,7 @@ import {
   GalleryContainer,
 } from "@/components/ui/animated-gallery";
 import { MouseFollowingEyes } from "@/components/ui/mouse-following-eyes";
+import { ExperienceArcade } from "@/components/ui/experience-arcade";
 
 // Types
 interface NavLink {
@@ -278,6 +279,7 @@ export default function App() {
 
         <Skills />
         <Projects />
+        <ExperienceSection />
       </main>
 
       <Contact />
@@ -346,21 +348,18 @@ const Skills = () => {
 
 const PROJECT_IMAGES_1 = [
   '/projects/ecommerce.png',
-  'https://images.unsplash.com/photo-1551434678-e076c223a692?w=900&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=900&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900&auto=format&fit=crop&q=60',
+  'https://images.unsplash.com/photo-1551434678-e076c223a692?w=560&auto=format&fit=crop&q=55',
+  'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=560&auto=format&fit=crop&q=55',
 ];
 const PROJECT_IMAGES_2 = [
   '/projects/ai.png',
-  'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=900&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=900&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1518770660439-4636190af475?w=900&auto=format&fit=crop&q=60',
+  'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=560&auto=format&fit=crop&q=55',
+  'https://images.unsplash.com/photo-1518770660439-4636190af475?w=560&auto=format&fit=crop&q=55',
 ];
 const PROJECT_IMAGES_3 = [
   '/projects/jewelry.png',
-  'https://images.unsplash.com/photo-1605106702734-205df224ecce?w=900&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?w=900&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=900&auto=format&fit=crop&q=60',
+  'https://images.unsplash.com/photo-1605106702734-205df224ecce?w=560&auto=format&fit=crop&q=55',
+  'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=560&auto=format&fit=crop&q=55',
 ];
 
 const Projects = () => {
@@ -380,7 +379,7 @@ const Projects = () => {
         </div>
       </div>
 
-      <ContainerScroll className="relative h-[350vh]">
+      <ContainerScroll className="relative h-[200vh]">
         <ContainerSticky className="h-svh">
           <div
             className="pointer-events-none absolute inset-0 z-0"
@@ -391,39 +390,79 @@ const Projects = () => {
             }}
           />
           <GalleryContainer className="max-w-7xl mx-auto px-6">
-            <GalleryCol yRange={['-10%', '2%']} className="-mt-2">
+            <GalleryCol yRange={['-6%', '1%']} className="-mt-2">
               {PROJECT_IMAGES_1.map((imageUrl, index) => (
                 <img
                   key={index}
-                  className="aspect-video block h-auto max-h-full w-full rounded-md object-cover shadow-xl shadow-gold-700/10 border border-stone-200"
+                  className="aspect-video block h-auto max-h-full w-full rounded-md object-cover shadow-md shadow-gold-700/10 border border-stone-200"
                   src={imageUrl}
                   alt="Proje görseli"
+                  loading="lazy"
+                  decoding="async"
                 />
               ))}
             </GalleryCol>
-            <GalleryCol className="mt-[-50%]" yRange={['15%', '5%']}>
+            <GalleryCol className="mt-[-30%]" yRange={['8%', '3%']}>
               {PROJECT_IMAGES_2.map((imageUrl, index) => (
                 <img
                   key={index}
-                  className="aspect-video block h-auto max-h-full w-full rounded-md object-cover shadow-xl shadow-gold-700/10 border border-stone-200"
+                  className="aspect-video block h-auto max-h-full w-full rounded-md object-cover shadow-md shadow-gold-700/10 border border-stone-200"
                   src={imageUrl}
                   alt="Proje görseli"
+                  loading="lazy"
+                  decoding="async"
                 />
               ))}
             </GalleryCol>
-            <GalleryCol yRange={['-10%', '2%']} className="-mt-2">
+            <GalleryCol yRange={['-6%', '1%']} className="-mt-2">
               {PROJECT_IMAGES_3.map((imageUrl, index) => (
                 <img
                   key={index}
-                  className="aspect-video block h-auto max-h-full w-full rounded-md object-cover shadow-xl shadow-gold-700/10 border border-stone-200"
+                  className="aspect-video block h-auto max-h-full w-full rounded-md object-cover shadow-md shadow-gold-700/10 border border-stone-200"
                   src={imageUrl}
                   alt="Proje görseli"
+                  loading="lazy"
+                  decoding="async"
                 />
               ))}
             </GalleryCol>
           </GalleryContainer>
         </ContainerSticky>
       </ContainerScroll>
+    </section>
+  );
+};
+
+const ExperienceSection = () => {
+  return (
+    <section id="experience" className="py-32 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="flex flex-col items-center mb-10 text-center">
+          <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full border border-gold-500/30 bg-gold-500/10">
+            <span className="text-base">⌨️</span>
+            <span className="text-[10px] uppercase tracking-widest text-gold-700 font-bold">
+              Klavye ile oyna · WASD / Ok tuşları
+            </span>
+          </div>
+          <AnimatedText
+            text="Deneyim Pisti"
+            textClassName="text-4xl md:text-6xl font-black text-stone-900"
+            underlineClassName="text-gold-500"
+          />
+          <p className="text-stone-600 text-base md:text-lg mt-6 max-w-2xl leading-relaxed">
+            Pistte arabayı sür ve her durakta o döneme dair bir hikaye keşfet. <span className="text-stone-800 font-semibold">Klavyenden W A S D</span> ya da ok tuşlarını kullanarak başla — bir durağa girince kart otomatik açılır.
+          </p>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
+          <ExperienceArcade />
+        </motion.div>
+      </div>
     </section>
   );
 };
