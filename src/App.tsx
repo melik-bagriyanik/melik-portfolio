@@ -3,7 +3,6 @@ import { Menu, X, Database, Layout, Cpu, Mail, Phone, ArrowUpRight } from 'lucid
 import { useState, useEffect, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { PerspectiveCamera, Environment, Float } from '@react-three/drei';
-import { animate } from 'animejs';
 import * as THREE from 'three';
 import { Globe } from './components/Globe';
 import { AnimatedText } from "@/components/ui/animated-underline-text-one";
@@ -107,68 +106,158 @@ const Navbar = () => {
 };
 
 const Hero = () => {
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const textRef = useRef<HTMLParagraphElement>(null);
-
-  useEffect(() => {
-    if (headingRef.current) {
-      animate(headingRef.current, {
-        opacity: [0, 1],
-        translateY: [40, 0],
-        duration: 2000,
-        easing: 'easeOutExpo',
-        delay: 500
-      });
-    }
-
-    if (textRef.current) {
-      animate(textRef.current, {
-        opacity: [0, 1],
-        translateY: [20, 0],
-        duration: 2000,
-        easing: 'easeOutExpo',
-        delay: 800
-      });
-    }
-  }, []);
+  const scrollToExperience = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const el = document.getElementById('experience');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   return (
-    <section className="relative min-h-[90vh] flex flex-col items-center justify-center pt-20">
-      <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2 }}
-          className="inline-block px-4 py-1.5 rounded-full bg-gold-500/10 border border-gold-500/30 text-[10px] font-black tracking-[0.3em] text-gold-700 mb-8 uppercase"
-        >
-          System Initialized // Core Node Alpha
-        </motion.div>
+    <section className="relative min-h-screen flex items-center pt-28 pb-20 overflow-hidden">
+      <div className="absolute top-32 -left-32 w-[440px] h-[440px] bg-gold-300/25 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-20 -right-32 w-[400px] h-[400px] bg-cream-300/40 rounded-full blur-[120px] pointer-events-none" />
 
-        <h1
-          ref={headingRef}
-          className="text-6xl md:text-8xl font-display font-black mb-8 tracking-tighter leading-[0.85] opacity-0 text-stone-900"
-        >
-          Limitlerin <br />
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-gold-400 via-gold-600 to-gold-700 italic">
-            ÖTESİNDE
-          </span>
-        </h1>
+      <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
 
-        <p
-          ref={textRef}
-          className="max-w-2xl mx-auto text-stone-600 text-lg md:text-xl mb-12 leading-relaxed opacity-0"
-        >
-          Global ölçekli sistemler, derin veri yapıları ve kusursuz 3D
-          arayüzlerle dijital dünyayı yeniden şekillendiriyorum.
-          <span className="text-gold-700"> Aydınlık altın estetiğiyle modern bir dokunuş.</span>
-        </p>
+          <div className="lg:col-span-7 order-2 lg:order-1 text-center lg:text-left">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7 }}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 backdrop-blur border border-stone-200 shadow-sm mb-7"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700">
+                Yeni projelere açık
+              </span>
+            </motion.div>
 
-        <div className="flex flex-col sm:flex-row gap-5 justify-center">
-          <button className="button-primary">Protokolü Başlat</button>
-          <button className="button-secondary">Sistem Analizi</button>
+            <motion.p
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              className="text-xs font-bold tracking-[0.4em] text-gold-700 uppercase mb-5"
+            >
+              Melik Bağrıyanık · Full-Stack Developer
+            </motion.p>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              className="text-5xl md:text-7xl lg:text-[5.5rem] font-display font-black mb-8 tracking-tighter leading-[0.9] text-stone-900"
+            >
+              Fikirleri{' '}
+              <span className="italic font-light bg-clip-text text-transparent bg-gradient-to-r from-gold-500 via-gold-600 to-gold-700">
+                dijital ürüne
+              </span>{' '}
+              <br className="hidden md:block" />
+              dönüştürüyorum.
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="max-w-xl mx-auto lg:mx-0 text-stone-600 text-lg md:text-xl mb-10 leading-relaxed"
+            >
+              Global ölçekli sistemler, akıllı arayüzler ve 3D deneyimler
+              kuruyorum. Kod ile estetiğin kesişiminde,
+              <span className="text-stone-800 font-medium"> kullanıcıyı önceleyen</span> ürünler inşa ediyorum.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.6 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12"
+            >
+              <a href="#experience" onClick={scrollToExperience} className="button-primary">
+                Kariyer yolculuğunu keşfet →
+              </a>
+              <a href="#contact" className="button-secondary">
+                İletişime geç
+              </a>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.8 }}
+              className="grid grid-cols-3 gap-6 max-w-md mx-auto lg:mx-0 pt-8 border-t border-stone-200"
+            >
+              <div>
+                <div className="text-3xl font-display font-black text-stone-900">5<span className="text-gold-600">+</span></div>
+                <div className="text-[10px] uppercase tracking-widest text-stone-500 mt-1 font-semibold">Yıl Deneyim</div>
+              </div>
+              <div>
+                <div className="text-3xl font-display font-black text-stone-900">30<span className="text-gold-600">+</span></div>
+                <div className="text-[10px] uppercase tracking-widest text-stone-500 mt-1 font-semibold">Proje</div>
+              </div>
+              <div>
+                <div className="text-3xl font-display font-black text-stone-900">∞</div>
+                <div className="text-[10px] uppercase tracking-widest text-stone-500 mt-1 font-semibold">Merak</div>
+              </div>
+            </motion.div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.94, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:col-span-5 order-1 lg:order-2 relative"
+          >
+            <div className="relative max-w-[440px] mx-auto">
+              <div className="absolute -inset-6 bg-gradient-to-br from-gold-300/40 via-cream-200/40 to-transparent rounded-[3rem] blur-2xl" />
+              <div className="absolute -top-4 -left-4 w-24 h-24 border-l-2 border-t-2 border-gold-400/60 rounded-tl-[2.5rem]" />
+              <div className="absolute -bottom-4 -right-4 w-24 h-24 border-r-2 border-b-2 border-gold-400/60 rounded-br-[2.5rem]" />
+
+              <div className="relative aspect-[4/5] rounded-[2.25rem] overflow-hidden ring-1 ring-stone-200 shadow-[0_30px_80px_-20px_rgba(168,132,56,0.25)] bg-white">
+                <img
+                  src="/profile.jpeg"
+                  alt="Melik Bağrıyanık"
+                  className="w-full h-full object-cover object-top"
+                  loading="eager"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-stone-900/20 via-transparent to-transparent pointer-events-none" />
+
+                <div className="absolute top-5 left-5 flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-white/60 shadow-sm">
+                  <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-stone-700">İstanbul · TR</span>
+                </div>
+              </div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.7 }}
+                className="absolute -bottom-6 -left-6 md:-left-10 px-4 py-3 rounded-2xl bg-white border border-stone-200 shadow-xl shadow-gold-700/5 flex items-center gap-3"
+              >
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center text-white font-display font-black text-sm">
+                  M.
+                </div>
+                <div>
+                  <div className="text-[10px] uppercase tracking-widest text-stone-500 font-bold">Şu an</div>
+                  <div className="text-xs font-bold text-stone-900">Yapay Zeka Mimarı</div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.85 }}
+                className="absolute -top-4 -right-4 md:-right-8 px-3.5 py-2 rounded-full bg-stone-900 text-white text-[10px] font-bold uppercase tracking-[0.18em] shadow-xl"
+              >
+                ✦ 2025
+              </motion.div>
+            </div>
+          </motion.div>
+
         </div>
       </div>
-
     </section>
   );
 };
