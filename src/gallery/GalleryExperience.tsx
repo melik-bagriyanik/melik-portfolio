@@ -84,7 +84,8 @@ export default function GalleryExperience() {
 
   const onLockChange = useCallback((locked: boolean) => {
     if (locked) {
-      setPhase('walk');
+      // Dönüş animasyonu sürerken kilit erken gelebilir; fazı bozma
+      setPhase((p) => (p === 'focus' || p === 'returning' ? p : 'walk'));
     } else {
       setPhase((p) => (p === 'focus' || p === 'returning' || p === 'intro' ? p : 'paused'));
     }
@@ -96,19 +97,29 @@ export default function GalleryExperience() {
     playerApi.current?.unlock();
   }, []);
 
-  const closeFocus = useCallback(() => {
-    setPhase((p) => (p === 'focus' ? 'returning' : p));
-  }, []);
+  /**
+   * Paneli kapat. Tıklamayla kapatılıyorsa (buton/dış alan) aynı kullanıcı
+   * hareketiyle pointer kilidini hemen geri iste — dönüş animasyonu bitince
+   * araya duraklatma ekranı girmeden yürüyüşe devam edilir.
+   */
+  const closeFocus = useCallback(
+    (relock: boolean) => {
+      setPhase((p) => (p === 'focus' ? 'returning' : p));
+      if (relock && !isTouch) playerApi.current?.lock();
+    },
+    [isTouch]
+  );
 
   const onReturned = useCallback(() => {
     setFocus(null);
-    setPhase(isTouch ? 'walk' : 'paused');
+    const locked = typeof document !== 'undefined' && !!document.pointerLockElement;
+    setPhase(isTouch || locked ? 'walk' : 'paused');
   }, [isTouch]);
 
-  // Odak modunda ESC panel kapatır
+  // Odak modunda ESC panel kapatır (ESC kullanıcı hareketi sayılmaz → kilit istenmez)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && phaseRef.current === 'focus') closeFocus();
+      if (e.key === 'Escape' && phaseRef.current === 'focus') closeFocus(false);
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
@@ -163,7 +174,10 @@ export default function GalleryExperience() {
         onInteract={() => interactApi.current?.trigger()}
       />
       <PausedOverlay visible={phase === 'paused'} onResume={enter} />
-      <InfoPanel meta={phase === 'focus' ? focus?.meta ?? null : null} onClose={closeFocus} />
+      <InfoPanel
+        meta={phase === 'focus' ? focus?.meta ?? null : null}
+        onClose={() => closeFocus(true)}
+      />
     </div>
   );
 }

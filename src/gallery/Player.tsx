@@ -62,7 +62,15 @@ export function Player({ enabled, apiRef, touchRef, onLockChange }: PlayerProps)
 
   useEffect(() => {
     apiRef.current = {
-      lock: () => gl.domElement.requestPointerLock(),
+      lock: () => {
+        try {
+          // Chrome'da Promise döner; reddi (ör. ESC sonrası soğuma süresi) sessizce yut
+          const result = gl.domElement.requestPointerLock() as unknown;
+          (result as Promise<void> | undefined)?.catch?.(() => {});
+        } catch {
+          /* kilit isteği başarısız — duraklatma ekranı devrede kalır */
+        }
+      },
       unlock: () => {
         if (document.pointerLockElement) document.exitPointerLock();
       },
@@ -86,6 +94,8 @@ export function Player({ enabled, apiRef, touchRef, onLockChange }: PlayerProps)
     };
     const onMouseMove = (e: MouseEvent) => {
       if (document.pointerLockElement !== gl.domElement) return;
+      // Odak/dönüş animasyonu sırasında (kilit erken alınmış olsa bile) bakışı FocusRig yönetir
+      if (!enabledRef.current) return;
       camera.rotation.y -= e.movementX * LOOK_SENSITIVITY;
       camera.rotation.x = THREE.MathUtils.clamp(
         camera.rotation.x - e.movementY * LOOK_SENSITIVITY,
