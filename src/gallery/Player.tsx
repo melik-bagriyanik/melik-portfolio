@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, type RefObject } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import { ROOM, TECHS, PEDESTAL_HALF } from './data';
+import { ROOM, SPAWN, COLLIDERS, WORLD_BOUNDS } from './data';
 
 export interface PlayerApi {
   lock: () => void;
@@ -33,16 +33,30 @@ const LOOK_SENSITIVITY = 0.0021;
 const TOUCH_LOOK_SENSITIVITY = 0.0042;
 const PITCH_LIMIT = 1.42;
 
-const BOUND_X = ROOM.width / 2 - 0.3 - PLAYER_RADIUS;
-const BOUND_Z = ROOM.length / 2 - 0.3 - PLAYER_RADIUS;
-const PEDESTAL_HIT = PEDESTAL_HALF + PLAYER_RADIUS;
+export const PLAYER_START = new THREE.Vector3(SPAWN.x, ROOM.eyeHeight, SPAWN.z);
 
-export const PLAYER_START = new THREE.Vector3(0, ROOM.eyeHeight, 13.5);
+/** Eksen-ayrık daire–AABB çözümü: verilen eksende çakışmayı iter */
+function resolveAxis(pos: THREE.Vector3, axis: 'x' | 'z') {
+  for (const c of COLLIDERS) {
+    const dx = pos.x - c.cx;
+    const dz = pos.z - c.cz;
+    const hx = c.hx + PLAYER_RADIUS;
+    const hz = c.hz + PLAYER_RADIUS;
+    if (Math.abs(dx) < hx && Math.abs(dz) < hz) {
+      if (axis === 'x') {
+        pos.x = c.cx + Math.sign(dx || 1) * hx;
+      } else {
+        pos.z = c.cz + Math.sign(dz || 1) * hz;
+      }
+    }
+  }
+}
 
 export function Player({ enabled, apiRef, touchRef, onLockChange }: PlayerProps) {
   const { camera, gl } = useThree();
   const keys = useRef<Set<string>>(new Set());
   const velocity = useRef(new THREE.Vector3());
+  const targetVel = useRef(new THREE.Vector3());
   const bobTime = useRef(0);
   const enabledRef = useRef(enabled);
   enabledRef.current = enabled;
@@ -162,28 +176,18 @@ export function Player({ enabled, apiRef, touchRef, onLockChange }: PlayerProps)
     const dirX = -sin * forward + cos * strafe;
     const dirZ = -cos * forward - sin * strafe;
 
-    const target = new THREE.Vector3(dirX * speed, 0, dirZ * speed);
+    targetVel.current.set(dirX * speed, 0, dirZ * speed);
     // Yumuşak hızlanma/yavaşlama
-    velocity.current.lerp(target, 1 - Math.exp(-10 * dt));
+    velocity.current.lerp(targetVel.current, 1 - Math.exp(-10 * dt));
 
     const pos = camera.position;
-    // Eksen-ayrık çarpışma çözümü: önce X, sonra Z
+    // Eksen-ayrık çarpışma çözümü: önce X, sonra Z (duvarlar + kaideler)
     pos.x += velocity.current.x * dt;
-    pos.x = THREE.MathUtils.clamp(pos.x, -BOUND_X, BOUND_X);
-    for (const tech of TECHS) {
-      const [px, , pz] = tech.position;
-      if (Math.abs(pos.x - px) < PEDESTAL_HIT && Math.abs(pos.z - pz) < PEDESTAL_HIT) {
-        pos.x = px + Math.sign(pos.x - px || 1) * PEDESTAL_HIT;
-      }
-    }
+    pos.x = THREE.MathUtils.clamp(pos.x, WORLD_BOUNDS.minX, WORLD_BOUNDS.maxX);
+    resolveAxis(pos, 'x');
     pos.z += velocity.current.z * dt;
-    pos.z = THREE.MathUtils.clamp(pos.z, -BOUND_Z, BOUND_Z);
-    for (const tech of TECHS) {
-      const [px, , pz] = tech.position;
-      if (Math.abs(pos.x - px) < PEDESTAL_HIT && Math.abs(pos.z - pz) < PEDESTAL_HIT) {
-        pos.z = pz + Math.sign(pos.z - pz || 1) * PEDESTAL_HIT;
-      }
-    }
+    pos.z = THREE.MathUtils.clamp(pos.z, WORLD_BOUNDS.minZ, WORLD_BOUNDS.maxZ);
+    resolveAxis(pos, 'z');
 
     // Zarif, hafif baş salınımı (yalnızca hareket halinde)
     const planarSpeed = Math.hypot(velocity.current.x, velocity.current.z);

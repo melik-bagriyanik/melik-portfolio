@@ -1,12 +1,23 @@
 import { useEffect, useState } from 'react';
 import * as THREE from 'three';
-import type { ProjectEntry, BoardEntry } from './data';
+import type {
+  ProjectEntry,
+  BoardEntry,
+  ExperienceEntry,
+  EducationItem,
+  RoomInfo,
+} from './data';
+
+// Dokunmatik cihazlarda GPU doku belleğini düşürmek için tuvaller küçük üretilir
+const TEXTURE_SCALE =
+  typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches ? 0.6 : 1;
 
 function makeCanvas(w: number, h: number) {
   const canvas = document.createElement('canvas');
-  canvas.width = w;
-  canvas.height = h;
+  canvas.width = Math.round(w * TEXTURE_SCALE);
+  canvas.height = Math.round(h * TEXTURE_SCALE);
   const ctx = canvas.getContext('2d')!;
+  ctx.scale(TEXTURE_SCALE, TEXTURE_SCALE);
   return { canvas, ctx };
 }
 
@@ -131,6 +142,200 @@ export function drawBoard(board: BoardEntry): HTMLCanvasElement {
   return canvas;
 }
 
+function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
+  const words = text.split(' ');
+  const lines: string[] = [];
+  let current = '';
+  for (const word of words) {
+    const test = current ? `${current} ${word}` : word;
+    if (ctx.measureText(test).width > maxWidth && current) {
+      lines.push(current);
+      current = word;
+    } else {
+      current = test;
+    }
+  }
+  if (current) lines.push(current);
+  return lines;
+}
+
+/** Kariyer panosu: şirket, rol, dönem + ilk maddeler */
+export function drawCareerBoard(exp: ExperienceEntry): HTMLCanvasElement {
+  const W = 1120;
+  const H = 760;
+  const { canvas, ctx } = makeCanvas(W, H);
+
+  ctx.fillStyle = '#fbf8f0';
+  ctx.fillRect(0, 0, W, H);
+  const wash = ctx.createLinearGradient(0, 0, W, H);
+  wash.addColorStop(0, '#c9a44b14');
+  wash.addColorStop(1, '#c9a44b00');
+  ctx.fillStyle = wash;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#a98438';
+  ctx.font = '700 30px Inter, sans-serif';
+  ctx.save();
+  ctx.letterSpacing = '10px';
+  ctx.fillText('KARİYER', 84, 96);
+  ctx.restore();
+
+  ctx.fillStyle = '#292524';
+  ctx.font = '800 66px Outfit, Inter, sans-serif';
+  ctx.fillText(exp.company, 84, 178);
+
+  ctx.fillStyle = '#57534e';
+  ctx.font = '600 38px Inter, sans-serif';
+  ctx.fillText(exp.role, 84, 236);
+
+  ctx.fillStyle = '#a98438';
+  ctx.font = '700 30px Inter, sans-serif';
+  ctx.fillText(`${exp.period} · ${exp.location}`, 84, 292);
+
+  ctx.strokeStyle = '#c9a44b';
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(84, 330);
+  ctx.lineTo(240, 330);
+  ctx.stroke();
+
+  ctx.fillStyle = '#3d3a34';
+  ctx.font = '500 32px Inter, sans-serif';
+  let y = 398;
+  outer: for (const bullet of exp.bullets) {
+    const lines = wrapText(ctx, bullet, W - 220);
+    for (let i = 0; i < lines.length; i++) {
+      if (y > H - 70) break outer;
+      if (i === 0) {
+        ctx.fillStyle = '#c9a44b';
+        ctx.fillText('◆', 84, y);
+        ctx.fillStyle = '#3d3a34';
+      }
+      ctx.fillText(lines[i], 128, y);
+      y += 46;
+    }
+    y += 14;
+  }
+
+  ctx.strokeStyle = '#29252418';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(28, 28, W - 56, H - 56);
+  return canvas;
+}
+
+/** Eğitim panosu */
+export function drawEducationBoard(items: EducationItem[]): HTMLCanvasElement {
+  const W = 1120;
+  const H = 760;
+  const { canvas, ctx } = makeCanvas(W, H);
+
+  ctx.fillStyle = '#fbf8f0';
+  ctx.fillRect(0, 0, W, H);
+  const wash = ctx.createLinearGradient(W, 0, 0, H);
+  wash.addColorStop(0, '#c9a44b14');
+  wash.addColorStop(1, '#c9a44b00');
+  ctx.fillStyle = wash;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#a98438';
+  ctx.font = '700 30px Inter, sans-serif';
+  ctx.save();
+  ctx.letterSpacing = '10px';
+  ctx.fillText('EĞİTİM', 84, 108);
+  ctx.restore();
+
+  ctx.strokeStyle = '#c9a44b';
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(84, 146);
+  ctx.lineTo(210, 146);
+  ctx.stroke();
+
+  let y = 232;
+  for (const item of items) {
+    ctx.fillStyle = '#292524';
+    ctx.font = '800 40px Outfit, Inter, sans-serif';
+    ctx.fillText(item.school, 84, y);
+    ctx.fillStyle = '#57534e';
+    ctx.font = '500 32px Inter, sans-serif';
+    ctx.fillText(`${item.degree} · ${item.period}`, 84, y + 48);
+    if (item.note) {
+      ctx.fillStyle = '#8a8378';
+      ctx.font = '500 28px Inter, sans-serif';
+      ctx.fillText(item.note, 84, y + 90);
+    }
+    y += 172;
+  }
+
+  ctx.strokeStyle = '#29252418';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(28, 28, W - 56, H - 56);
+  return canvas;
+}
+
+/** Sergi planı (kroki) panosu */
+export function drawGuideBoard(rooms: RoomInfo[]): HTMLCanvasElement {
+  const W = 1120;
+  const H = 820;
+  const { canvas, ctx } = makeCanvas(W, H);
+
+  ctx.fillStyle = '#fbf8f0';
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#a98438';
+  ctx.font = '700 30px Inter, sans-serif';
+  ctx.save();
+  ctx.letterSpacing = '10px';
+  ctx.fillText('SERGİ PLANI', 84, 96);
+  ctx.restore();
+
+  ctx.strokeStyle = '#c9a44b';
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(84, 130);
+  ctx.lineTo(300, 130);
+  ctx.stroke();
+
+  // Dünya → tuval dönüşümü (x: -20..20, z: -21..21; z aşağı doğru büyür)
+  const scale = 15;
+  const px = (x: number) => 560 + x * scale;
+  const py = (z: number) => 470 + z * scale;
+
+  ctx.textAlign = 'center';
+  for (const room of rooms) {
+    const [x1, z1, x2, z2] = room.rect;
+    const rx = px(x1);
+    const ry = py(z1);
+    const rw = (x2 - x1) * scale;
+    const rh = (z2 - z1) * scale;
+    ctx.fillStyle = '#f3ecdb';
+    ctx.fillRect(rx, ry, rw, rh);
+    ctx.strokeStyle = '#a98438';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(rx, ry, rw, rh);
+    ctx.fillStyle = '#44403c';
+    ctx.font = '700 24px Inter, sans-serif';
+    ctx.fillText(room.name.toUpperCase(), rx + rw / 2, ry + rh / 2 + 8);
+  }
+
+  // "Buradasınız" işareti (giriş holü)
+  ctx.fillStyle = '#c9a44b';
+  ctx.beginPath();
+  ctx.arc(px(0), py(17), 12, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#84682d';
+  ctx.font = '700 24px Inter, sans-serif';
+  ctx.fillText('BURADASINIZ', px(0), py(17) + 44);
+
+  ctx.strokeStyle = '#29252418';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(28, 28, W - 56, H - 56);
+  return canvas;
+}
+
 /** Kaidelerin altına yumuşak temas gölgesi */
 export function makeBlobShadowTexture(): THREE.Texture {
   const { canvas, ctx } = makeCanvas(256, 256);
@@ -155,10 +360,9 @@ export function useCanvasTexture(draw: () => HTMLCanvasElement): THREE.CanvasTex
     let cancelled = false;
     document.fonts.ready.then(() => {
       if (cancelled) return;
-      setTexture((prev) => {
-        prev.dispose();
-        return toTexture(draw());
-      });
+      // Eski dokunun dispose'u aşağıdaki [texture] cleanup'ında yapılır;
+      // updater saf kalmalı (StrictMode çift çağırır).
+      setTexture(toTexture(draw()));
     });
     return () => {
       cancelled = true;

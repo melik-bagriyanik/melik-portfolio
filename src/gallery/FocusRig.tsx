@@ -71,6 +71,8 @@ export function FocusRig({ pose, returning, onReturned }: FocusRigProps) {
     s.t = Math.min(s.t + dt / DURATION, 1);
     const e = easeInOutCubic(s.t);
     camera.position.lerpVectors(s.fromPos, s.toPos, e);
+    // Hafif yay: sinematik his + yol üzerindeki kaide/heykellerin içinden geçmeyi önler
+    camera.position.y += 0.28 * Math.sin(Math.PI * e);
     camera.quaternion.slerpQuaternions(s.fromQuat, s.toQuat, e);
     if (s.t >= 1) {
       if (s.mode === 'out') {

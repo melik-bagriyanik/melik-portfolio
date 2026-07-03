@@ -1,83 +1,139 @@
 import { Text } from '@react-three/drei';
-import { ROOM, ABOUT } from './data';
+import {
+  ROOM,
+  WALLS,
+  LINTELS,
+  SIGNS,
+  ABOUT,
+  WALL_THICKNESS,
+  DOOR_HEIGHT,
+  type WallSegment,
+} from './data';
 
-const W = ROOM.width;
-const L = ROOM.length;
 const H = ROOM.height;
+const T = WALL_THICKNESS;
 
 const WALL_COLOR = '#f6f1e6';
 const OUTFIT = '/fonts/outfit-700.ttf';
-const INTER = '/fonts/inter-500.ttf';
+
+function WallBox({ seg }: { seg: WallSegment }) {
+  const size: [number, number, number] =
+    seg.axis === 'x' ? [seg.len, H, T] : [T, H, seg.len];
+  return (
+    <group position={[seg.cx, 0, seg.cz]}>
+      <mesh position={[0, H / 2, 0]}>
+        <boxGeometry args={size} />
+        <meshStandardMaterial color={WALL_COLOR} roughness={0.95} />
+      </mesh>
+      {/* Süpürgelik */}
+      <mesh position={[0, 0.08, 0]}>
+        <boxGeometry
+          args={
+            seg.axis === 'x'
+              ? [seg.len, 0.16, T + 0.05]
+              : [T + 0.05, 0.16, seg.len]
+          }
+        />
+        <meshStandardMaterial color="#3a352c" roughness={0.6} />
+      </mesh>
+    </group>
+  );
+}
+
+function Lintel({ seg }: { seg: WallSegment }) {
+  const height = H - DOOR_HEIGHT;
+  const size: [number, number, number] =
+    seg.axis === 'x' ? [seg.len, height, T] : [T, height, seg.len];
+  return (
+    <group position={[seg.cx, DOOR_HEIGHT + height / 2, seg.cz]}>
+      <mesh>
+        <boxGeometry args={size} />
+        <meshStandardMaterial color={WALL_COLOR} roughness={0.95} />
+      </mesh>
+      {/* Kapı üstü altın profil */}
+      <mesh position={[0, -height / 2 + 0.03, 0]}>
+        <boxGeometry
+          args={
+            seg.axis === 'x' ? [seg.len, 0.06, T + 0.04] : [T + 0.04, 0.06, seg.len]
+          }
+        />
+        <meshStandardMaterial color="#c9a44b" metalness={0.85} roughness={0.3} />
+      </mesh>
+    </group>
+  );
+}
+
+function Skylight({
+  x,
+  z,
+  sx,
+  sz,
+}: {
+  x: number;
+  z: number;
+  sx: number;
+  sz: number;
+}) {
+  return (
+    <mesh rotation-x={Math.PI / 2} position={[x, H - 0.015, z]}>
+      <planeGeometry args={[sx, sz]} />
+      <meshStandardMaterial
+        color="#ffffff"
+        emissive="#fff3d6"
+        emissiveIntensity={1.5}
+        toneMapped={false}
+      />
+    </mesh>
+  );
+}
 
 export function Room() {
   return (
     <group>
-      {/* Zemin — cilalı taş görünümü (env yansımasıyla yumuşak parlaklık) */}
+      {/* Zemin — cilalı taş (tüm kompleksi kaplar) */}
       <mesh rotation-x={-Math.PI / 2} receiveShadow>
-        <planeGeometry args={[W, L]} />
-        <meshStandardMaterial color="#dfd6c3" roughness={0.32} metalness={0.06} envMapIntensity={0.55} />
+        <planeGeometry args={[39.2, 41.2]} />
+        <meshStandardMaterial
+          color="#dfd6c3"
+          roughness={0.32}
+          metalness={0.06}
+          envMapIntensity={0.55}
+        />
       </mesh>
 
       {/* Tavan */}
       <mesh rotation-x={Math.PI / 2} position={[0, H, 0]}>
-        <planeGeometry args={[W, L]} />
+        <planeGeometry args={[39.2, 41.2]} />
         <meshStandardMaterial color="#fbf8f0" roughness={0.95} />
       </mesh>
 
-      {/* Tavan ışıklığı — galeri boyunca süzülen sıcak şerit */}
-      <mesh rotation-x={Math.PI / 2} position={[0, H - 0.015, 0]}>
-        <planeGeometry args={[2.6, L - 8]} />
-        <meshStandardMaterial color="#ffffff" emissive="#fff3d6" emissiveIntensity={1.5} toneMapped={false} />
-      </mesh>
-      {/* Işıklık altın kenar profilleri */}
-      {[-1.38, 1.38].map((x) => (
-        <mesh key={x} position={[x, H - 0.04, 0]}>
-          <boxGeometry args={[0.09, 0.07, L - 8]} />
+      {/* Oda ışıklıkları */}
+      <Skylight x={0} z={2} sx={2.6} sz={12} />
+      <Skylight x={-13} z={2} sx={9} sz={2.2} />
+      <Skylight x={13} z={2} sx={9} sz={2.2} />
+      <Skylight x={0} z={-13} sx={2.6} sz={10} />
+      <Skylight x={0} z={15} sx={2.2} sz={7} />
+      {/* Ana salon ışıklık altın profilleri */}
+      {[-1.42, 1.42].map((x) => (
+        <mesh key={x} position={[x, H - 0.045, 2]}>
+          <boxGeometry args={[0.09, 0.07, 12]} />
           <meshStandardMaterial color="#c9a44b" metalness={0.85} roughness={0.3} />
         </mesh>
       ))}
 
-      {/* Duvarlar */}
-      <mesh position={[-W / 2 - 0.15, H / 2, 0]}>
-        <boxGeometry args={[0.3, H, L]} />
-        <meshStandardMaterial color={WALL_COLOR} roughness={0.95} />
-      </mesh>
-      <mesh position={[W / 2 + 0.15, H / 2, 0]}>
-        <boxGeometry args={[0.3, H, L]} />
-        <meshStandardMaterial color={WALL_COLOR} roughness={0.95} />
-      </mesh>
-      <mesh position={[0, H / 2, -L / 2 - 0.15]}>
-        <boxGeometry args={[W + 0.6, H, 0.3]} />
-        <meshStandardMaterial color={WALL_COLOR} roughness={0.95} />
-      </mesh>
-      <mesh position={[0, H / 2, L / 2 + 0.15]}>
-        <boxGeometry args={[W + 0.6, H, 0.3]} />
-        <meshStandardMaterial color={WALL_COLOR} roughness={0.95} />
-      </mesh>
+      {/* Duvarlar ve kapı lentoları */}
+      {WALLS.map((seg, i) => (
+        <WallBox key={`w${i}`} seg={seg} />
+      ))}
+      {LINTELS.map((seg, i) => (
+        <Lintel key={`l${i}`} seg={seg} />
+      ))}
 
-      {/* Süpürgelikler */}
-      <mesh position={[-W / 2 + 0.03, 0.08, 0]}>
-        <boxGeometry args={[0.06, 0.16, L]} />
-        <meshStandardMaterial color="#3a352c" roughness={0.6} />
-      </mesh>
-      <mesh position={[W / 2 - 0.03, 0.08, 0]}>
-        <boxGeometry args={[0.06, 0.16, L]} />
-        <meshStandardMaterial color="#3a352c" roughness={0.6} />
-      </mesh>
-      <mesh position={[0, 0.08, -L / 2 + 0.03]}>
-        <boxGeometry args={[W, 0.16, 0.06]} />
-        <meshStandardMaterial color="#3a352c" roughness={0.6} />
-      </mesh>
-      <mesh position={[0, 0.08, L / 2 - 0.03]}>
-        <boxGeometry args={[W, 0.16, 0.06]} />
-        <meshStandardMaterial color="#3a352c" roughness={0.6} />
-      </mesh>
-
-      {/* Onur duvarı tipografisi (galerinin sonu) */}
+      {/* Onur duvarı tipografisi — ana salon, Teknoloji kapısının üstü */}
       <Text
         font={OUTFIT}
-        position={[0, 4.15, -L / 2 + 0.02]}
-        fontSize={0.5}
+        position={[0, 4.5, -5.82]}
+        fontSize={0.46}
         letterSpacing={0.14}
         color="#292524"
         anchorX="center"
@@ -87,8 +143,8 @@ export function Room() {
       </Text>
       <Text
         font={OUTFIT}
-        position={[0, 3.62, -L / 2 + 0.02]}
-        fontSize={0.15}
+        position={[0, 3.98, -5.82]}
+        fontSize={0.14}
         letterSpacing={0.42}
         color="#a98438"
         anchorX="center"
@@ -97,47 +153,44 @@ export function Room() {
         {ABOUT.role}
       </Text>
 
-      {/* Giriş duvarı */}
-      <Text
-        font={OUTFIT}
-        position={[0, 3.0, L / 2 - 0.02]}
-        rotation-y={Math.PI}
-        fontSize={0.34}
-        letterSpacing={0.3}
-        color="#57534e"
-        anchorX="center"
-        anchorY="middle"
-      >
-        SANAL GALERİ
-      </Text>
-      <Text
-        font={INTER}
-        position={[0, 2.55, L / 2 - 0.02]}
-        rotation-y={Math.PI}
-        fontSize={0.12}
-        letterSpacing={0.5}
-        color="#a8a29e"
-        anchorX="center"
-        anchorY="middle"
-      >
-        MMXXVI · İSTANBUL
-      </Text>
+      {/* Yönlendirme tabelaları */}
+      {SIGNS.map((sign) => (
+        <Text
+          key={sign.text}
+          font={OUTFIT}
+          position={sign.position}
+          rotation-y={sign.rotationY}
+          fontSize={sign.size ?? 0.13}
+          letterSpacing={0.32}
+          color={sign.size && sign.size > 0.2 ? '#57534e' : '#a98438'}
+          anchorX="center"
+          anchorY="middle"
+        >
+          {sign.text}
+        </Text>
+      ))}
 
       {/* Işıklandırma */}
       <ambientLight intensity={0.5} color="#fff8ec" />
       <hemisphereLight args={['#fffbf0', '#cfc2a6', 0.55]} />
       <directionalLight
         position={[5, 9, 4]}
-        intensity={1.35}
+        intensity={1.3}
         color="#fff6e2"
         castShadow
         shadow-mapSize={[2048, 2048]}
-        shadow-camera-left={-20}
-        shadow-camera-right={20}
-        shadow-camera-top={22}
-        shadow-camera-bottom={-22}
+        shadow-camera-left={-24}
+        shadow-camera-right={24}
+        shadow-camera-top={24}
+        shadow-camera-bottom={-24}
         shadow-bias={-0.0004}
+        // shadow-camera-* prop'ları projeksiyonu otomatik yenilemez
+        onUpdate={(self) => self.shadow.camera.updateProjectionMatrix()}
       />
+      {/* Oda dolgu ışıkları (spotu olmayan bölgeler) */}
+      <pointLight position={[-13, 4.2, 2]} intensity={14} distance={17} decay={1.8} color="#fff2d9" />
+      <pointLight position={[0, 4.2, -13]} intensity={14} distance={17} decay={1.8} color="#fff2d9" />
+      <pointLight position={[0, 4.2, 15]} intensity={10} distance={13} decay={1.8} color="#fff2d9" />
     </group>
   );
 }

@@ -47,7 +47,10 @@
       "Bash(echo \"tsc exit: $?\")",
       "Bash(git -C \"c:/Users/Melik/melik-portfolio\" status --short)",
       "Bash(git -C \"c:/Users/Melik/melik-portfolio\" log --oneline -3 --stat)",
-      "Bash(git -C \"c:/Users/Melik/melik-portfolio\" diff src/gallery/Player.tsx src/gallery/GalleryExperience.tsx)"
+      "Bash(git -C \"c:/Users/Melik/melik-portfolio\" diff src/gallery/Player.tsx src/gallery/GalleryExperience.tsx)",
+      "PowerShell(Get-ChildItem \"c:\\\\Users\\\\Melik\\\\melik-portfolio\\\\public\\\\projects\" | ForEach-Object { $img = [System.Drawing.Image]::FromFile\\($_.FullName\\); \"{0} {1}x{2} {3}KB\" -f $_.Name, $img.Width, $img.Height, [int]\\($_.Length/1KB\\); $img.Dispose\\(\\) })",
+      "Bash(JDIR=\"C:/Users/Melik/.claude/projects/c--Users-Melik-melik-portfolio/73b87e24-8204-432d-a4c1-4d238f484e40/subagents/workflows/wf_60af16e1-e48\"; ls \"$JDIR\" 2>/dev/null | head -5; echo \"---\"; if [ -f \"$JDIR/journal.jsonl\" ]; then tail -3 \"$JDIR/journal.jsonl\" | head -c 3000; fi)",
+      "Read(//c/Users/Melik/.claude/projects/c--Users-Melik-melik-portfolio/73b87e24-8204-432d-a4c1-4d238f484e40/subagents/workflows/wf_60af16e1-e48/**)"
     ]
   }
 }

@@ -27,8 +27,8 @@ function WebGLFallback() {
           MELİK<span className="text-gold-600 italic">.AI</span>
         </h1>
         <p className="text-stone-600 mb-6">
-          Bu galeri WebGL gerektiriyor ancak tarayıcınız desteklemiyor görünüyor. Yine de bana
-          ulaşabilirsiniz:
+          Bu galeri WebGL gerektiriyor ancak tarayıcın desteklemiyor görünüyor. Yine de bana
+          ulaşabilirsin:
         </p>
         <div className="flex flex-col gap-2 text-sm font-bold">
           <a className="text-gold-700 hover:underline" href={`mailto:${CONTACT.email}`}>
@@ -130,14 +130,14 @@ export default function GalleryExperience() {
   return (
     <div className="fixed inset-0 bg-[#f2eee3]">
       <Canvas
-        shadows
-        dpr={[1, 1.75]}
+        shadows={!isTouch}
+        dpr={isTouch ? [1, 1.5] : [1, 1.75]}
         gl={{ antialias: true, powerPreference: 'high-performance' }}
         camera={{ fov: 70, near: 0.1, far: 90 }}
         fallback={<WebGLFallback />}
       >
         <Suspense fallback={null}>
-          <Scene hoveredId={hovered?.id ?? null} objectsRef={objectsRef} />
+          <Scene hoveredId={hovered?.id ?? null} objectsRef={objectsRef} lite={isTouch} />
         </Suspense>
         <Player
           enabled={walking}

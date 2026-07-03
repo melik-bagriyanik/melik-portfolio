@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState, type RefObject } from 'react';
+import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
 import type { TouchState } from '../Player';
 
 interface TouchControlsProps {
@@ -18,6 +18,21 @@ export function TouchControls({ visible, touchRef, onInteract }: TouchControlsPr
   const lookTouchId = useRef<number | null>(null);
   const lookLast = useRef({ x: 0, y: 0 });
   const tapInfo = useRef({ t: 0, x: 0, y: 0, moved: 0 });
+
+  // Katman gizlenirken (yürüyüş → odak) aktif dokunuşlar yarıda kalır:
+  // takip durumunu ve paylaşılan girdi vektörlerini sıfırla, yoksa oyuncu
+  // kendiliğinden yürümeye devam eder ve joystick kalıcı olarak kilitlenir.
+  useEffect(() => {
+    if (visible) return;
+    const ts = touchRef.current;
+    moveTouchId.current = null;
+    lookTouchId.current = null;
+    setStick(null);
+    ts.move.x = 0;
+    ts.move.y = 0;
+    ts.look.dx = 0;
+    ts.look.dy = 0;
+  }, [visible, touchRef]);
 
   const handleStart = useCallback(
     (e: React.TouchEvent) => {

@@ -79,6 +79,20 @@ function Sculpture({ kind, material }: { kind: SculptureKind; material: TechEntr
           <meshStandardMaterial {...props} flatShading />
         </mesh>
       );
+    case 'slab':
+      // Telefon plakası: mobil geliştirme
+      return (
+        <group rotation={[0.12, 0.4, 0]}>
+          <mesh castShadow>
+            <boxGeometry args={[0.32, 0.58, 0.05]} />
+            <meshStandardMaterial {...props} />
+          </mesh>
+          <mesh position={[0, 0, 0.028]}>
+            <boxGeometry args={[0.27, 0.5, 0.006]} />
+            <meshStandardMaterial color="#1c1917" metalness={0.4} roughness={0.18} />
+          </mesh>
+        </group>
+      );
   }
 }
 
@@ -98,9 +112,6 @@ export function Pedestal({ entry, hovered }: { entry: TechEntry; hovered: boolea
   );
   useRegisterTarget(groupRef, meta);
 
-  // Plaket koridora (x=0 eksenine) baksın
-  const faceY = entry.position[0] < 0 ? Math.PI / 2 : -Math.PI / 2;
-
   useFrame((state, dt) => {
     if (sculptureRef.current) {
       sculptureRef.current.rotation.y += dt * 0.4;
@@ -110,7 +121,11 @@ export function Pedestal({ entry, hovered }: { entry: TechEntry; hovered: boolea
   });
 
   return (
-    <group ref={groupRef} position={[entry.position[0], 0, entry.position[2]]} rotation-y={faceY}>
+    <group
+      ref={groupRef}
+      position={[entry.position[0], 0, entry.position[2]]}
+      rotation-y={entry.rotationY}
+    >
       {/* Taban + gövde + tabla */}
       <mesh position={[0, 0.075, 0]} castShadow receiveShadow>
         <boxGeometry args={[0.92, 0.15, 0.92]} />
@@ -155,8 +170,8 @@ export function Pedestal({ entry, hovered }: { entry: TechEntry; hovered: boolea
         {entry.title.toUpperCase()}
       </Text>
 
-      {/* Temas gölgesi */}
-      <mesh rotation-x={-Math.PI / 2} position={[0, 0.006, 0]}>
+      {/* Temas gölgesi — crosshair bunu hedef saymasın */}
+      <mesh rotation-x={-Math.PI / 2} position={[0, 0.006, 0]} raycast={() => null}>
         <planeGeometry args={[1.7, 1.7]} />
         <meshBasicMaterial map={getBlobTexture()} transparent depthWrite={false} />
       </mesh>

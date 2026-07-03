@@ -1,32 +1,27 @@
-import { useMemo, useRef } from 'react';
+import { useRef } from 'react';
 import type * as THREE from 'three';
-import type { BoardEntry } from './data';
-import { drawBoard, useCanvasTexture } from './textures';
+import type { WallPlacement } from './data';
+import { useCanvasTexture } from './textures';
 import { useRegisterTarget, type TargetMeta } from './interaction';
 
-/** Hakkımda / İletişim duvar panoları — ince çerçeveli bilgi levhaları */
-export function Board({ entry, hovered }: { entry: BoardEntry; hovered: boolean }) {
-  const groupRef = useRef<THREE.Group>(null);
-  const { placement } = entry;
-  const { width, height } = placement;
-  const texture = useCanvasTexture(() => drawBoard(entry));
+interface WallBoardProps {
+  placement: WallPlacement;
+  meta: TargetMeta;
+  hovered: boolean;
+  draw: () => HTMLCanvasElement;
+}
 
-  const meta = useMemo<TargetMeta>(
-    () => ({
-      id: entry.id,
-      kind: entry.id,
-      label: entry.title === 'HAKKIMDA' ? 'Hakkımda' : 'İletişim',
-      center: placement.position,
-      normal: placement.normal,
-      width,
-    }),
-    [entry, placement, width]
-  );
+/** İnce çerçeveli, tuval dokulu duvar panosu (Hakkımda, İletişim, Kariyer, Eğitim, Kroki) */
+export function WallBoard({ placement, meta, hovered, draw }: WallBoardProps) {
+  const groupRef = useRef<THREE.Group>(null);
+  const { width, height } = placement;
+  const texture = useCanvasTexture(draw);
+
   useRegisterTarget(groupRef, meta);
 
   return (
     <group ref={groupRef} position={placement.position} rotation-y={placement.rotationY}>
-      <mesh position={[0, 0, 0.025]}>
+      <mesh position={[0, 0, 0.025]} castShadow>
         <boxGeometry args={[width + 0.1, height + 0.1, 0.05]} />
         <meshStandardMaterial
           color="#2e2a23"

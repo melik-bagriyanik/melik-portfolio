@@ -32,7 +32,14 @@ function PosterSurface({ project, width, height }: { project: ProjectEntry; widt
   return <ArtSurface texture={texture} width={width} height={height} />;
 }
 
-export function Painting({ entry, hovered }: { entry: PaintingEntry; hovered: boolean }) {
+interface PaintingProps {
+  entry: PaintingEntry;
+  hovered: boolean;
+  /** Mobil performans modu: eser spotları kapalı, genel ışık yeterli */
+  lite?: boolean;
+}
+
+export function Painting({ entry, hovered, lite }: PaintingProps) {
   const { project, placement } = entry;
   const { width, height } = placement;
   const groupRef = useRef<THREE.Group>(null);
@@ -113,18 +120,22 @@ export function Painting({ entry, hovered }: { entry: PaintingEntry; hovered: bo
         </Text>
       </group>
 
-      {/* Esere yönelen sıcak spot */}
-      <object3D ref={targetRef} position={[0, 0, 0]} />
-      <spotLight
-        ref={spotRef}
-        position={[0, 2.3, 2.1]}
-        angle={0.58}
-        penumbra={0.78}
-        intensity={hovered ? 30 : 20}
-        distance={9}
-        decay={1.7}
-        color="#fff2d9"
-      />
+      {/* Esere yönelen sıcak spot (mobilde kapalı) */}
+      {!lite && (
+        <>
+          <object3D ref={targetRef} position={[0, 0, 0]} />
+          <spotLight
+            ref={spotRef}
+            position={[0, 2.3, 2.1]}
+            angle={0.58}
+            penumbra={0.78}
+            intensity={hovered ? 30 : 20}
+            distance={9}
+            decay={1.7}
+            color="#fff2d9"
+          />
+        </>
+      )}
     </group>
   );
 }

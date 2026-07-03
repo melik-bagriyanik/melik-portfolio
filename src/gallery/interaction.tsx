@@ -10,8 +10,16 @@ import {
 } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
+import { ROOM } from './data';
 
-export type TargetKind = 'project' | 'tech' | 'about' | 'contact';
+export type TargetKind =
+  | 'project'
+  | 'tech'
+  | 'about'
+  | 'contact'
+  | 'experience'
+  | 'education'
+  | 'guide';
 
 export interface TargetMeta {
   id: string;
@@ -72,7 +80,7 @@ export function useRegisterTarget(ref: RefObject<THREE.Object3D | null>, meta: T
   }, [registry, ref, meta]);
 }
 
-const EYE_Y = 1.68;
+const EYE_Y = ROOM.eyeHeight;
 
 /** Seçilen hedef için sinematik kamera pozu üretir (panel sağda açıldığı için eser sola kaydırılır). */
 export function computeFocusPose(meta: TargetMeta, cameraPos: THREE.Vector3): FocusPose {

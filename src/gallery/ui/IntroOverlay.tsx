@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
 interface IntroOverlayProps {
   visible: boolean;
@@ -9,14 +10,33 @@ interface IntroOverlayProps {
 }
 
 export function IntroOverlay({ visible, progress, loading, isTouch, onEnter }: IntroOverlayProps) {
-  const ready = !loading || progress >= 100;
+  // useProgress ilk boyamada 0/false döner; en az bir yükleme başlangıcı görmeden
+  // "hazır" deme. Yükleyici hiç tetiklenmezse 7 sn sonra yine de kapıyı aç.
+  const [started, setStarted] = useState(false);
+  const [forceReady, setForceReady] = useState(false);
+
+  useEffect(() => {
+    if (loading) setStarted(true);
+  }, [loading]);
+
+  useEffect(() => {
+    const t = setTimeout(() => setForceReady(true), 7000);
+    return () => clearTimeout(t);
+  }, []);
+
+  const ready = forceReady || (started && !loading && progress >= 100);
 
   return (
     <AnimatePresence>
       {visible && (
         <motion.div
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: 0.9, ease: 'easeInOut' } }}
+          exit={{
+            opacity: 0,
+            // Kapanış solması sırasında ilk joystick/fare girişini yutma
+            pointerEvents: 'none',
+            transition: { duration: 0.9, ease: 'easeInOut' },
+          }}
           className="fixed inset-0 z-50 flex items-center justify-center bg-[#faf8f2]/92 backdrop-blur-md"
         >
           <div className="max-w-2xl mx-auto px-8 text-center">
@@ -50,7 +70,7 @@ export function IntroOverlay({ visible, progress, loading, isTouch, onEnter }: I
               transition={{ duration: 0.7, delay: 0.3 }}
               className="text-xs font-bold tracking-[0.4em] text-stone-500 uppercase mb-8"
             >
-              Full-Stack Developer · AI Mimarı · İstanbul
+              Full Stack Developer · React & Mobile · İstanbul
             </motion.p>
 
             <motion.p

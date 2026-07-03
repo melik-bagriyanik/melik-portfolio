@@ -13,7 +13,16 @@ const LinkedinIcon = ({ size = 16 }: { size?: number }) => (
   </svg>
 );
 import type { TargetMeta } from '../interaction';
-import { PAINTINGS, TECHS, ABOUT, CONTACT } from '../data';
+import {
+  PAINTINGS,
+  TECHS,
+  ABOUT,
+  CONTACT,
+  EXPERIENCES,
+  EDUCATION,
+  LANGUAGES,
+  ROOMS_INFO,
+} from '../data';
 
 interface InfoPanelProps {
   meta: TargetMeta | null;
@@ -142,6 +151,94 @@ function ProjectContent({ id }: { id: string }) {
             GitHub — Kaynak Kod
           </LinkButton>
         )}
+        {project.note && (
+          <p className="text-[12px] italic text-stone-400 leading-relaxed px-1">{project.note}</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ExperienceContent({ id }: { id: string }) {
+  const exp = EXPERIENCES.find((e) => e.id === id);
+  if (!exp) return null;
+
+  return (
+    <div>
+      <h2 className="text-3xl font-display font-black tracking-tight text-stone-900">
+        {exp.company}
+      </h2>
+      <p className="text-sm font-bold text-stone-700 mt-1">{exp.role}</p>
+      <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold-700 mt-1 mb-6">
+        {exp.period} · {exp.location}
+      </p>
+      <ul className="space-y-3 mb-8">
+        {exp.bullets.map((b) => (
+          <li key={b} className="flex gap-3 text-stone-600 leading-relaxed text-[14px]">
+            <span className="text-gold-500 shrink-0 mt-0.5">◆</span>
+            {b}
+          </li>
+        ))}
+      </ul>
+      <div className="flex flex-wrap gap-2">
+        {exp.tech.map((t) => (
+          <Chip key={t}>{t}</Chip>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function EducationContent() {
+  return (
+    <div>
+      <h2 className="text-3xl font-display font-black tracking-tight text-stone-900 mb-6">
+        Eğitim
+      </h2>
+      <div className="space-y-5 mb-8">
+        {EDUCATION.map((item) => (
+          <div key={item.school} className="pb-5 border-b border-stone-100 last:border-0">
+            <div className="font-bold text-stone-900">{item.school}</div>
+            <div className="text-sm text-stone-600 mt-0.5">{item.degree}</div>
+            <div className="text-xs font-bold uppercase tracking-[0.15em] text-gold-700 mt-1">
+              {item.period}
+              {item.note ? ` · ${item.note}` : ''}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400 mb-3">
+        Diller
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {LANGUAGES.map((l) => (
+          <Chip key={l}>{l}</Chip>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function GuideContent() {
+  return (
+    <div>
+      <h2 className="text-3xl font-display font-black tracking-tight text-stone-900 mb-4">
+        Sergi Planı
+      </h2>
+      <p className="text-stone-600 leading-relaxed text-[15px] mb-6">
+        Galeri beş bölümden oluşuyor. Duvarlardaki eserlerin ve heykellerin önünde durup
+        tıklayarak detayları inceleyebilirsin.
+      </p>
+      <div className="space-y-3">
+        {ROOMS_INFO.map((room) => (
+          <div
+            key={room.name}
+            className="p-4 rounded-xl bg-white border border-stone-200"
+          >
+            <div className="font-bold text-stone-900 text-sm">{room.name}</div>
+            <div className="text-xs text-stone-500 mt-0.5">{room.blurb}</div>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -180,11 +277,7 @@ function AboutContent() {
       </p>
       <p className="text-stone-600 leading-relaxed text-[15px] mb-8">{ABOUT.paragraph}</p>
       <div className="grid grid-cols-3 gap-4 pt-6 border-t border-stone-200">
-        {[
-          ['5+', 'Yıl Deneyim'],
-          ['30+', 'Proje'],
-          ['∞', 'Merak'],
-        ].map(([num, label]) => (
+        {ABOUT.stats.map(([num, label]) => (
           <div key={label}>
             <div className="text-2xl font-display font-black text-stone-900">{num}</div>
             <div className="text-[9px] uppercase tracking-widest text-stone-500 mt-1 font-semibold">
@@ -205,8 +298,7 @@ function ContactContent() {
         Hadi bir şey <span className="italic font-light text-gold-600">inşa edelim</span>
       </h2>
       <p className="text-stone-600 leading-relaxed text-[15px] mb-8">
-        Aklınızdaki fikri birlikte somutlaştıralım. Mesajınızı bırakın, en kısa sürede dönüş
-        yapayım.
+        Aklındaki fikri birlikte somutlaştıralım. Mesajını bırak, en kısa sürede dönüş yapayım.
       </p>
       <div className="flex flex-col gap-3">
         <LinkButton href={mailto} primary icon={<Mail size={16} />}>
@@ -231,6 +323,9 @@ const EYEBROWS: Record<string, string> = {
   tech: 'Heykel · Teknoloji',
   about: 'Sanatçı',
   contact: 'İletişim',
+  experience: 'Kariyer · Deneyim',
+  education: 'Eğitim',
+  guide: 'Sergi Planı',
 };
 
 export function InfoPanel({ meta, onClose }: InfoPanelProps) {
@@ -242,6 +337,9 @@ export function InfoPanel({ meta, onClose }: InfoPanelProps) {
           {meta.kind === 'tech' && <TechContent id={meta.id} />}
           {meta.kind === 'about' && <AboutContent />}
           {meta.kind === 'contact' && <ContactContent />}
+          {meta.kind === 'experience' && <ExperienceContent id={meta.id} />}
+          {meta.kind === 'education' && <EducationContent />}
+          {meta.kind === 'guide' && <GuideContent />}
         </PanelShell>
       )}
     </AnimatePresence>
