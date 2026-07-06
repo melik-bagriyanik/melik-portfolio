@@ -116,8 +116,12 @@ interface InteractionManagerProps {
   objectsRef: RefObject<THREE.Object3D[]>;
   onHover: (meta: TargetMeta | null) => void;
   onSelect: (meta: TargetMeta, pose: FocusPose) => void;
-  /** Dokunmatikte "incele" tetikleyicisi dışarıdan çağrılır */
-  triggerRef?: RefObject<{ trigger: () => void } | null>;
+  /**
+   * Dokunmatikte "incele" tetikleyicisi dışarıdan çağrılır.
+   * ndc verilirse ışın ekranın o noktasından atılır (esere doğrudan dokunma);
+   * verilmezse mevcut crosshair hedefi kullanılır.
+   */
+  triggerRef?: RefObject<{ trigger: (ndc?: { x: number; y: number }) => void } | null>;
 }
 
 export function InteractionManager({
@@ -167,11 +171,23 @@ export function InteractionManager({
     setHover((obj?.userData.__target as TargetMeta) ?? null);
   });
 
-  const select = useCallback(() => {
-    const meta = hoverRef.current;
-    if (!meta || !enabledRef.current) return;
-    onSelect(meta, computeFocusPose(meta, camera.position));
-  }, [onSelect, camera]);
+  const select = useCallback(
+    (ndc?: { x: number; y: number }) => {
+      if (!enabledRef.current) return;
+      let meta = hoverRef.current;
+      if (ndc) {
+        // Dokunulan ekran noktasından ışın at
+        raycaster.setFromCamera(new THREE.Vector2(ndc.x, ndc.y), camera);
+        const hits = raycaster.intersectObjects(objectsRef.current, true);
+        let obj: THREE.Object3D | null = hits.length > 0 ? hits[0].object : null;
+        while (obj && !obj.userData.__target) obj = obj.parent;
+        meta = (obj?.userData.__target as TargetMeta) ?? null;
+      }
+      if (!meta) return;
+      onSelect(meta, computeFocusPose(meta, camera.position));
+    },
+    [onSelect, camera, raycaster, objectsRef]
+  );
 
   useEffect(() => {
     const onMouseDown = (e: MouseEvent) => {
@@ -185,7 +201,7 @@ export function InteractionManager({
 
   useEffect(() => {
     if (!triggerRef) return;
-    triggerRef.current = { trigger: select };
+    triggerRef.current = { trigger: (ndc) => select(ndc) };
     return () => {
       triggerRef.current = null;
     };

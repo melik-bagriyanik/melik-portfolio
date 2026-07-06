@@ -16,10 +16,12 @@ export interface TouchState {
   look: { dx: number; dy: number };
   /** zıplama isteği; Player tarafından tüketilir */
   jump: boolean;
+  /** joystick kenara dayandığında koşu */
+  sprint: boolean;
 }
 
 export function createTouchState(): TouchState {
-  return { move: { x: 0, y: 0 }, look: { dx: 0, dy: 0 }, jump: false };
+  return { move: { x: 0, y: 0 }, look: { dx: 0, dy: 0 }, jump: false, sprint: false };
 }
 
 interface PlayerProps {
@@ -197,7 +199,7 @@ export function Player({ enabled, apiRef, touchRef, onLockChange }: PlayerProps)
       strafe /= inputLen;
     }
 
-    const sprint = k.has('ShiftLeft') || k.has('ShiftRight');
+    const sprint = k.has('ShiftLeft') || k.has('ShiftRight') || touch.sprint;
     const speed = sprint ? SPRINT_SPEED : WALK_SPEED;
 
     // Kamera yaw uzayında hareket yönü

@@ -108,9 +108,10 @@ export function IntroOverlay({
             >
               {(isTouch
                 ? [
-                    ['Sol joystick', 'Yürü'],
+                    ['Joystick', 'Yürü'],
+                    ['Kenara it', 'Koş'],
                     ['Sürükle', 'Etrafına bak'],
-                    ['Dokun', 'Eseri incele'],
+                    ['Esere dokun', 'İncele'],
                   ]
                 : [
                     ['W A S D', 'Yürü'],

@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useProgress } from '@react-three/drei';
 import type * as THREE from 'three';
@@ -54,15 +54,23 @@ export default function GalleryExperience() {
 
   const objectsRef = useRef<THREE.Object3D[]>([]);
   const playerApi = useRef<PlayerApi | null>(null);
-  const interactApi = useRef<{ trigger: () => void } | null>(null);
+  const interactApi = useRef<{ trigger: (ndc?: { x: number; y: number }) => void } | null>(null);
   const touchRef = useRef(createTouchState());
   const phaseRef = useRef(phase);
   phaseRef.current = phase;
 
-  const isTouch = useMemo(
-    () => typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches,
-    []
+  // Dokunmatik tespiti: kaba işaretçi (telefon/tablet) başlangıçta;
+  // melez cihazlarda (dokunmatik ekranlı laptop) ilk gerçek dokunuşta yükselt.
+  const [isTouch, setIsTouch] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches
   );
+
+  useEffect(() => {
+    if (isTouch) return;
+    const onFirstTouch = () => setIsTouch(true);
+    window.addEventListener('touchstart', onFirstTouch, { once: true, passive: true });
+    return () => window.removeEventListener('touchstart', onFirstTouch);
+  }, [isTouch]);
 
   const { progress, active: loading } = useProgress();
 
@@ -220,7 +228,7 @@ export default function GalleryExperience() {
       <TouchControls
         visible={isTouch && walking}
         touchRef={touchRef}
-        onInteract={() => interactApi.current?.trigger()}
+        onInteract={(ndc) => interactApi.current?.trigger(ndc)}
       />
       <PausedOverlay
         visible={phase === 'paused'}

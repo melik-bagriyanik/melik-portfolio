@@ -52,7 +52,11 @@
       "Bash(JDIR=\"C:/Users/Melik/.claude/projects/c--Users-Melik-melik-portfolio/73b87e24-8204-432d-a4c1-4d238f484e40/subagents/workflows/wf_60af16e1-e48\"; ls \"$JDIR\" 2>/dev/null | head -5; echo \"---\"; if [ -f \"$JDIR/journal.jsonl\" ]; then tail -3 \"$JDIR/journal.jsonl\" | head -c 3000; fi)",
       "Read(//c/Users/Melik/.claude/projects/c--Users-Melik-melik-portfolio/73b87e24-8204-432d-a4c1-4d238f484e40/subagents/workflows/wf_60af16e1-e48/**)",
       "Bash(echo \"tsc: $?\")",
-      "Bash(curl -s -o /dev/null -w \"dev: %{http_code}\\\\n\" http://localhost:5199/)"
+      "Bash(curl -s -o /dev/null -w \"dev: %{http_code}\\\\n\" http://localhost:5199/)",
+      "Bash(curl -s -o /dev/null -w \"dev 5199: %{http_code}\\\\n\" http://localhost:5199/)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\Melik\\OneDrive\\Desktop\\word-project\\src\\taskpane\\components\\pages\\ContractCreator"
     ]
   }
 }
