@@ -23,6 +23,7 @@ import {
   EDUCATION,
   LANGUAGES,
   ROOMS_INFO,
+  GUESTBOOK,
 } from '../data';
 
 interface InfoPanelProps {
@@ -230,6 +231,113 @@ function EducationContent() {
   );
 }
 
+const inputCls =
+  'w-full px-4 py-3 rounded-xl bg-white border border-stone-200 text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 transition-all';
+
+function GuestbookContent() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+
+  const canSend = name.trim().length >= 2 && message.trim().length >= 5 && status !== 'sending';
+
+  const submit = async () => {
+    if (!canSend) return;
+    setStatus('sending');
+    try {
+      const res = await fetch(GUESTBOOK.endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim() || 'belirtilmedi',
+          message: message.trim(),
+          _subject: `Galeri Ziyaretçi Defteri — ${name.trim()}`,
+          _template: 'table',
+          _captcha: 'false',
+        }),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      setStatus('sent');
+    } catch {
+      setStatus('error');
+    }
+  };
+
+  if (status === 'sent') {
+    return (
+      <div className="flex flex-col items-center text-center pt-10">
+        <div className="w-16 h-16 rounded-full bg-gold-500/15 border border-gold-500/40 flex items-center justify-center text-3xl mb-6">
+          ✒️
+        </div>
+        <h2 className="text-2xl font-display font-black tracking-tight text-stone-900 mb-3">
+          Deftere yazıldı!
+        </h2>
+        <p className="text-stone-600 text-[15px] leading-relaxed max-w-xs">
+          Mesajın bana ulaştı{name ? `, ${name.split(' ')[0]}` : ''}. Ziyaretin ve notun için
+          teşekkürler — en kısa sürede dönüş yapacağım.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <h2 className="text-3xl font-display font-black tracking-tight text-stone-900 mb-2">
+        Ziyaretçi Defteri
+      </h2>
+      <p className="text-stone-600 text-[14px] leading-relaxed mb-6">
+        Galeriyi gezdiğin için teşekkürler! Bir not bırak — mesajın doğrudan bana ulaşır.
+      </p>
+      <div className="flex flex-col gap-3">
+        <input
+          className={inputCls}
+          placeholder="Adın *"
+          value={name}
+          maxLength={80}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <input
+          className={inputCls}
+          type="email"
+          placeholder="E-posta (dönüş için, isteğe bağlı)"
+          value={email}
+          maxLength={120}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <textarea
+          className={`${inputCls} resize-none h-32`}
+          placeholder="Mesajın *"
+          value={message}
+          maxLength={1000}
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        {status === 'error' && (
+          <p className="text-[12px] text-red-500 leading-relaxed">
+            Gönderilemedi — bağlantını kontrol edip tekrar dene, ya da{' '}
+            <a className="underline font-bold" href={`mailto:${CONTACT.email}`}>
+              doğrudan e-posta gönder
+            </a>
+            .
+          </p>
+        )}
+        <button
+          onClick={submit}
+          disabled={!canSend}
+          className={`mt-1 py-3.5 rounded-xl text-sm font-bold transition-all ${
+            canSend
+              ? 'bg-gold-500 text-white hover:bg-gold-600 shadow-lg shadow-gold-500/25'
+              : 'bg-stone-100 text-stone-400 cursor-not-allowed'
+          }`}
+        >
+          {status === 'sending' ? 'Gönderiliyor…' : 'Deftere Yaz ✒️'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function GuideContent() {
   return (
     <div>
@@ -344,6 +452,7 @@ const EYEBROWS: Record<string, string> = {
   experience: 'Kariyer · Deneyim',
   education: 'Eğitim',
   guide: 'Sergi Planı',
+  guestbook: 'Ziyaretçi Defteri',
 };
 
 export function InfoPanel({ meta, onClose }: InfoPanelProps) {
@@ -358,6 +467,7 @@ export function InfoPanel({ meta, onClose }: InfoPanelProps) {
           {meta.kind === 'experience' && <ExperienceContent id={meta.id} />}
           {meta.kind === 'education' && <EducationContent />}
           {meta.kind === 'guide' && <GuideContent />}
+          {meta.kind === 'guestbook' && <GuestbookContent />}
         </PanelShell>
       )}
     </AnimatePresence>

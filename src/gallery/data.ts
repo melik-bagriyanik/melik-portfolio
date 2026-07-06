@@ -541,23 +541,6 @@ export interface BoardEntry {
 
 export const BOARDS: BoardEntry[] = [
   {
-    // Portrenin yanında: ziyaretçiyi kısaca tanıştıran pano (Teknoloji kapısının sağı)
-    id: 'about',
-    title: 'HAKKIMDA',
-    lines: [
-      'Melik Bağrıyanık — Full Stack Developer',
-      'İstanbul, Türkiye',
-      '',
-      'React, Next.js ve React Native ile',
-      'web ve mobil ürünler geliştiriyorum.',
-      'Kod ile estetiğin kesişiminde,',
-      'kullanıcıyı önceleyen işler.',
-      '',
-      'Yeni projelere açığım.',
-    ],
-    placement: faceSouth(4.5, -6, 2.3, 1.7, 2.35),
-  },
-  {
     id: 'contact',
     title: 'İLETİŞİM',
     lines: [
@@ -575,6 +558,40 @@ export const BOARDS: BoardEntry[] = [
 
 export const GUIDE_PLACEMENT: WallPlacement = faceWest(4, 15, 1.7, 1.25, 2.1);
 
+// ---------------------------------------------------------------------------
+// Anıt (Ana Salon merkezi) — yaklaşınca hologramlar belirir
+// ---------------------------------------------------------------------------
+
+export const MONUMENT = {
+  id: 'monument',
+  position: [0, 0, 1.4] as [number, number, number],
+  /** Hologram etkinleşme mesafesi (m) */
+  activationDistance: 5.4,
+  /** Yörüngede dönen yetenek çipleri */
+  skills: ['React', 'Next.js', 'React Native', 'TypeScript', '.NET', 'Node.js', 'SQL', 'Flutter'],
+  holoCard: {
+    title: 'EĞİTİM',
+    rows: [
+      { head: 'Bilgisayar Mühendisliği', sub: 'Bilecik Şeyh Edebali Üniversitesi · 2019–2023' },
+      { head: 'Erasmus+ · Bilgisayar Bilimi', sub: 'Wroclaw Ekonomi ve İşletme Üniv. · 2021–2022' },
+      { head: 'İngilizce Hazırlık (B2)', sub: 'WSB Üniversitesi · Poznan · 2024' },
+    ],
+  },
+} as const;
+
+// ---------------------------------------------------------------------------
+// Ziyaretçi Defteri kürsüsü (Giriş/Çıkış holü)
+// ---------------------------------------------------------------------------
+
+export const GUESTBOOK = {
+  id: 'guestbook',
+  position: [2.4, 0, 12.6] as [number, number, number],
+  /** Kürsü, giriş yoluna/oyuncuya dönük */
+  rotationY: Math.atan2(0 - 2.4, 17 - 12.6),
+  /** Mesajlar bu adrese e-posta olarak düşer (FormSubmit) */
+  endpoint: 'https://formsubmit.co/ajax/melik.bagriyanik0@gmail.com',
+} as const;
+
 export interface RoomInfo {
   name: string;
   blurb: string;
@@ -583,8 +600,8 @@ export interface RoomInfo {
 }
 
 export const ROOMS_INFO: RoomInfo[] = [
-  { name: 'Giriş Holü', blurb: 'Sergi planı ve karşılama', rect: [-4, 10, 4, 20] },
-  { name: 'Ana Salon', blurb: 'Sanatçı portresi · Hakkımda · İletişim', rect: [-7, -6, 7, 10] },
+  { name: 'Giriş Holü', blurb: 'Sergi planı · Ziyaretçi defteri', rect: [-4, 10, 4, 20] },
+  { name: 'Ana Salon', blurb: 'Sanatçı portresi · Anıt · İletişim', rect: [-7, -6, 7, 10] },
   { name: 'Kariyer Kanadı', blurb: 'İş deneyimi ve eğitim panoları', rect: [-19, -6, -7, 10] },
   { name: 'Proje Galerisi', blurb: 'Kişisel ve kurumsal projeler', rect: [7, -6, 19, 10] },
   { name: 'Teknoloji Salonu', blurb: 'Yetenek heykelleri', rect: [-7, -20, 7, -6] },
@@ -625,6 +642,9 @@ export const COLLIDERS: Collider[] = [
     hx: PEDESTAL_HALF,
     hz: PEDESTAL_HALF,
   })),
+  // Anıt ve ziyaretçi defteri kürsüsü
+  { cx: MONUMENT.position[0], cz: MONUMENT.position[2], hx: 0.8, hz: 0.8 },
+  { cx: GUESTBOOK.position[0], cz: GUESTBOOK.position[2], hx: 0.45, hz: 0.45 },
 ];
 
 /** Tüm yürünebilir alanın sınır kutusu (güvenlik kelepçesi) */

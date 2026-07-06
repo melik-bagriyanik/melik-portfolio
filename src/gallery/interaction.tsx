@@ -19,7 +19,8 @@ export type TargetKind =
   | 'contact'
   | 'experience'
   | 'education'
-  | 'guide';
+  | 'guide'
+  | 'guestbook';
 
 export interface TargetMeta {
   id: string;

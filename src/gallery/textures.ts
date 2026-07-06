@@ -336,6 +336,69 @@ export function drawGuideBoard(rooms: RoomInfo[]): HTMLCanvasElement {
   return canvas;
 }
 
+/** Anıt hologramı: havada asılı yetenek çipi */
+export function drawHoloChip(label: string): HTMLCanvasElement {
+  const W = 256;
+  const H = 88;
+  const { canvas, ctx } = makeCanvas(W, H);
+  ctx.beginPath();
+  ctx.roundRect(6, 6, W - 12, H - 12, 22);
+  ctx.fillStyle = 'rgba(30, 24, 14, 0.78)';
+  ctx.fill();
+  ctx.strokeStyle = '#e8c37a';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+  ctx.font = '700 34px Outfit, Inter, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#ffe9b8';
+  ctx.fillText(label, W / 2, H / 2 + 2);
+  return canvas;
+}
+
+/** Anıt hologramı: eğitim bilgisi kartı */
+export function drawHoloCard(
+  title: string,
+  rows: { head: string; sub: string }[]
+): HTMLCanvasElement {
+  const W = 760;
+  const H = 430;
+  const { canvas, ctx } = makeCanvas(W, H);
+  ctx.beginPath();
+  ctx.roundRect(8, 8, W - 16, H - 16, 26);
+  ctx.fillStyle = 'rgba(28, 22, 13, 0.82)';
+  ctx.fill();
+  ctx.strokeStyle = '#e8c37a';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#e8c37a';
+  ctx.font = '800 30px Outfit, Inter, sans-serif';
+  ctx.save();
+  ctx.letterSpacing = '8px';
+  ctx.fillText(title, 52, 76);
+  ctx.restore();
+  ctx.strokeStyle = 'rgba(232,195,122,0.4)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(52, 100);
+  ctx.lineTo(180, 100);
+  ctx.stroke();
+
+  let y = 160;
+  for (const row of rows) {
+    ctx.fillStyle = '#fdf4dd';
+    ctx.font = '700 32px Inter, sans-serif';
+    ctx.fillText(row.head, 52, y);
+    ctx.fillStyle = 'rgba(253,244,221,0.62)';
+    ctx.font = '500 26px Inter, sans-serif';
+    ctx.fillText(row.sub, 52, y + 38);
+    y += 100;
+  }
+  return canvas;
+}
+
 /** Tabloların önünde zemine vuran sıcak spot havuzu (fırınlanmış görünüm) */
 export function makeLightPoolTexture(): THREE.Texture {
   const { canvas, ctx } = makeCanvas(256, 256);

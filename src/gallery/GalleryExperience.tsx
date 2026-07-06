@@ -92,9 +92,11 @@ export default function GalleryExperience() {
     localStorage.setItem('gallerySfx', sfxOn ? 'on' : 'off');
   }, [sfxOn]);
 
-  // M tuşu müziği her fazda açıp kapatır
+  // M tuşu müziği açıp kapatır (form alanlarında yazarken devre dışı)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      const el = e.target as HTMLElement | null;
+      if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable)) return;
       if (e.code === 'KeyM') setMusicOn((m) => !m);
     };
     document.addEventListener('keydown', onKey);

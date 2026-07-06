@@ -16,6 +16,8 @@ import { Room } from './Room';
 import { Painting } from './Painting';
 import { Portrait } from './Portrait';
 import { Pedestal } from './Pedestal';
+import { Monument } from './Monument';
+import { Guestbook } from './Guestbook';
 import { WallBoard } from './Board';
 import { InteractionProvider, type TargetMeta } from './interaction';
 
@@ -86,6 +88,8 @@ export function Scene({ hoveredId, objectsRef, lite }: SceneProps) {
       <Room />
 
       <Portrait hovered={hoveredId === 'artist'} lite={lite} />
+      <Monument hovered={hoveredId === 'monument'} />
+      <Guestbook hovered={hoveredId === 'guestbook'} />
 
       {PAINTINGS.map((entry) => (
         <Painting
