@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { SoundToggles } from './SoundToggles';
 
 interface IntroOverlayProps {
   visible: boolean;
@@ -7,9 +8,23 @@ interface IntroOverlayProps {
   loading: boolean;
   isTouch: boolean;
   onEnter: () => void;
+  musicOn: boolean;
+  sfxOn: boolean;
+  onToggleMusic: () => void;
+  onToggleSfx: () => void;
 }
 
-export function IntroOverlay({ visible, progress, loading, isTouch, onEnter }: IntroOverlayProps) {
+export function IntroOverlay({
+  visible,
+  progress,
+  loading,
+  isTouch,
+  onEnter,
+  musicOn,
+  sfxOn,
+  onToggleMusic,
+  onToggleSfx,
+}: IntroOverlayProps) {
   // useProgress ilk boyamada 0/false döner; en az bir yükleme başlangıcı görmeden
   // "hazır" deme. Yükleyici hiç tetiklenmezse 7 sn sonra yine de kapıyı aç.
   const [started, setStarted] = useState(false);
@@ -101,6 +116,7 @@ export function IntroOverlay({ visible, progress, loading, isTouch, onEnter }: I
                     ['W A S D', 'Yürü'],
                     ['Fare', 'Etrafına bak'],
                     ['Sol tık', 'Eseri incele'],
+                    ['Boşluk', 'Zıpla'],
                     ['ESC', 'Duraklat'],
                   ]
               ).map(([key, label]) => (
@@ -129,11 +145,25 @@ export function IntroOverlay({ visible, progress, loading, isTouch, onEnter }: I
               {ready ? 'Galeriye Gir →' : `Galeri hazırlanıyor… %${Math.round(progress)}`}
             </motion.button>
 
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
+              className="mt-8"
+            >
+              <SoundToggles
+                musicOn={musicOn}
+                sfxOn={sfxOn}
+                onToggleMusic={onToggleMusic}
+                onToggleSfx={onToggleSfx}
+              />
+            </motion.div>
+
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1 }}
-              className="mt-8 text-[10px] uppercase tracking-[0.25em] text-stone-400 font-semibold"
+              className="mt-6 text-[10px] uppercase tracking-[0.25em] text-stone-400 font-semibold"
             >
               En iyi deneyim için masaüstü önerilir
             </motion.p>

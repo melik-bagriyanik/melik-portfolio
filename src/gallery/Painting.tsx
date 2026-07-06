@@ -2,8 +2,42 @@ import { useEffect, useMemo, useRef } from 'react';
 import { Text, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 import type { PaintingEntry, ProjectEntry } from './data';
-import { drawPoster, useCanvasTexture } from './textures';
+import { drawPoster, useCanvasTexture, makeLightPoolTexture } from './textures';
 import { useRegisterTarget, type TargetMeta } from './interaction';
+
+let lightPoolTexture: THREE.Texture | null = null;
+export function getLightPoolTexture() {
+  if (!lightPoolTexture) lightPoolTexture = makeLightPoolTexture();
+  return lightPoolTexture;
+}
+
+/** Eserin önünde zemine vuran sıcak ışık havuzu — fırınlanmış spot izlenimi */
+export function FloorLightPool({
+  centerY,
+  width,
+}: {
+  centerY: number;
+  width: number;
+}) {
+  return (
+    <mesh
+      rotation-x={-Math.PI / 2}
+      position={[0, -centerY + 0.012, 0.95]}
+      scale={[width * 1.35, 1.9, 1]}
+      raycast={() => null}
+    >
+      <planeGeometry args={[1.6, 1]} />
+      <meshBasicMaterial
+        map={getLightPoolTexture()}
+        transparent
+        opacity={0.5}
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+        toneMapped={false}
+      />
+    </mesh>
+  );
+}
 
 const OUTFIT = '/fonts/outfit-700.ttf';
 const INTER = '/fonts/inter-500.ttf';
@@ -119,6 +153,9 @@ export function Painting({ entry, hovered, lite }: PaintingProps) {
           {`${project.subtitle} · ${project.year}`}
         </Text>
       </group>
+
+      {/* Zemindeki ışık havuzu */}
+      <FloorLightPool centerY={placement.position[1]} width={width} />
 
       {/* Esere yönelen sıcak spot (mobilde kapalı) */}
       {!lite && (

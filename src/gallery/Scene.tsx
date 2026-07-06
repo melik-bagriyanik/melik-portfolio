@@ -14,6 +14,7 @@ import {
 import { drawBoard, drawCareerBoard, drawEducationBoard, drawGuideBoard } from './textures';
 import { Room } from './Room';
 import { Painting } from './Painting';
+import { Portrait } from './Portrait';
 import { Pedestal } from './Pedestal';
 import { WallBoard } from './Board';
 import { InteractionProvider, type TargetMeta } from './interaction';
@@ -83,6 +84,8 @@ export function Scene({ hoveredId, objectsRef, lite }: SceneProps) {
       <fog attach="fog" args={['#f2eee3', 26, 62]} />
 
       <Room />
+
+      <Portrait hovered={hoveredId === 'artist'} lite={lite} />
 
       {PAINTINGS.map((entry) => (
         <Painting

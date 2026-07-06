@@ -5,9 +5,21 @@ interface HudProps {
   visible: boolean;
   hovered: TargetMeta | null;
   isTouch: boolean;
+  musicOn: boolean;
+  sfxOn: boolean;
+  onToggleMusic: () => void;
+  onToggleSfx: () => void;
 }
 
-export function Hud({ visible, hovered, isTouch }: HudProps) {
+export function Hud({
+  visible,
+  hovered,
+  isTouch,
+  musicOn,
+  sfxOn,
+  onToggleMusic,
+  onToggleSfx,
+}: HudProps) {
   if (!visible) return null;
 
   return (
@@ -17,10 +29,36 @@ export function Hud({ visible, hovered, isTouch }: HudProps) {
         MELİK<span className="text-gold-600 italic">.AI</span>
       </div>
 
-      {/* Duraklatma ipucu */}
-      {!isTouch && (
-        <div className="absolute top-6 right-6 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-500/80">
-          ESC — Duraklat
+      {/* Duraklatma + müzik ipuçları / mobil ses düğmeleri */}
+      {!isTouch ? (
+        <div className="absolute top-6 right-6 flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-500/80">
+          <span>M — Müzik {musicOn ? '♪' : '✕'}</span>
+          <span>ESC — Duraklat</span>
+        </div>
+      ) : (
+        <div className="absolute top-5 right-5 flex items-center gap-2 pointer-events-auto">
+          <button
+            onClick={onToggleMusic}
+            className={`w-9 h-9 rounded-full border backdrop-blur-sm flex items-center justify-center text-sm ${
+              musicOn
+                ? 'bg-gold-500/20 border-gold-500/50 text-gold-700'
+                : 'bg-white/50 border-stone-300 text-stone-400'
+            }`}
+            aria-label="Müzik aç/kapat"
+          >
+            ♪
+          </button>
+          <button
+            onClick={onToggleSfx}
+            className={`w-9 h-9 rounded-full border backdrop-blur-sm flex items-center justify-center text-[10px] font-black ${
+              sfxOn
+                ? 'bg-gold-500/20 border-gold-500/50 text-gold-700'
+                : 'bg-white/50 border-stone-300 text-stone-400'
+            }`}
+            aria-label="Efekt seslerini aç/kapat"
+          >
+            SFX
+          </button>
         </div>
       )}
 
@@ -67,6 +105,7 @@ export function Hud({ visible, hovered, isTouch }: HudProps) {
             ['W A S D', 'Yürü'],
             ['Fare', 'Bak'],
             ['Shift', 'Hızlı'],
+            ['Boşluk', 'Zıpla'],
           ].map(([key, label]) => (
             <div
               key={key}

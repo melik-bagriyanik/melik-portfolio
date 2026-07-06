@@ -336,6 +336,18 @@ export function drawGuideBoard(rooms: RoomInfo[]): HTMLCanvasElement {
   return canvas;
 }
 
+/** Tabloların önünde zemine vuran sıcak spot havuzu (fırınlanmış görünüm) */
+export function makeLightPoolTexture(): THREE.Texture {
+  const { canvas, ctx } = makeCanvas(256, 256);
+  const g = ctx.createRadialGradient(128, 128, 8, 128, 128, 126);
+  g.addColorStop(0, 'rgba(255, 240, 205, 0.85)');
+  g.addColorStop(0.45, 'rgba(255, 236, 195, 0.35)');
+  g.addColorStop(1, 'rgba(255, 236, 195, 0)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, 256, 256);
+  return new THREE.CanvasTexture(canvas);
+}
+
 /** Kaidelerin altına yumuşak temas gölgesi */
 export function makeBlobShadowTexture(): THREE.Texture {
   const { canvas, ctx } = makeCanvas(256, 256);

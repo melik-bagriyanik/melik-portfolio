@@ -19,6 +19,13 @@ const OUTFIT = '/fonts/outfit-700.ttf';
 function WallBox({ seg }: { seg: WallSegment }) {
   const size: [number, number, number] =
     seg.axis === 'x' ? [seg.len, H, T] : [T, H, seg.len];
+  // Köşelerde dik kesişen süpürgelikler üst üste biner; üst yüzeyleri aynı
+  // yükseklikte kalırsa z-fighting titremesi olur. Eksene göre göze görünmez
+  // bir yükseklik farkı düzlemleri ayırır.
+  const bbH = seg.axis === 'x' ? 0.16 : 0.152;
+  // Uç yüzler kapı sövelerinde duvarın uç yüzüyle aynı düzleme denk gelir;
+  // 2'şer cm içeri çekerek çakışmayı kaldır (köşelerde dik süpürgelik örter).
+  const bbLen = seg.len - 0.04;
   return (
     <group position={[seg.cx, 0, seg.cz]}>
       <mesh position={[0, H / 2, 0]}>
@@ -26,12 +33,12 @@ function WallBox({ seg }: { seg: WallSegment }) {
         <meshStandardMaterial color={WALL_COLOR} roughness={0.95} />
       </mesh>
       {/* Süpürgelik */}
-      <mesh position={[0, 0.08, 0]}>
+      <mesh position={[0, bbH / 2, 0]}>
         <boxGeometry
           args={
             seg.axis === 'x'
-              ? [seg.len, 0.16, T + 0.05]
-              : [T + 0.05, 0.16, seg.len]
+              ? [bbLen, bbH, T + 0.05]
+              : [T + 0.05, bbH, bbLen]
           }
         />
         <meshStandardMaterial color="#3a352c" roughness={0.6} />
@@ -50,11 +57,14 @@ function Lintel({ seg }: { seg: WallSegment }) {
         <boxGeometry args={size} />
         <meshStandardMaterial color={WALL_COLOR} roughness={0.95} />
       </mesh>
-      {/* Kapı üstü altın profil */}
-      <mesh position={[0, -height / 2 + 0.03, 0]}>
+      {/* Kapı üstü altın profil — alt yüzü lentodan aşağı, uçları 1.5'er cm
+          dışarı taşırılır; aynı düzlemde kalan yüzeyler z-fighting titremesi yapar */}
+      <mesh position={[0, -height / 2 - 0.012, 0]}>
         <boxGeometry
           args={
-            seg.axis === 'x' ? [seg.len, 0.06, T + 0.04] : [T + 0.04, 0.06, seg.len]
+            seg.axis === 'x'
+              ? [seg.len + 0.03, 0.09, T + 0.04]
+              : [T + 0.04, 0.09, seg.len + 0.03]
           }
         />
         <meshStandardMaterial color="#c9a44b" metalness={0.85} roughness={0.3} />

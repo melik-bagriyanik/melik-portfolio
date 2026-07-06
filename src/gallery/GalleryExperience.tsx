@@ -16,6 +16,7 @@ import { InfoPanel } from './ui/InfoPanel';
 import { PausedOverlay } from './ui/PausedOverlay';
 import { TouchControls } from './ui/TouchControls';
 import { CONTACT } from './data';
+import { galleryAudio } from './audio';
 
 type Phase = 'intro' | 'walk' | 'paused' | 'focus' | 'returning';
 
@@ -65,6 +66,33 @@ export default function GalleryExperience() {
 
   const { progress, active: loading } = useProgress();
 
+  // Ses tercihleri (kalıcı)
+  const [musicOn, setMusicOn] = useState(
+    () => typeof localStorage === 'undefined' || localStorage.getItem('galleryMusic') !== 'off'
+  );
+  const [sfxOn, setSfxOn] = useState(
+    () => typeof localStorage === 'undefined' || localStorage.getItem('gallerySfx') !== 'off'
+  );
+
+  useEffect(() => {
+    galleryAudio.setMusic(musicOn);
+    localStorage.setItem('galleryMusic', musicOn ? 'on' : 'off');
+  }, [musicOn]);
+
+  useEffect(() => {
+    galleryAudio.setSfx(sfxOn);
+    localStorage.setItem('gallerySfx', sfxOn ? 'on' : 'off');
+  }, [sfxOn]);
+
+  // M tuşu müziği her fazda açıp kapatır
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.code === 'KeyM') setMusicOn((m) => !m);
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, []);
+
   // Sayfa kaydırmasını kilitle — deneyim tam ekran
   useEffect(() => {
     const prev = document.body.style.overflow;
@@ -75,6 +103,8 @@ export default function GalleryExperience() {
   }, []);
 
   const enter = useCallback(() => {
+    // Ses motoru ancak kullanıcı hareketiyle başlayabilir (tarayıcı politikası)
+    galleryAudio.init();
     if (isTouch) {
       setPhase('walk');
     } else {
@@ -92,9 +122,15 @@ export default function GalleryExperience() {
   }, []);
 
   const onSelect = useCallback((meta: TargetMeta, pose: FocusPose) => {
+    galleryAudio.playSelect();
     setFocus({ meta, pose });
     setPhase('focus');
     playerApi.current?.unlock();
+  }, []);
+
+  const onHover = useCallback((meta: TargetMeta | null) => {
+    if (meta) galleryAudio.playHover();
+    setHovered(meta);
   }, []);
 
   /**
@@ -104,6 +140,7 @@ export default function GalleryExperience() {
    */
   const closeFocus = useCallback(
     (relock: boolean) => {
+      if (phaseRef.current === 'focus') galleryAudio.playClose();
       setPhase((p) => (p === 'focus' ? 'returning' : p));
       if (relock && !isTouch) playerApi.current?.lock();
     },
@@ -148,7 +185,7 @@ export default function GalleryExperience() {
         <InteractionManager
           enabled={walking}
           objectsRef={objectsRef}
-          onHover={setHovered}
+          onHover={onHover}
           onSelect={onSelect}
           triggerRef={interactApi}
         />
@@ -166,14 +203,33 @@ export default function GalleryExperience() {
         loading={loading}
         isTouch={isTouch}
         onEnter={enter}
+        musicOn={musicOn}
+        sfxOn={sfxOn}
+        onToggleMusic={() => setMusicOn((m) => !m)}
+        onToggleSfx={() => setSfxOn((s) => !s)}
       />
-      <Hud visible={walking} hovered={hovered} isTouch={isTouch} />
+      <Hud
+        visible={walking}
+        hovered={hovered}
+        isTouch={isTouch}
+        musicOn={musicOn}
+        sfxOn={sfxOn}
+        onToggleMusic={() => setMusicOn((m) => !m)}
+        onToggleSfx={() => setSfxOn((s) => !s)}
+      />
       <TouchControls
         visible={isTouch && walking}
         touchRef={touchRef}
         onInteract={() => interactApi.current?.trigger()}
       />
-      <PausedOverlay visible={phase === 'paused'} onResume={enter} />
+      <PausedOverlay
+        visible={phase === 'paused'}
+        onResume={enter}
+        musicOn={musicOn}
+        sfxOn={sfxOn}
+        onToggleMusic={() => setMusicOn((m) => !m)}
+        onToggleSfx={() => setSfxOn((s) => !s)}
+      />
       <InfoPanel
         meta={phase === 'focus' ? focus?.meta ?? null : null}
         onClose={() => closeFocus(true)}

@@ -32,6 +32,7 @@ export function TouchControls({ visible, touchRef, onInteract }: TouchControlsPr
     ts.move.y = 0;
     ts.look.dx = 0;
     ts.look.dy = 0;
+    ts.jump = false;
   }, [visible, touchRef]);
 
   const handleStart = useCallback(
@@ -110,6 +111,17 @@ export function TouchControls({ visible, touchRef, onInteract }: TouchControlsPr
       onTouchEnd={handleEnd}
       onTouchCancel={handleEnd}
     >
+      {/* Zıplama butonu */}
+      <button
+        onTouchStart={(e) => {
+          e.stopPropagation();
+          touchRef.current.jump = true;
+        }}
+        className="absolute bottom-12 right-7 w-16 h-16 rounded-full bg-white/50 backdrop-blur-sm border-2 border-stone-400/50 flex items-center justify-center text-[10px] font-black uppercase tracking-widest text-stone-600 active:bg-gold-500/60 active:border-gold-600"
+      >
+        Zıpla
+      </button>
+
       {/* Joystick görseli */}
       {stick ? (
         <div

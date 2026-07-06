@@ -172,39 +172,20 @@ export interface PaintingEntry {
 const GITHUB = 'https://github.com/melik-bagriyanik';
 const CORPORATE_NOTE = 'Kurumsal proje — kaynak kodu ve canlı ortam gizlilik kapsamında.';
 
-export const PAINTINGS: PaintingEntry[] = [
-  // ——— Ana Salon: öne çıkan kurumsal işler (Teknoloji kapısının iki yanı) ———
-  {
-    project: {
-      id: 'commersee',
-      title: 'Commersee',
-      subtitle: 'E-Ticaret Platformu · Singularity',
-      description:
-        'Singularity bünyesinde frontend geliştirmesini yönettiğim, SEO uyumlu ve yüksek performanslı bir e-ticaret platformu. Reusable component yapısı ve modüler mimariyle kod kalitesini ve süreç verimliliğini artırdım.',
-      tech: ['React.js', 'Next.js', 'TypeScript', 'SEO'],
-      image: '/projects/ecommerce.png',
-      accent: '#c9a44b',
-      note: CORPORATE_NOTE,
-      year: '2023–2025',
-    },
-    placement: faceSouth(-4.5, -6, 3.2, 1.8, 2.35),
-  },
-  {
-    project: {
-      id: 'ranswer',
-      title: 'Ranswer.ai',
-      subtitle: 'AI Destek Platformu · Web & Mobil',
-      description:
-        'Yapay zeka destekli müşteri destek platformu. Dinamik UI yapılarını ve backend API entegrasyonlarını yönettim; authentication ve state management mimarisini Clean Architecture prensipleriyle tasarladım. React Native ile web sürümüyle uyumlu mobil uygulamasını da geliştirdim.',
-      tech: ['React.js', 'React Native', 'Clean Architecture', 'REST API'],
-      image: '/projects/ai.png',
-      accent: '#7c6df2',
-      note: CORPORATE_NOTE,
-      year: '2023–2025',
-    },
-    placement: faceSouth(4.5, -6, 3.2, 1.8, 2.35),
-  },
+/**
+ * Ana Salon — sanatçı portresi (Teknoloji kapısının solu).
+ * Tıklanınca Hakkımda paneli açılır.
+ */
+export const PORTRAIT = {
+  id: 'artist',
+  image: '/profile.jpeg',
+  title: 'MELİK BAĞRIYANIK',
+  subtitle: 'Sanatçının Portresi · İstanbul',
+  // profile.jpeg 1344×1920 → 7:10 oranı korunur
+  placement: faceSouth(-4.5, -6, 1.75, 2.5, 2.35),
+} as const;
 
+export const PAINTINGS: PaintingEntry[] = [
   // ——— Doğu Kanadı: Proje Galerisi ———
   {
     project: {
@@ -304,6 +285,7 @@ export const PAINTINGS: PaintingEntry[] = [
 export type SculptureKind =
   | 'torusKnot'
   | 'icosahedron'
+  | 'octahedron'
   | 'prism'
   | 'rings'
   | 'stack'
@@ -319,52 +301,56 @@ export interface TechEntry {
   position: [number, number, number];
   rotationY: number;
   material: 'gold' | 'stone' | 'bronze';
+  /** Uzmanlık yıldızları: daha büyük kaide, altın malzeme, öne yerleşim */
+  featured?: boolean;
 }
 
-const TECH_CENTER = { x: 0, z: -13 };
-const TECH_RADIUS = 3.9;
+/** Plaket verilen noktaya (genelde kapıya/odaya) baksın */
+const faceTo = (x: number, z: number, tx: number, tz: number): number =>
+  Math.atan2(tx - x, tz - z);
 
-function ringPos(angleDeg: number): { position: [number, number, number]; rotationY: number } {
-  const a = (angleDeg * Math.PI) / 180;
-  const x = TECH_CENTER.x + Math.cos(a) * TECH_RADIUS;
-  const z = TECH_CENTER.z + Math.sin(a) * TECH_RADIUS;
-  // Plaket çemberin merkezine baksın
-  const rotationY = Math.atan2(TECH_CENTER.x - x, TECH_CENTER.z - z);
-  return { position: [x, 0, z], rotationY };
-}
+const TECH_DOOR = { x: 0, z: -6 };
 
 export const TECHS: TechEntry[] = [
-  {
-    id: 'threejs',
-    title: '3D & Animasyon',
-    blurb:
-      'WebGL üzerinde gerçek zamanlı sahneler ve sinematik mikro etkileşimler — bu galerinin kendisi bu alandaki işçiliğin kanıtı.',
-    skills: ['Three.js', 'R3F', 'Framer Motion'],
-    sculpture: 'torusKnot',
-    position: [TECH_CENTER.x, 0, TECH_CENTER.z],
-    rotationY: 0,
-    material: 'gold',
-  },
+  // ——— Ön sıra: uzmanlık yıldızları (kapıdan girince ilk görülenler) ———
   {
     id: 'react',
-    title: 'React & Next.js',
+    title: 'React',
     blurb:
-      'Bileşen mimarisi, SSR/SEO ve modern render stratejileriyle ölçeklenen, yüksek performanslı web arayüzleri.',
-    skills: ['React.js', 'Next.js', 'SEO', 'Reusable Components'],
+      'En güçlü olduğum alan: bileşen mimarisi, hooks ve modern render stratejileriyle ölçeklenen, yüksek performanslı arayüzler.',
+    skills: ['React.js', 'Hooks & Context', 'Reusable Components', 'SPA'],
     sculpture: 'rings',
-    ...ringPos(90),
+    position: [0, 0, -10.9],
+    rotationY: faceTo(0, -10.9, TECH_DOOR.x, TECH_DOOR.z),
     material: 'gold',
+    featured: true,
   },
   {
-    id: 'mobile',
-    title: 'Mobil Geliştirme',
+    id: 'nextjs',
+    title: 'Next.js',
     blurb:
-      'Native kalitesinde iOS ve Android uygulamaları — belediye hizmetlerinden canlı finans akışlarına üretimde çalışan işler.',
-    skills: ['React Native', 'Expo', 'Flutter', 'Firebase'],
-    sculpture: 'slab',
-    ...ringPos(30),
-    material: 'stone',
+      'SSR/SSG, SEO ve performans odağı: Commersee gibi üretim projelerinde Next.js ile yüksek performanslı, arama dostu yapılar kurdum.',
+    skills: ['Next.js', 'SSR / SSG', 'SEO', 'Vercel'],
+    sculpture: 'torusKnot',
+    position: [-4.2, 0, -12.6],
+    rotationY: faceTo(-4.2, -12.6, TECH_DOOR.x, TECH_DOOR.z),
+    material: 'gold',
+    featured: true,
   },
+  {
+    id: 'reactnative',
+    title: 'React Native',
+    blurb:
+      'Native kalitesinde iOS & Android: e-belediye ve canlı finans akışlı kuyumcu uygulaması dahil üretimde çalışan mobil işler.',
+    skills: ['React Native', 'Expo', 'iOS & Android', 'Flutter'],
+    sculpture: 'slab',
+    position: [4.2, 0, -12.6],
+    rotationY: faceTo(4.2, -12.6, TECH_DOOR.x, TECH_DOOR.z),
+    material: 'gold',
+    featured: true,
+  },
+
+  // ——— Arka sıra: destekleyici yetenekler ———
   {
     id: 'typescript',
     title: 'TypeScript & JS',
@@ -372,7 +358,8 @@ export const TECHS: TechEntry[] = [
       'Tip güvenliğiyle kendini belgeleyen, hatayı derleme anında yakalayan modern JavaScript kod tabanları.',
     skills: ['TypeScript', 'JavaScript', 'HTML', 'CSS'],
     sculpture: 'cube',
-    ...ringPos(150),
+    position: [-5.0, 0, -16.4],
+    rotationY: faceTo(-5.0, -16.4, 0, -13),
     material: 'stone',
   },
   {
@@ -382,7 +369,8 @@ export const TECHS: TechEntry[] = [
       'İstemci-sunucu mimarisini bütüncül ele alan backend geliştirme: API tasarımı ve dependency injection ile katmanlı yapılar.',
     skills: ['.NET', 'Node.js', 'REST API', 'Dependency Injection'],
     sculpture: 'prism',
-    ...ringPos(210),
+    position: [-1.7, 0, -17.3],
+    rotationY: faceTo(-1.7, -17.3, 0, -13),
     material: 'bronze',
   },
   {
@@ -391,7 +379,8 @@ export const TECHS: TechEntry[] = [
     blurb: 'İlişkisel modelleme ve sorgu tasarımıyla güvenilir veri katmanları.',
     skills: ['SQL', 'Firebase'],
     sculpture: 'stack',
-    ...ringPos(270),
+    position: [1.7, 0, -17.3],
+    rotationY: faceTo(1.7, -17.3, 0, -13),
     material: 'stone',
   },
   {
@@ -400,8 +389,9 @@ export const TECHS: TechEntry[] = [
     blurb:
       'SOLID ve Clean Code prensipleri, Git akışları ve Agile/Scrum ile sürdürülebilir ekip üretkenliği.',
     skills: ['Git', 'GitHub', 'Agile / Scrum', 'SOLID', 'Clean Code'],
-    sculpture: 'icosahedron',
-    ...ringPos(330),
+    sculpture: 'octahedron',
+    position: [5.0, 0, -16.4],
+    rotationY: faceTo(5.0, -16.4, 0, -13),
     material: 'bronze',
   },
 ];
@@ -551,18 +541,21 @@ export interface BoardEntry {
 
 export const BOARDS: BoardEntry[] = [
   {
+    // Portrenin yanında: ziyaretçiyi kısaca tanıştıran pano (Teknoloji kapısının sağı)
     id: 'about',
     title: 'HAKKIMDA',
     lines: [
       'Melik Bağrıyanık — Full Stack Developer',
+      'İstanbul, Türkiye',
       '',
-      'React.js, Next.js ve React Native',
-      'ekosistemlerinde ileri seviye uzmanlık.',
-      'Web arayüzlerinden native mobil',
-      'uygulamalara; .NET ve Node.js ile',
-      'backend destekli bütüncül geliştirme.',
+      'React, Next.js ve React Native ile',
+      'web ve mobil ürünler geliştiriyorum.',
+      'Kod ile estetiğin kesişiminde,',
+      'kullanıcıyı önceleyen işler.',
+      '',
+      'Yeni projelere açığım.',
     ],
-    placement: faceEast(-7, 6.5, 2.0, 1.4, 2.25),
+    placement: faceSouth(4.5, -6, 2.3, 1.7, 2.35),
   },
   {
     id: 'contact',
@@ -591,7 +584,7 @@ export interface RoomInfo {
 
 export const ROOMS_INFO: RoomInfo[] = [
   { name: 'Giriş Holü', blurb: 'Sergi planı ve karşılama', rect: [-4, 10, 4, 20] },
-  { name: 'Ana Salon', blurb: 'Öne çıkan işler · Hakkımda · İletişim', rect: [-7, -6, 7, 10] },
+  { name: 'Ana Salon', blurb: 'Sanatçı portresi · Hakkımda · İletişim', rect: [-7, -6, 7, 10] },
   { name: 'Kariyer Kanadı', blurb: 'İş deneyimi ve eğitim panoları', rect: [-19, -6, -7, 10] },
   { name: 'Proje Galerisi', blurb: 'Kişisel ve kurumsal projeler', rect: [7, -6, 19, 10] },
   { name: 'Teknoloji Salonu', blurb: 'Yetenek heykelleri', rect: [-7, -20, 7, -6] },

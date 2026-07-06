@@ -269,6 +269,13 @@ function TechContent({ id }: { id: string }) {
 function AboutContent() {
   return (
     <div>
+      <div className="rounded-2xl overflow-hidden border border-stone-200 mb-5 shadow-sm">
+        <img
+          src="/profile.jpeg"
+          alt="Melik Bağrıyanık"
+          className="w-full aspect-[4/5] object-cover object-top"
+        />
+      </div>
       <h2 className="text-3xl font-display font-black tracking-tight text-stone-900 mb-1">
         {ABOUT.name}
       </h2>

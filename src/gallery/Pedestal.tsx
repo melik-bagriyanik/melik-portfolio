@@ -79,6 +79,13 @@ function Sculpture({ kind, material }: { kind: SculptureKind; material: TechEntr
           <meshStandardMaterial {...props} flatShading />
         </mesh>
       );
+    case 'octahedron':
+      return (
+        <mesh rotation={[0, Math.PI / 5, 0]} castShadow>
+          <octahedronGeometry args={[0.34, 0]} />
+          <meshStandardMaterial {...props} flatShading />
+        </mesh>
+      );
     case 'slab':
       // Telefon plakası: mobil geliştirme
       return (
@@ -99,14 +106,16 @@ function Sculpture({ kind, material }: { kind: SculptureKind; material: TechEntr
 export function Pedestal({ entry, hovered }: { entry: TechEntry; hovered: boolean }) {
   const groupRef = useRef<THREE.Group>(null);
   const sculptureRef = useRef<THREE.Group>(null);
+  // Uzmanlık yıldızları (React, Next.js, React Native) daha görkemli sunulur
+  const scale = entry.featured ? 1.22 : 1;
 
   const meta = useMemo<TargetMeta>(
     () => ({
       id: entry.id,
       kind: 'tech',
       label: entry.title,
-      center: [entry.position[0], 1.35, entry.position[2]],
-      width: 1.2,
+      center: [entry.position[0], entry.featured ? 1.6 : 1.35, entry.position[2]],
+      width: entry.featured ? 1.5 : 1.2,
     }),
     [entry]
   );
@@ -125,6 +134,7 @@ export function Pedestal({ entry, hovered }: { entry: TechEntry; hovered: boolea
       ref={groupRef}
       position={[entry.position[0], 0, entry.position[2]]}
       rotation-y={entry.rotationY}
+      scale={scale}
     >
       {/* Taban + gövde + tabla */}
       <mesh position={[0, 0.075, 0]} castShadow receiveShadow>
@@ -141,12 +151,12 @@ export function Pedestal({ entry, hovered }: { entry: TechEntry; hovered: boolea
           color="#e9e2d2"
           roughness={0.8}
           emissive="#c9a44b"
-          emissiveIntensity={hovered ? 0.3 : 0}
+          emissiveIntensity={hovered ? 0.3 : entry.featured ? 0.12 : 0}
         />
       </mesh>
-      {/* Altın kaide bileziği */}
+      {/* Altın kaide bileziği — yıldız kaidelerde daha kalın */}
       <mesh position={[0, 1.13, 0]}>
-        <boxGeometry args={[0.64, 0.025, 0.64]} />
+        <boxGeometry args={[0.64, entry.featured ? 0.05 : 0.025, 0.64]} />
         <meshStandardMaterial color="#c9a44b" metalness={0.85} roughness={0.3} />
       </mesh>
 
@@ -159,9 +169,9 @@ export function Pedestal({ entry, hovered }: { entry: TechEntry; hovered: boolea
       <Text
         font={OUTFIT}
         position={[0, 0.78, 0.315]}
-        fontSize={0.05}
+        fontSize={entry.featured ? 0.062 : 0.05}
         letterSpacing={0.12}
-        color={hovered ? '#a98438' : '#57534e'}
+        color={hovered ? '#a98438' : entry.featured ? '#84682d' : '#57534e'}
         anchorX="center"
         anchorY="middle"
         maxWidth={0.56}
@@ -169,6 +179,19 @@ export function Pedestal({ entry, hovered }: { entry: TechEntry; hovered: boolea
       >
         {entry.title.toUpperCase()}
       </Text>
+      {entry.featured && (
+        <Text
+          font={OUTFIT}
+          position={[0, 0.58, 0.315]}
+          fontSize={0.032}
+          letterSpacing={0.3}
+          color="#a98438"
+          anchorX="center"
+          anchorY="middle"
+        >
+          UZMANLIK
+        </Text>
+      )}
 
       {/* Temas gölgesi — crosshair bunu hedef saymasın */}
       <mesh rotation-x={-Math.PI / 2} position={[0, 0.006, 0]} raycast={() => null}>

@@ -93,14 +93,13 @@ export function computeFocusPose(meta: TargetMeta, cameraPos: THREE.Vector3): Fo
     camera = center.clone().addScaledVector(n, dist);
     camera.y = EYE_Y;
   } else {
-    // Kaide: oyuncunun geldiği yönden bak
+    // Kaide: oyuncunun geldiği yönden bak (bakış yüksekliği meta.center'dan gelir)
     const dir = cameraPos.clone().sub(center);
     dir.y = 0;
     if (dir.lengthSq() < 0.0001) dir.set(0, 0, 1);
     dir.normalize();
-    camera = center.clone().addScaledVector(dir, 2.2);
+    camera = center.clone().addScaledVector(dir, 2.2 + (meta.width - 1.2) * 0.6);
     camera.y = EYE_Y;
-    center.y = 1.32;
   }
 
   const viewDir = center.clone().sub(camera).normalize();
