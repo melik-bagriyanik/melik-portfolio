@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, ArrowUpRight, Mail, Phone, MapPin } from 'lucide-react';
 
@@ -38,15 +39,25 @@ function PanelShell({
   onClose: () => void;
   eyebrow: string;
 }) {
+  // Mobilde paneli açan dokunuşun ürettiği hayalet "click" (~300ms sonra gelir)
+  // dış-tıklama katmanına düşüp paneli anında kapatıyordu. Panel ilk 350ms
+  // boyunca "silahsız": dış tıklama yok sayılır, panel etkileşimi kapalı.
+  const [armed, setArmed] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setArmed(true), 350);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <>
       {/* Panel dışına tıklayınca kapat */}
-      <div className="fixed inset-0 z-40" onClick={onClose} />
+      <div className="fixed inset-0 z-40" onClick={armed ? onClose : undefined} />
       <motion.aside
         initial={{ x: 480, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         exit={{ x: 480, opacity: 0 }}
         transition={{ type: 'spring', stiffness: 260, damping: 30 }}
+        style={{ pointerEvents: armed ? 'auto' : 'none' }}
         className="fixed right-4 top-4 bottom-4 z-50 w-[min(420px,calc(100vw-2rem))] flex flex-col rounded-3xl bg-white/90 backdrop-blur-2xl border border-stone-200 shadow-2xl shadow-gold-700/10 overflow-hidden"
       >
         <div className="flex items-center justify-between px-6 pt-5 pb-3">

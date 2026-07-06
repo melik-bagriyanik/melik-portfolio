@@ -143,7 +143,9 @@ export function TouchControls({ visible, touchRef, onInteract }: TouchControlsPr
           lookTouchId.current = null;
           const dt = performance.now() - tapInfo.current.t;
           if (dt < 280 && tapInfo.current.moved < 14) {
-            // Kısa dokunuş: dokunulan noktadan esere ışın at
+            // Kısa dokunuş: hayalet "click"i engelle (yeni açılan paneli
+            // anında kapatmasın), sonra dokunulan noktadan esere ışın at
+            if (e.cancelable) e.preventDefault();
             onInteract({
               x: (tapInfo.current.x / window.innerWidth) * 2 - 1,
               y: -(tapInfo.current.y / window.innerHeight) * 2 + 1,

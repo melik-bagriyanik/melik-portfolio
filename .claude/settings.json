@@ -53,7 +53,11 @@
       "Read(//c/Users/Melik/.claude/projects/c--Users-Melik-melik-portfolio/73b87e24-8204-432d-a4c1-4d238f484e40/subagents/workflows/wf_60af16e1-e48/**)",
       "Bash(echo \"tsc: $?\")",
       "Bash(curl -s -o /dev/null -w \"dev: %{http_code}\\\\n\" http://localhost:5199/)",
-      "Bash(curl -s -o /dev/null -w \"dev 5199: %{http_code}\\\\n\" http://localhost:5199/)"
+      "Bash(curl -s -o /dev/null -w \"dev 5199: %{http_code}\\\\n\" http://localhost:5199/)",
+      "Bash(curl -s -o /dev/null -w \"5199: %{http_code}\\\\n\" http://localhost:5199/)",
+      "Bash(curl -s -o /dev/null -w \"5173 \\(eski süreç?\\): %{http_code}\\\\n\" http://localhost:5173/)",
+      "Bash(curl -s -o /dev/null -w \"5174 \\(eski süreç?\\): %{http_code}\\\\n\" http://localhost:5174/)",
+      "Bash(echo \"useHttpPath \\(yerel\\): $\\(git config --local credential.https://github.com.useHttpPath\\)\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\Melik\\OneDrive\\Desktop\\word-project\\src\\taskpane\\components\\pages\\ContractCreator"
