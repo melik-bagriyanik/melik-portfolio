@@ -159,6 +159,9 @@ export interface ProjectEntry {
   accent: string;
   live?: string;
   github?: string;
+  /** Mobil uygulama mağaza bağlantıları */
+  playStore?: string;
+  appStore?: string;
   /** Kurumsal projelerde link yerine gösterilecek not */
   note?: string;
   year: string;
@@ -195,12 +198,13 @@ export const PAINTINGS: PaintingEntry[] = [
       description:
         'Finans/ticaret odaklı, canlı veri akışı ve anlık altın-döviz fiyat takibi sunan mobil kuyumcu uygulaması. Anlık fiyat gösterimi gibi kritik modülleri ilgili API’lerle entegre ettim; performans optimizasyonlarıyla akıcı bir deneyim sağladım.',
       tech: ['React Native', 'Expo', 'Canlı Veri', 'WebSocket'],
-      image: '/projects/jewelry.png',
+      image: '/projects/kuyumcu.jpeg',
       accent: '#b8860b',
       note: CORPORATE_NOTE,
-      year: '2025',
+      year: '2026',
     },
-    placement: faceSouth(10.5, -6, 3.0, 1.69),
+    // kuyumcu.jpeg 518×1061 → dikey telefon oranı korunur
+    placement: faceSouth(10.5, -6, 1.22, 2.5),
   },
   {
     project: {
@@ -210,11 +214,15 @@ export const PAINTINGS: PaintingEntry[] = [
       description:
         'Batman Belediyesi vatandaşlarının belediye hizmetlerine erişimini sağlayan kurumsal e-belediye mobil uygulaması. Toplu taşıma, haberler ve duyurular gibi kritik modülleri API entegrasyonlarıyla hayata geçirdim; iOS ve Android’de stabil çalışacak şekilde optimize ettim.',
       tech: ['React Native', 'Expo', 'iOS & Android', 'REST API'],
+      image: '/projects/belediye.webp',
       accent: '#0d9488',
-      note: CORPORATE_NOTE,
+      playStore: 'https://play.google.com/store/apps/details?id=com.batmanmobileapp&hl=tr',
+      appStore: 'https://apps.apple.com/tr/app/batman-belediyesi/id6755880286',
+      note: 'Kurumsal proje — kaynak kodu gizlilik kapsamında.',
       year: '2025',
     },
-    placement: faceSouth(15.5, -6, 1.92, 2.4),
+    // belediye.webp 273×592 → dikey telefon oranı korunur
+    placement: faceSouth(15.5, -6, 1.15, 2.5),
   },
   {
     project: {
@@ -224,12 +232,14 @@ export const PAINTINGS: PaintingEntry[] = [
       description:
         'Next.js ile geliştirdiğim, Dev.to API’sinden anlık veri çekerek güncel teknoloji içeriklerini dinamik olarak sunan haber platformu. Hızlı gezinme ve okunabilirlik öncelikli sade bir editoryal arayüz sunar.',
       tech: ['Next.js', 'TypeScript', 'Dev.to API', 'Vercel'],
+      image: '/projects/image.png',
       accent: '#2563eb',
       live: 'https://melik-news.vercel.app',
       github: `${GITHUB}/tech-news`,
-      year: '2025',
+      year: '2026',
     },
-    placement: faceWest(19, -1, 1.92, 2.4),
+    // image.png 2704×1488 → yatay ekran görüntüsü oranı korunur
+    placement: faceWest(19, -1, 3.0, 1.65),
   },
   {
     project: {
@@ -239,42 +249,47 @@ export const PAINTINGS: PaintingEntry[] = [
       description:
         'React ile geliştirdiğim, kullanıcıların odaklanma sürelerini optimize etmelerini sağlayan modern arayüzlü Pomodoro zamanlayıcı uygulaması. Oturum akışları ve zarif geçiş animasyonlarıyla odaklanmayı keyifli hale getirir.',
       tech: ['React', 'TypeScript', 'LocalStorage'],
+      image: '/projects/pomodoro.png',
       accent: '#e11d48',
       live: 'https://pomodoro-snowy-seven.vercel.app',
       github: `${GITHUB}/pomodoro`,
-      year: '2024',
+      year: '2025',
     },
-    placement: faceWest(19, 5, 1.92, 2.4),
+    // pomodoro.png 2460×1530 → yatay ekran görüntüsü oranı korunur
+    placement: faceWest(19, 5, 3.0, 1.87),
   },
   {
     project: {
       id: 'portfolio',
-      title: 'Bu Galeri',
-      subtitle: 'Kişisel Web Sitesi · 3D Deneyim',
+      title: 'Portfolyo',
+      subtitle: 'Kişisel Web Sitesi',
       description:
-        'Şu an içinde gezdiğiniz eser: React, TypeScript ve Three.js ile inşa edilmiş birinci şahıs 3D sanal sanat galerisi. Portfolyoyu bir sergi deneyimine dönüştürür — tablolar projeleri, heykeller teknolojileri anlatır.',
-      tech: ['React', 'Three.js', 'R3F', 'TypeScript', 'Tailwind'],
-      accent: '#c9a44b',
-      live: 'https://melik-portfolio.vercel.app',
-      github: `${GITHUB}/melik-portfolio`,
-      year: '2026',
+        'Next.js ve Tailwind CSS ile geliştirdiğim önceki kişisel portfolyo sitem. Hakkımda, projeler, yetenekler, eğitim ve deneyim bölümlerini tek sayfalık akıcı bir deneyimde toplar.',
+      tech: ['Next.js', 'TypeScript', 'Tailwind CSS'],
+      image: '/projects/portfolio.png',
+      accent: '#8b5cf6',
+      github: `${GITHUB}/new_portfolio`,
+      year: '2024',
     },
-    placement: faceNorth(10.5, 10, 1.92, 2.4),
+    // portfolio.png 2552×1468 → yatay ekran görüntüsü oranı korunur
+    placement: faceNorth(10.5, 10, 3.0, 1.73),
   },
   {
     project: {
-      id: 'image-blur-game',
-      title: 'Blur Game',
-      subtitle: 'Görsel Tahmin Oyunu',
+      id: 'commersee',
+      title: 'Commersee',
+      subtitle: 'E-Ticaret Analitiği · Singularity',
       description:
-        'Bulanık görselin adım adım netleştiği, refleks ve dikkat üzerine kurulu bir tahmin oyunu. Oyunlaştırılmış puanlama ve anlık geri bildirimlerle eğlenceli bir mini deneyim.',
-      tech: ['React', 'TypeScript', 'Canvas API'],
-      accent: '#0d9488',
-      live: 'https://image-blur-game.vercel.app',
-      github: `${GITHUB}/image-blur-game`,
+        'Singularity Software bünyesinde frontend geliştirmesini yönettiğim e-ticaret analiz platformu. Markaları yükseltmek, e-ticaret satışlarını artırmak ve keşfedilmemiş pazarları keşfetmek için gelişmiş analitiğin gücünü kullanır; SEO uyumlu, yüksek performanslı bir yapıyla geliştirildi.',
+      tech: ['Next.js', 'React', 'TypeScript', 'SEO'],
+      image: '/projects/commersee.png',
+      accent: '#a855f7',
+      live: 'https://www.commersee.com/tr/',
+      note: 'Kurumsal proje — kaynak kodu gizlilik kapsamında.',
       year: '2024',
     },
-    placement: faceNorth(15.5, 10, 1.92, 2.4),
+    // commersee.png 2772×1480 → yatay ekran görüntüsü oranı korunur
+    placement: faceNorth(15.5, 10, 3.0, 1.6),
   },
 ];
 
@@ -625,9 +640,31 @@ export const SIGNS: SignEntry[] = [
   { text: 'PROJE GALERİSİ', position: [7 - EPS, 3.55, 2], rotationY: -Math.PI / 2, size: 0.13 },
   // Giriş holünden ana salona
   { text: 'ANA SALON', position: [0, 3.55, 10 + EPS], rotationY: 0, size: 0.13 },
+  // Ana salondan çıkışa (güney kapının ana salon yüzü)
+  { text: 'ÇIKIŞ · ZİYARETÇİ DEFTERİ', position: [0, 3.55, 10 - EPS], rotationY: Math.PI, size: 0.105 },
+  // İletişim panosunun üstü (uzaktan görünsün)
+  { text: 'İLETİŞİM', position: [7 - EPS, 3.35, 6.5], rotationY: -Math.PI / 2, size: 0.13 },
+  // Sergi planı krokisinin üstü
+  { text: 'SERGİ PLANI', position: [4 - EPS, 2.95, 15], rotationY: -Math.PI / 2, size: 0.09 },
   // Giriş holü karşılama (güney duvar iç yüzü, oyuncunun arkası)
   { text: 'SANAL GALERİ', position: [0, 3.1, 20 - EPS], rotationY: Math.PI, size: 0.3 },
   { text: 'MMXXVI · İSTANBUL', position: [0, 2.62, 20 - EPS], rotationY: Math.PI, size: 0.1 },
+];
+
+/** Oklu yön tabelaları — sergilerin yerini duvar üzerinde işaret eder */
+export interface ArrowSignEntry {
+  label: string;
+  position: [number, number, number];
+  rotationY: number;
+  /** Ok yönü (tabelanın yerel uzayında) */
+  dir: 'left' | 'right';
+}
+
+export const ARROW_SIGNS: ArrowSignEntry[] = [
+  // Ana salon doğu duvarı, Proje kapısının yanı → İletişim panosu güneyde kalır
+  { label: 'İLETİŞİM', position: [7 - EPS, 2.1, 4.15], rotationY: -Math.PI / 2, dir: 'right' },
+  // Ana salon güney duvarı (batı parçası) → çıkış/ziyaretçi defteri kapının içinden
+  { label: 'ZİYARETÇİ DEFTERİ', position: [-4.5, 2.1, 10 - EPS], rotationY: Math.PI, dir: 'left' },
 ];
 
 // ---------------------------------------------------------------------------

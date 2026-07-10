@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { Text, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
+import { ROOM } from './data';
 import type { PaintingEntry, ProjectEntry } from './data';
 import { drawPoster, useCanvasTexture, makeLightPoolTexture } from './textures';
 import { useRegisterTarget, type TargetMeta } from './interaction';
@@ -36,6 +37,101 @@ export function FloorLightPool({
         toneMapped={false}
       />
     </mesh>
+  );
+}
+
+/** Armatürün duvardan uzaklığı — eser merkezine ~30° "müze açısı" verir */
+const SPOT_WALL_DIST = 1.5;
+/** Işık kaynağının (spot kafası pivotu) tavandan sarkma payı */
+const SPOT_HEAD_DROP = 0.22;
+
+interface PictureSpotProps {
+  /** Eser merkezinin dünya y yüksekliği (tavana kalan pay için) */
+  centerY: number;
+  width: number;
+  height: number;
+  hovered: boolean;
+  lite?: boolean;
+  castShadow?: boolean;
+  intensity?: number;
+  hoverIntensity?: number;
+}
+
+/**
+ * Galeri tipi tavan spotu: tavana monte görünür armatür + esere üstten,
+ * ~30° müze açısıyla düşen sıcak ışık. Koni, eserin köşegenini hafif
+ * bir taşmayla kapsayacak kadar açılır — duvarda eseri saran yumuşak hale bırakır.
+ */
+export function PictureSpot({
+  centerY,
+  width,
+  height,
+  hovered,
+  lite,
+  castShadow,
+  intensity = 20,
+  hoverIntensity = 30,
+}: PictureSpotProps) {
+  const spotRef = useRef<THREE.SpotLight>(null);
+  const targetRef = useRef<THREE.Object3D>(null);
+
+  useEffect(() => {
+    if (spotRef.current && targetRef.current) {
+      spotRef.current.target = targetRef.current;
+    }
+  }, []);
+
+  const ceilY = ROOM.height - centerY;
+  const lightY = ceilY - SPOT_HEAD_DROP;
+  const headTilt = Math.atan2(SPOT_WALL_DIST, lightY);
+  const beamAngle = Math.min(
+    0.6,
+    Math.atan((Math.hypot(width, height) / 2 + 0.1) / Math.hypot(lightY, SPOT_WALL_DIST))
+  );
+
+  return (
+    <>
+      {/* Görünür armatür: montaj tablası + sap + eğik spot kafası */}
+      <group position={[0, ceilY, SPOT_WALL_DIST]}>
+        <mesh position={[0, -0.02, 0]}>
+          <cylinderGeometry args={[0.07, 0.07, 0.04, 16]} />
+          <meshStandardMaterial color="#1d1a16" metalness={0.5} roughness={0.5} />
+        </mesh>
+        <mesh position={[0, -0.1, 0]}>
+          <cylinderGeometry args={[0.016, 0.016, 0.13, 8]} />
+          <meshStandardMaterial color="#1d1a16" metalness={0.5} roughness={0.5} />
+        </mesh>
+        <group position={[0, -SPOT_HEAD_DROP, 0]} rotation-x={headTilt}>
+          <mesh position={[0, 0.03, 0]}>
+            <cylinderGeometry args={[0.055, 0.068, 0.21, 16]} />
+            <meshStandardMaterial color="#26221c" metalness={0.55} roughness={0.4} />
+          </mesh>
+          {/* Lens — sıcak parıltı */}
+          <mesh position={[0, -0.076, 0]} rotation-x={Math.PI / 2}>
+            <circleGeometry args={[0.05, 16]} />
+            <meshBasicMaterial color="#ffd9a0" toneMapped={false} />
+          </mesh>
+        </group>
+      </group>
+      {!lite && (
+        <>
+          <object3D ref={targetRef} position={[0, 0, 0]} />
+          <spotLight
+            ref={spotRef}
+            position={[0, lightY, SPOT_WALL_DIST]}
+            angle={beamAngle}
+            penumbra={0.5}
+            intensity={hovered ? hoverIntensity : intensity}
+            distance={9}
+            decay={1.7}
+            color="#fff2d9"
+            castShadow={castShadow}
+            shadow-mapSize={[1024, 1024]}
+            shadow-bias={-0.0003}
+          />
+        </>
+      )}
+    </>
   );
 }
 
@@ -77,8 +173,6 @@ export function Painting({ entry, hovered, lite }: PaintingProps) {
   const { project, placement } = entry;
   const { width, height } = placement;
   const groupRef = useRef<THREE.Group>(null);
-  const spotRef = useRef<THREE.SpotLight>(null);
-  const targetRef = useRef<THREE.Object3D>(null);
 
   const meta = useMemo<TargetMeta>(
     () => ({
@@ -92,12 +186,6 @@ export function Painting({ entry, hovered, lite }: PaintingProps) {
     [project.id, project.title, placement, width]
   );
   useRegisterTarget(groupRef, meta);
-
-  useEffect(() => {
-    if (spotRef.current && targetRef.current) {
-      spotRef.current.target = targetRef.current;
-    }
-  }, []);
 
   return (
     <group ref={groupRef} position={placement.position} rotation-y={placement.rotationY}>
@@ -157,22 +245,14 @@ export function Painting({ entry, hovered, lite }: PaintingProps) {
       {/* Zemindeki ışık havuzu */}
       <FloorLightPool centerY={placement.position[1]} width={width} />
 
-      {/* Esere yönelen sıcak spot (mobilde kapalı) */}
-      {!lite && (
-        <>
-          <object3D ref={targetRef} position={[0, 0, 0]} />
-          <spotLight
-            ref={spotRef}
-            position={[0, 2.3, 2.1]}
-            angle={0.58}
-            penumbra={0.78}
-            intensity={hovered ? 30 : 20}
-            distance={9}
-            decay={1.7}
-            color="#fff2d9"
-          />
-        </>
-      )}
+      {/* Tavan ray spotu — ışık esere üstten, müze açısıyla düşer (mobilde ışık kapalı) */}
+      <PictureSpot
+        centerY={placement.position[1]}
+        width={width}
+        height={height}
+        hovered={hovered}
+        lite={lite}
+      />
     </group>
   );
 }

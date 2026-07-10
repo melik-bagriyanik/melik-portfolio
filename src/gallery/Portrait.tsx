@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { Text, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 import { PORTRAIT } from './data';
-import { FloorLightPool } from './Painting';
+import { FloorLightPool, PictureSpot } from './Painting';
 import { useRegisterTarget, type TargetMeta } from './interaction';
 
 const OUTFIT = '/fonts/outfit-700.ttf';
@@ -18,8 +18,6 @@ export function Portrait({ hovered, lite }: PortraitProps) {
   const { placement } = PORTRAIT;
   const { width, height } = placement;
   const groupRef = useRef<THREE.Group>(null);
-  const spotRef = useRef<THREE.SpotLight>(null);
-  const targetRef = useRef<THREE.Object3D>(null);
 
   const texture = useTexture(PORTRAIT.image);
   useEffect(() => {
@@ -40,12 +38,6 @@ export function Portrait({ hovered, lite }: PortraitProps) {
     [placement, width]
   );
   useRegisterTarget(groupRef, meta);
-
-  useEffect(() => {
-    if (spotRef.current && targetRef.current) {
-      spotRef.current.target = targetRef.current;
-    }
-  }, []);
 
   return (
     <group ref={groupRef} position={placement.position} rotation-y={placement.rotationY}>
@@ -109,25 +101,17 @@ export function Portrait({ hovered, lite }: PortraitProps) {
       {/* Zemindeki ışık havuzu */}
       <FloorLightPool centerY={placement.position[1]} width={width + 0.6} />
 
-      {/* Portreye yönelen sıcak spot — galerinin tek gerçek gölge üreten spotu */}
-      {!lite && (
-        <>
-          <object3D ref={targetRef} position={[0, 0, 0]} />
-          <spotLight
-            ref={spotRef}
-            position={[0, 2.3, 2.1]}
-            angle={0.55}
-            penumbra={0.78}
-            intensity={hovered ? 32 : 24}
-            distance={9}
-            decay={1.7}
-            color="#fff2d9"
-            castShadow
-            shadow-mapSize={[1024, 1024]}
-            shadow-bias={-0.0003}
-          />
-        </>
-      )}
+      {/* Tavan ray spotu — galerinin tek gerçek gölge üreten spotu */}
+      <PictureSpot
+        centerY={placement.position[1]}
+        width={width}
+        height={height}
+        hovered={hovered}
+        lite={lite}
+        castShadow
+        intensity={24}
+        hoverIntensity={32}
+      />
     </group>
   );
 }

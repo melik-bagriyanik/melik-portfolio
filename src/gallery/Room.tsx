@@ -4,10 +4,12 @@ import {
   WALLS,
   LINTELS,
   SIGNS,
+  ARROW_SIGNS,
   ABOUT,
   WALL_THICKNESS,
   DOOR_HEIGHT,
   type WallSegment,
+  type ArrowSignEntry,
 } from './data';
 
 const H = ROOM.height;
@@ -97,6 +99,37 @@ function Skylight({
   );
 }
 
+/** Altın geometrik ok + etiket — yön tabelası (font'a bağımlı değil) */
+function ArrowSign({ sign }: { sign: ArrowSignEntry }) {
+  const flip = sign.dir === 'left' ? -1 : 1;
+  return (
+    <group position={sign.position} rotation-y={sign.rotationY}>
+      {/* Ok: şaft + uç */}
+      <group position={[flip * 0.14, 0, 0]} scale={[flip, 1, 1]}>
+        <mesh position={[0.06, 0, 0]}>
+          <boxGeometry args={[0.16, 0.024, 0.014]} />
+          <meshStandardMaterial color="#c9a44b" metalness={0.85} roughness={0.3} />
+        </mesh>
+        <mesh position={[0.17, 0, 0]} rotation={[0, 0, -Math.PI / 2]}>
+          <coneGeometry args={[0.045, 0.09, 4]} />
+          <meshStandardMaterial color="#c9a44b" metalness={0.85} roughness={0.3} />
+        </mesh>
+      </group>
+      <Text
+        font={OUTFIT}
+        position={[flip * -0.1, 0, 0]}
+        fontSize={0.082}
+        letterSpacing={0.16}
+        color="#84682d"
+        anchorX={sign.dir === 'right' ? 'right' : 'left'}
+        anchorY="middle"
+      >
+        {sign.label}
+      </Text>
+    </group>
+  );
+}
+
 export function Room() {
   return (
     <group>
@@ -162,6 +195,11 @@ export function Room() {
       >
         {ABOUT.role}
       </Text>
+
+      {/* Oklu yön tabelaları */}
+      {ARROW_SIGNS.map((sign) => (
+        <ArrowSign key={sign.label} sign={sign} />
+      ))}
 
       {/* Yönlendirme tabelaları */}
       {SIGNS.map((sign) => (

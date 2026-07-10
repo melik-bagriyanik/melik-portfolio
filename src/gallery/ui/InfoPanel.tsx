@@ -13,6 +13,18 @@ const LinkedinIcon = ({ size = 16 }: { size?: number }) => (
     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.446-2.136 2.94v5.666H9.351V9h3.414v1.561h.048c.476-.9 1.637-1.852 3.37-1.852 3.602 0 4.268 2.37 4.268 5.455v6.288zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
   </svg>
 );
+
+const GooglePlayIcon = ({ size = 16 }: { size?: number }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" width={size} height={size}>
+    <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 010 1.73l-2.808 1.626L15.206 12l2.492-2.491zM5.864 2.658L16.802 8.99l-2.303 2.303-8.635-8.635z" />
+  </svg>
+);
+
+const AppleIcon = ({ size = 16 }: { size?: number }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" width={size} height={size}>
+    <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.031 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701" />
+  </svg>
+);
 import type { TargetMeta } from '../interaction';
 import {
   PAINTINGS,
@@ -134,8 +146,16 @@ function ProjectContent({ id }: { id: string }) {
   return (
     <div>
       {project.image && (
-        <div className="rounded-2xl overflow-hidden border border-stone-200 mb-5 shadow-sm">
-          <img src={project.image} alt={project.title} className="w-full aspect-video object-cover" />
+        <div className="rounded-2xl overflow-hidden border border-stone-200 mb-5 shadow-sm bg-stone-100">
+          <img
+            src={project.image}
+            alt={project.title}
+            className={
+              entry.placement.height > entry.placement.width
+                ? 'w-full max-h-80 object-contain'
+                : 'w-full aspect-video object-cover'
+            }
+          />
         </div>
       )}
       <h2 className="text-3xl font-display font-black tracking-tight text-stone-900">
@@ -156,6 +176,16 @@ function ProjectContent({ id }: { id: string }) {
         {project.live && (
           <LinkButton href={project.live} primary icon={<ArrowUpRight size={16} />}>
             Canlı Siteyi Gör
+          </LinkButton>
+        )}
+        {project.playStore && (
+          <LinkButton href={project.playStore} primary icon={<GooglePlayIcon size={16} />}>
+            Google Play'den İndir
+          </LinkButton>
+        )}
+        {project.appStore && (
+          <LinkButton href={project.appStore} icon={<AppleIcon size={16} />}>
+            App Store'dan İndir
           </LinkButton>
         )}
         {project.github && (
