@@ -5,6 +5,8 @@ interface SoundTogglesProps {
   onToggleSfx: () => void;
   /** Kapsayıcı bir tıklama alanının içindeyse yayılımı durdur */
   stopPropagation?: boolean;
+  /** Koyu zemin üzerinde kullanım (kapak ekranı) */
+  dark?: boolean;
 }
 
 function Pill({
@@ -12,11 +14,13 @@ function Pill({
   label,
   onClick,
   stopPropagation,
+  dark,
 }: {
   on: boolean;
   label: string;
   onClick: () => void;
   stopPropagation?: boolean;
+  dark?: boolean;
 }) {
   return (
     <button
@@ -26,8 +30,10 @@ function Pill({
       }}
       className={`flex items-center gap-2 px-4 py-2 rounded-full border text-[10px] font-bold uppercase tracking-[0.18em] transition-all ${
         on
-          ? 'bg-gold-500/15 border-gold-500/50 text-gold-700'
-          : 'bg-white/70 border-stone-200 text-stone-400'
+          ? `bg-gold-500/15 border-gold-500/50 ${dark ? 'text-gold-400' : 'text-gold-700'}`
+          : dark
+            ? 'bg-white/10 border-white/15 text-stone-400'
+            : 'bg-white/70 border-stone-200 text-stone-400'
       }`}
     >
       <span
@@ -45,11 +51,12 @@ export function SoundToggles({
   onToggleMusic,
   onToggleSfx,
   stopPropagation,
+  dark,
 }: SoundTogglesProps) {
   return (
     <div className="flex items-center justify-center gap-3">
-      <Pill on={musicOn} label="Müzik" onClick={onToggleMusic} stopPropagation={stopPropagation} />
-      <Pill on={sfxOn} label="Sesler" onClick={onToggleSfx} stopPropagation={stopPropagation} />
+      <Pill on={musicOn} label="Müzik" onClick={onToggleMusic} stopPropagation={stopPropagation} dark={dark} />
+      <Pill on={sfxOn} label="Sesler" onClick={onToggleSfx} stopPropagation={stopPropagation} dark={dark} />
     </div>
   );
 }

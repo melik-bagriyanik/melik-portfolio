@@ -52,16 +52,19 @@ export function IntroOverlay({
             pointerEvents: 'none',
             transition: { duration: 0.9, ease: 'easeInOut' },
           }}
-          className={`fixed inset-0 z-50 overflow-y-auto ${
+          className={`fixed inset-0 z-50 overflow-y-auto [scrollbar-gutter:stable] ${
             // Mobil GPU'da canlı sahne üzerinde backdrop-blur çok pahalı — dokunmatikte opak zemin
-            isTouch ? 'bg-[#f8f5ec]' : 'bg-[#faf8f2]/92 backdrop-blur-md'
+            // Galeriyle aynı koyu ton; mobilde blur pahalı olduğundan opak zemin
+            isTouch ? 'bg-[#221f1b]' : 'bg-[#221f1b]/95 backdrop-blur-md'
           }`}
         >
           <div className="min-h-full flex items-center justify-center px-6 py-10">
           <div className="max-w-2xl mx-auto text-center">
+            {/* Giriş koreografisi yalnızca solma — y kayması, arka plan geldiği anda
+                "metinler yukarı kayıyor" izlenimi veriyordu */}
             <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ duration: 0.7 }}
               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gold-500/30 bg-gold-500/10 mb-6 sm:mb-8"
             >
@@ -69,34 +72,34 @@ export function IntroOverlay({
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold-500 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-gold-600" />
               </span>
-              <span className="text-[10px] uppercase tracking-[0.3em] text-gold-700 font-bold">
+              <span className="text-[10px] uppercase tracking-[0.3em] text-gold-400 font-bold">
                 Sanal Sanat Galerisi
               </span>
             </motion.div>
 
             <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              className="text-4xl sm:text-5xl md:text-7xl font-display font-black tracking-tighter text-stone-900 mb-4"
+              className="text-4xl sm:text-5xl md:text-7xl font-display font-black tracking-tighter text-stone-100 mb-4"
             >
-              MELİK <span className="italic font-light text-gold-600">BAĞRIYANIK</span>
+              MELİK <span className="italic font-light text-gold-500">BAĞRIYANIK</span>
             </motion.h1>
 
             <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.3 }}
-              className="text-[10px] sm:text-xs font-bold tracking-[0.3em] sm:tracking-[0.4em] text-stone-500 uppercase mb-6 sm:mb-8"
+              className="text-[10px] sm:text-xs font-bold tracking-[0.3em] sm:tracking-[0.4em] text-stone-400 uppercase mb-6 sm:mb-8"
             >
               Full Stack Developer · React & Mobile · İstanbul
             </motion.p>
 
             <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.4 }}
-              className="text-stone-600 text-sm sm:text-base md:text-lg leading-relaxed mb-7 sm:mb-10 max-w-lg mx-auto"
+              className="text-stone-300 text-sm sm:text-base md:text-lg leading-relaxed mb-7 sm:mb-10 max-w-lg mx-auto"
             >
               Projelerim bir galerinin duvarlarında sergileniyor. İçeride özgürce dolaş;
               bir eserin önünde durup incelediğinde hikayesi, canlı önizlemesi ve kaynak
@@ -105,8 +108,8 @@ export function IntroOverlay({
 
             {/* Kontrol şeması */}
             <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.5 }}
               className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-8 sm:mb-12"
             >
@@ -127,10 +130,10 @@ export function IntroOverlay({
               ).map(([key, label]) => (
                 <div
                   key={key}
-                  className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-white/80 border border-stone-200 shadow-sm"
+                  className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-white/10 border border-white/15"
                 >
-                  <span className="text-[11px] font-black tracking-widest text-stone-800">{key}</span>
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-stone-500">
+                  <span className="text-[11px] font-black tracking-widest text-stone-100">{key}</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-stone-400">
                     {label}
                   </span>
                 </div>
@@ -138,12 +141,14 @@ export function IntroOverlay({
             </motion.div>
 
             <motion.button
-              initial={{ opacity: 0, scale: 0.94 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.65 }}
               onClick={ready ? onEnter : undefined}
               disabled={!ready}
-              className={`button-primary text-base px-12 py-4 ${
+              // Sabit genişlik + tek satır: metin "hazırlanıyor %x" ↔ "Galeriye Gir"
+              // değişince buton boyutu ve sayfa düzeni kıpırdamasın
+              className={`button-primary text-base py-4 w-80 max-w-full tabular-nums whitespace-nowrap ${
                 ready ? '' : 'opacity-60 cursor-wait'
               }`}
             >
@@ -161,6 +166,7 @@ export function IntroOverlay({
                 sfxOn={sfxOn}
                 onToggleMusic={onToggleMusic}
                 onToggleSfx={onToggleSfx}
+                dark
               />
             </motion.div>
 

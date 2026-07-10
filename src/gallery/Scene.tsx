@@ -1,5 +1,5 @@
 import { Component, Suspense, type ReactNode, type RefObject } from 'react';
-import { Environment } from '@react-three/drei';
+import { Environment, Preload } from '@react-three/drei';
 import type * as THREE from 'three';
 import {
   PAINTINGS,
@@ -143,6 +143,9 @@ export function Scene({ hoveredId, objectsRef, lite }: SceneProps) {
           <Environment preset="city" />
         </Suspense>
       </EnvBoundary>
+
+      {/* Kapak ekranındayken shader/dokular GPU'ya önceden derlenir — girişte kasma olmaz */}
+      <Preload all />
     </InteractionProvider>
   );
 }
