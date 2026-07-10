@@ -24,9 +24,9 @@ export function WallBoard({ placement, meta, hovered, draw }: WallBoardProps) {
       <mesh position={[0, 0, 0.025]} castShadow>
         <boxGeometry args={[width + 0.1, height + 0.1, 0.05]} />
         <meshStandardMaterial
-          color="#2e2a23"
-          metalness={0.6}
-          roughness={0.42}
+          color="#8a6f3f"
+          metalness={0.75}
+          roughness={0.35}
           emissive="#c9a44b"
           emissiveIntensity={hovered ? 0.32 : 0}
         />

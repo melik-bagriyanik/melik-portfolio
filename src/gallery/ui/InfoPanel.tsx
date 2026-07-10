@@ -71,25 +71,25 @@ function PanelShell({
         exit={{ x: 480, opacity: 0 }}
         transition={{ type: 'spring', stiffness: 260, damping: 30 }}
         style={{ pointerEvents: armed ? 'auto' : 'none' }}
-        className="fixed right-4 top-4 bottom-4 z-50 w-[min(420px,calc(100vw-2rem))] flex flex-col rounded-3xl bg-white/90 backdrop-blur-2xl border border-stone-200 shadow-2xl shadow-gold-700/10 overflow-hidden"
+        className="fixed right-4 top-4 bottom-4 z-50 w-[min(420px,calc(100vw-2rem))] flex flex-col rounded-3xl bg-[#28231d]/95 backdrop-blur-2xl border border-white/10 shadow-2xl shadow-black/40 overflow-hidden"
       >
         <div className="flex items-center justify-between px-6 pt-5 pb-3">
-          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gold-700">
+          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gold-400">
             {eyebrow}
           </span>
           <button
             onClick={onClose}
             aria-label="Kapat"
-            className="w-9 h-9 rounded-full bg-stone-100 hover:bg-stone-200 border border-stone-200 flex items-center justify-center text-stone-600 transition-colors"
+            className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center text-stone-300 transition-colors"
           >
             <X size={16} />
           </button>
         </div>
         <div className="flex-1 overflow-y-auto px-6 pb-4">{children}</div>
-        <div className="px-6 py-4 border-t border-stone-100">
+        <div className="px-6 py-4 border-t border-white/10">
           <button
             onClick={onClose}
-            className="w-full py-3 rounded-xl bg-stone-900 text-white text-xs font-bold uppercase tracking-[0.2em] hover:bg-stone-800 transition-colors"
+            className="w-full py-3 rounded-xl bg-white/10 border border-white/10 text-stone-100 text-xs font-bold uppercase tracking-[0.2em] hover:bg-white/20 transition-colors"
           >
             ← Galeriye Dön
           </button>
@@ -101,7 +101,7 @@ function PanelShell({
 
 function Chip({ children }: { children: React.ReactNode }) {
   return (
-    <span className="px-3 py-1.5 bg-cream-100 rounded-md text-[10px] font-bold tracking-wider text-stone-600 border border-stone-200">
+    <span className="px-3 py-1.5 bg-white/5 rounded-md text-[10px] font-bold tracking-wider text-stone-300 border border-white/10">
       {children}
     </span>
   );
@@ -126,7 +126,7 @@ function LinkButton({
       className={`flex items-center justify-between gap-3 px-5 py-3.5 rounded-xl font-bold text-sm transition-all ${
         primary
           ? 'bg-gold-500 text-white hover:bg-gold-600 shadow-lg shadow-gold-500/25'
-          : 'bg-white border border-stone-200 text-stone-800 hover:border-gold-400'
+          : 'bg-white/5 border border-white/15 text-stone-100 hover:border-gold-500/60'
       }`}
     >
       <span className="flex items-center gap-3">
@@ -146,7 +146,7 @@ function ProjectContent({ id }: { id: string }) {
   return (
     <div>
       {project.image && (
-        <div className="rounded-2xl overflow-hidden border border-stone-200 mb-5 shadow-sm bg-stone-100">
+        <div className="rounded-2xl overflow-hidden border border-white/10 mb-5 shadow-sm bg-black/25">
           <img
             src={project.image}
             alt={project.title}
@@ -158,13 +158,13 @@ function ProjectContent({ id }: { id: string }) {
           />
         </div>
       )}
-      <h2 className="text-3xl font-display font-black tracking-tight text-stone-900">
+      <h2 className="text-3xl font-display font-black tracking-tight text-stone-100">
         {project.title}
       </h2>
-      <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold-700 mt-1 mb-5">
+      <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold-400 mt-1 mb-5">
         {project.subtitle} · {project.year}
       </p>
-      <p className="text-stone-600 leading-relaxed text-[15px] mb-6">{project.description}</p>
+      <p className="text-stone-300 leading-relaxed text-[15px] mb-6">{project.description}</p>
 
       <div className="flex flex-wrap gap-2 mb-8">
         {project.tech.map((t) => (
@@ -207,16 +207,16 @@ function ExperienceContent({ id }: { id: string }) {
 
   return (
     <div>
-      <h2 className="text-3xl font-display font-black tracking-tight text-stone-900">
+      <h2 className="text-3xl font-display font-black tracking-tight text-stone-100">
         {exp.company}
       </h2>
-      <p className="text-sm font-bold text-stone-700 mt-1">{exp.role}</p>
-      <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold-700 mt-1 mb-6">
+      <p className="text-sm font-bold text-stone-300 mt-1">{exp.role}</p>
+      <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold-400 mt-1 mb-6">
         {exp.period} · {exp.location}
       </p>
       <ul className="space-y-3 mb-8">
         {exp.bullets.map((b) => (
-          <li key={b} className="flex gap-3 text-stone-600 leading-relaxed text-[14px]">
+          <li key={b} className="flex gap-3 text-stone-300 leading-relaxed text-[14px]">
             <span className="text-gold-500 shrink-0 mt-0.5">◆</span>
             {b}
           </li>
@@ -234,15 +234,15 @@ function ExperienceContent({ id }: { id: string }) {
 function EducationContent() {
   return (
     <div>
-      <h2 className="text-3xl font-display font-black tracking-tight text-stone-900 mb-6">
+      <h2 className="text-3xl font-display font-black tracking-tight text-stone-100 mb-6">
         Eğitim
       </h2>
       <div className="space-y-5 mb-8">
         {EDUCATION.map((item) => (
-          <div key={item.school} className="pb-5 border-b border-stone-100 last:border-0">
-            <div className="font-bold text-stone-900">{item.school}</div>
-            <div className="text-sm text-stone-600 mt-0.5">{item.degree}</div>
-            <div className="text-xs font-bold uppercase tracking-[0.15em] text-gold-700 mt-1">
+          <div key={item.school} className="pb-5 border-b border-white/10 last:border-0">
+            <div className="font-bold text-stone-100">{item.school}</div>
+            <div className="text-sm text-stone-300 mt-0.5">{item.degree}</div>
+            <div className="text-xs font-bold uppercase tracking-[0.15em] text-gold-400 mt-1">
               {item.period}
               {item.note ? ` · ${item.note}` : ''}
             </div>
@@ -262,7 +262,7 @@ function EducationContent() {
 }
 
 const inputCls =
-  'w-full px-4 py-3 rounded-xl bg-white border border-stone-200 text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 transition-all';
+  'w-full px-4 py-3 rounded-xl bg-white/5 border border-white/15 text-sm text-stone-100 placeholder:text-stone-500 focus:outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 transition-all';
 
 function GuestbookContent() {
   const [name, setName] = useState('');
@@ -301,10 +301,10 @@ function GuestbookContent() {
         <div className="w-16 h-16 rounded-full bg-gold-500/15 border border-gold-500/40 flex items-center justify-center text-3xl mb-6">
           ✒️
         </div>
-        <h2 className="text-2xl font-display font-black tracking-tight text-stone-900 mb-3">
+        <h2 className="text-2xl font-display font-black tracking-tight text-stone-100 mb-3">
           Deftere yazıldı!
         </h2>
-        <p className="text-stone-600 text-[15px] leading-relaxed max-w-xs">
+        <p className="text-stone-300 text-[15px] leading-relaxed max-w-xs">
           Mesajın bana ulaştı{name ? `, ${name.split(' ')[0]}` : ''}. Ziyaretin ve notun için
           teşekkürler — en kısa sürede dönüş yapacağım.
         </p>
@@ -314,10 +314,10 @@ function GuestbookContent() {
 
   return (
     <div>
-      <h2 className="text-3xl font-display font-black tracking-tight text-stone-900 mb-2">
+      <h2 className="text-3xl font-display font-black tracking-tight text-stone-100 mb-2">
         Ziyaretçi Defteri
       </h2>
-      <p className="text-stone-600 text-[14px] leading-relaxed mb-6">
+      <p className="text-stone-300 text-[14px] leading-relaxed mb-6">
         Galeriyi gezdiğin için teşekkürler! Bir not bırak — mesajın doğrudan bana ulaşır.
       </p>
       <div className="flex flex-col gap-3">
@@ -344,7 +344,7 @@ function GuestbookContent() {
           onChange={(e) => setMessage(e.target.value)}
         />
         {status === 'error' && (
-          <p className="text-[12px] text-red-500 leading-relaxed">
+          <p className="text-[12px] text-red-400 leading-relaxed">
             Gönderilemedi — bağlantını kontrol edip tekrar dene, ya da{' '}
             <a className="underline font-bold" href={`mailto:${CONTACT.email}`}>
               doğrudan e-posta gönder
@@ -358,7 +358,7 @@ function GuestbookContent() {
           className={`mt-1 py-3.5 rounded-xl text-sm font-bold transition-all ${
             canSend
               ? 'bg-gold-500 text-white hover:bg-gold-600 shadow-lg shadow-gold-500/25'
-              : 'bg-stone-100 text-stone-400 cursor-not-allowed'
+              : 'bg-white/10 text-stone-500 cursor-not-allowed'
           }`}
         >
           {status === 'sending' ? 'Gönderiliyor…' : 'Deftere Yaz ✒️'}
@@ -371,10 +371,10 @@ function GuestbookContent() {
 function GuideContent() {
   return (
     <div>
-      <h2 className="text-3xl font-display font-black tracking-tight text-stone-900 mb-4">
+      <h2 className="text-3xl font-display font-black tracking-tight text-stone-100 mb-4">
         Sergi Planı
       </h2>
-      <p className="text-stone-600 leading-relaxed text-[15px] mb-6">
+      <p className="text-stone-300 leading-relaxed text-[15px] mb-6">
         Galeri beş bölümden oluşuyor. Duvarlardaki eserlerin ve heykellerin önünde durup
         tıklayarak detayları inceleyebilirsin.
       </p>
@@ -382,10 +382,10 @@ function GuideContent() {
         {ROOMS_INFO.map((room) => (
           <div
             key={room.name}
-            className="p-4 rounded-xl bg-white border border-stone-200"
+            className="p-4 rounded-xl bg-white/5 border border-white/10"
           >
-            <div className="font-bold text-stone-900 text-sm">{room.name}</div>
-            <div className="text-xs text-stone-500 mt-0.5">{room.blurb}</div>
+            <div className="font-bold text-stone-100 text-sm">{room.name}</div>
+            <div className="text-xs text-stone-400 mt-0.5">{room.blurb}</div>
           </div>
         ))}
       </div>
@@ -399,10 +399,10 @@ function TechContent({ id }: { id: string }) {
 
   return (
     <div>
-      <h2 className="text-3xl font-display font-black tracking-tight text-stone-900 mb-4">
+      <h2 className="text-3xl font-display font-black tracking-tight text-stone-100 mb-4">
         {tech.title}
       </h2>
-      <p className="text-stone-600 leading-relaxed text-[15px] mb-6">{tech.blurb}</p>
+      <p className="text-stone-300 leading-relaxed text-[15px] mb-6">{tech.blurb}</p>
       <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400 mb-3">
         Bu alandaki araçlarım
       </div>
@@ -418,25 +418,25 @@ function TechContent({ id }: { id: string }) {
 function AboutContent() {
   return (
     <div>
-      <div className="rounded-2xl overflow-hidden border border-stone-200 mb-5 shadow-sm">
+      <div className="rounded-2xl overflow-hidden border border-white/10 mb-5 shadow-sm">
         <img
           src="/profile.jpeg"
           alt="Melik Bağrıyanık"
           className="w-full aspect-[4/5] object-cover object-top"
         />
       </div>
-      <h2 className="text-3xl font-display font-black tracking-tight text-stone-900 mb-1">
+      <h2 className="text-3xl font-display font-black tracking-tight text-stone-100 mb-1">
         {ABOUT.name}
       </h2>
-      <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold-700 mb-5 flex items-center gap-1.5">
+      <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold-400 mb-5 flex items-center gap-1.5">
         <MapPin size={12} /> {ABOUT.location}
       </p>
-      <p className="text-stone-600 leading-relaxed text-[15px] mb-8">{ABOUT.paragraph}</p>
-      <div className="grid grid-cols-3 gap-4 pt-6 border-t border-stone-200">
+      <p className="text-stone-300 leading-relaxed text-[15px] mb-8">{ABOUT.paragraph}</p>
+      <div className="grid grid-cols-3 gap-4 pt-6 border-t border-white/10">
         {ABOUT.stats.map(([num, label]) => (
           <div key={label}>
-            <div className="text-2xl font-display font-black text-stone-900">{num}</div>
-            <div className="text-[9px] uppercase tracking-widest text-stone-500 mt-1 font-semibold">
+            <div className="text-2xl font-display font-black text-stone-100">{num}</div>
+            <div className="text-[9px] uppercase tracking-widest text-stone-400 mt-1 font-semibold">
               {label}
             </div>
           </div>
@@ -450,10 +450,10 @@ function ContactContent() {
   const mailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent('Yeni Proje Sinyali')}`;
   return (
     <div>
-      <h2 className="text-3xl font-display font-black tracking-tight text-stone-900 mb-4">
-        Hadi bir şey <span className="italic font-light text-gold-600">inşa edelim</span>
+      <h2 className="text-3xl font-display font-black tracking-tight text-stone-100 mb-4">
+        Hadi bir şey <span className="italic font-light text-gold-500">inşa edelim</span>
       </h2>
-      <p className="text-stone-600 leading-relaxed text-[15px] mb-8">
+      <p className="text-stone-300 leading-relaxed text-[15px] mb-8">
         Aklındaki fikri birlikte somutlaştıralım. Mesajını bırak, en kısa sürede dönüş yapayım.
       </p>
       <div className="flex flex-col gap-3">

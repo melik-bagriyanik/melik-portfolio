@@ -34,8 +34,8 @@ export function drawPoster(project: ProjectEntry): HTMLCanvasElement {
   const H = 1280;
   const { canvas, ctx } = makeCanvas(W, H);
 
-  // Krem zemin
-  ctx.fillStyle = '#faf6ec';
+  // Koyu zemin
+  ctx.fillStyle = '#2d2822';
   ctx.fillRect(0, 0, W, H);
 
   // Yumuşak accent ışıması
@@ -59,17 +59,17 @@ export function drawPoster(project: ProjectEntry): HTMLCanvasElement {
   ctx.font = '900 300px Outfit, Inter, sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillStyle = '#292524';
+  ctx.fillStyle = '#efe8d8';
   ctx.fillText(project.title.charAt(0).toUpperCase(), 0, 16);
   ctx.restore();
 
   // Alt tipografi bloğu
   ctx.textAlign = 'center';
-  ctx.fillStyle = '#292524';
+  ctx.fillStyle = '#efe8d8';
   ctx.font = '800 86px Outfit, Inter, sans-serif';
   ctx.fillText(project.title.toUpperCase(), W / 2, H * 0.74);
 
-  ctx.fillStyle = '#a98438';
+  ctx.fillStyle = '#d3aa54';
   ctx.font = '600 34px Inter, sans-serif';
   const sub = project.subtitle.toUpperCase();
   ctx.save();
@@ -85,12 +85,12 @@ export function drawPoster(project: ProjectEntry): HTMLCanvasElement {
   ctx.lineTo(W / 2 + 70, H * 0.84);
   ctx.stroke();
 
-  ctx.fillStyle = '#78716c';
+  ctx.fillStyle = '#9b9182';
   ctx.font = '600 30px Inter, sans-serif';
   ctx.fillText(project.year, W / 2, H * 0.89);
 
   // İnce çerçeve içi kenarlık
-  ctx.strokeStyle = '#29252422';
+  ctx.strokeStyle = '#f5edd916';
   ctx.lineWidth = 2;
   ctx.strokeRect(36, 36, W - 72, H - 72);
 
@@ -103,17 +103,17 @@ export function drawBoard(board: BoardEntry): HTMLCanvasElement {
   const H = 800;
   const { canvas, ctx } = makeCanvas(W, H);
 
-  ctx.fillStyle = '#fbf8f0';
+  ctx.fillStyle = '#2d2822';
   ctx.fillRect(0, 0, W, H);
 
   const wash = ctx.createLinearGradient(0, 0, W, H);
-  wash.addColorStop(0, '#c9a44b14');
+  wash.addColorStop(0, '#c9a44b16');
   wash.addColorStop(1, '#c9a44b00');
   ctx.fillStyle = wash;
   ctx.fillRect(0, 0, W, H);
 
   ctx.textAlign = 'left';
-  ctx.fillStyle = '#a98438';
+  ctx.fillStyle = '#d3aa54';
   ctx.font = '800 40px Outfit, Inter, sans-serif';
   ctx.save();
   ctx.letterSpacing = '14px';
@@ -127,7 +127,7 @@ export function drawBoard(board: BoardEntry): HTMLCanvasElement {
   ctx.lineTo(228, 168);
   ctx.stroke();
 
-  ctx.fillStyle = '#3d3a34';
+  ctx.fillStyle = '#d3cabb';
   ctx.font = '500 41px Inter, sans-serif';
   let y = 262;
   for (const line of board.lines) {
@@ -135,7 +135,7 @@ export function drawBoard(board: BoardEntry): HTMLCanvasElement {
     y += line ? 62 : 34;
   }
 
-  ctx.strokeStyle = '#29252418';
+  ctx.strokeStyle = '#f5edd916';
   ctx.lineWidth = 2;
   ctx.strokeRect(28, 28, W - 56, H - 56);
 
@@ -165,31 +165,31 @@ export function drawCareerBoard(exp: ExperienceEntry): HTMLCanvasElement {
   const H = 760;
   const { canvas, ctx } = makeCanvas(W, H);
 
-  ctx.fillStyle = '#fbf8f0';
+  ctx.fillStyle = '#2d2822';
   ctx.fillRect(0, 0, W, H);
   const wash = ctx.createLinearGradient(0, 0, W, H);
-  wash.addColorStop(0, '#c9a44b14');
+  wash.addColorStop(0, '#c9a44b16');
   wash.addColorStop(1, '#c9a44b00');
   ctx.fillStyle = wash;
   ctx.fillRect(0, 0, W, H);
 
   ctx.textAlign = 'left';
-  ctx.fillStyle = '#a98438';
+  ctx.fillStyle = '#d3aa54';
   ctx.font = '700 30px Inter, sans-serif';
   ctx.save();
   ctx.letterSpacing = '10px';
   ctx.fillText('KARİYER', 84, 96);
   ctx.restore();
 
-  ctx.fillStyle = '#292524';
+  ctx.fillStyle = '#efe8d8';
   ctx.font = '800 66px Outfit, Inter, sans-serif';
   ctx.fillText(exp.company, 84, 178);
 
-  ctx.fillStyle = '#57534e';
+  ctx.fillStyle = '#b3a998';
   ctx.font = '600 38px Inter, sans-serif';
   ctx.fillText(exp.role, 84, 236);
 
-  ctx.fillStyle = '#a98438';
+  ctx.fillStyle = '#d3aa54';
   ctx.font = '700 30px Inter, sans-serif';
   ctx.fillText(`${exp.period} · ${exp.location}`, 84, 292);
 
@@ -200,7 +200,7 @@ export function drawCareerBoard(exp: ExperienceEntry): HTMLCanvasElement {
   ctx.lineTo(240, 330);
   ctx.stroke();
 
-  ctx.fillStyle = '#3d3a34';
+  ctx.fillStyle = '#d3cabb';
   ctx.font = '500 32px Inter, sans-serif';
   let y = 398;
   outer: for (const bullet of exp.bullets) {
@@ -210,7 +210,7 @@ export function drawCareerBoard(exp: ExperienceEntry): HTMLCanvasElement {
       if (i === 0) {
         ctx.fillStyle = '#c9a44b';
         ctx.fillText('◆', 84, y);
-        ctx.fillStyle = '#3d3a34';
+        ctx.fillStyle = '#d3cabb';
       }
       ctx.fillText(lines[i], 128, y);
       y += 46;
@@ -218,7 +218,7 @@ export function drawCareerBoard(exp: ExperienceEntry): HTMLCanvasElement {
     y += 14;
   }
 
-  ctx.strokeStyle = '#29252418';
+  ctx.strokeStyle = '#f5edd916';
   ctx.lineWidth = 2;
   ctx.strokeRect(28, 28, W - 56, H - 56);
   return canvas;
@@ -230,16 +230,16 @@ export function drawEducationBoard(items: EducationItem[]): HTMLCanvasElement {
   const H = 760;
   const { canvas, ctx } = makeCanvas(W, H);
 
-  ctx.fillStyle = '#fbf8f0';
+  ctx.fillStyle = '#2d2822';
   ctx.fillRect(0, 0, W, H);
   const wash = ctx.createLinearGradient(W, 0, 0, H);
-  wash.addColorStop(0, '#c9a44b14');
+  wash.addColorStop(0, '#c9a44b16');
   wash.addColorStop(1, '#c9a44b00');
   ctx.fillStyle = wash;
   ctx.fillRect(0, 0, W, H);
 
   ctx.textAlign = 'left';
-  ctx.fillStyle = '#a98438';
+  ctx.fillStyle = '#d3aa54';
   ctx.font = '700 30px Inter, sans-serif';
   ctx.save();
   ctx.letterSpacing = '10px';
@@ -255,21 +255,21 @@ export function drawEducationBoard(items: EducationItem[]): HTMLCanvasElement {
 
   let y = 232;
   for (const item of items) {
-    ctx.fillStyle = '#292524';
+    ctx.fillStyle = '#efe8d8';
     ctx.font = '800 40px Outfit, Inter, sans-serif';
     ctx.fillText(item.school, 84, y);
-    ctx.fillStyle = '#57534e';
+    ctx.fillStyle = '#b3a998';
     ctx.font = '500 32px Inter, sans-serif';
     ctx.fillText(`${item.degree} · ${item.period}`, 84, y + 48);
     if (item.note) {
-      ctx.fillStyle = '#8a8378';
+      ctx.fillStyle = '#9b9182';
       ctx.font = '500 28px Inter, sans-serif';
       ctx.fillText(item.note, 84, y + 90);
     }
     y += 172;
   }
 
-  ctx.strokeStyle = '#29252418';
+  ctx.strokeStyle = '#f5edd916';
   ctx.lineWidth = 2;
   ctx.strokeRect(28, 28, W - 56, H - 56);
   return canvas;
@@ -281,11 +281,11 @@ export function drawGuideBoard(rooms: RoomInfo[]): HTMLCanvasElement {
   const H = 820;
   const { canvas, ctx } = makeCanvas(W, H);
 
-  ctx.fillStyle = '#fbf8f0';
+  ctx.fillStyle = '#2d2822';
   ctx.fillRect(0, 0, W, H);
 
   ctx.textAlign = 'left';
-  ctx.fillStyle = '#a98438';
+  ctx.fillStyle = '#d3aa54';
   ctx.font = '700 30px Inter, sans-serif';
   ctx.save();
   ctx.letterSpacing = '10px';
@@ -311,12 +311,12 @@ export function drawGuideBoard(rooms: RoomInfo[]): HTMLCanvasElement {
     const ry = py(z1);
     const rw = (x2 - x1) * scale;
     const rh = (z2 - z1) * scale;
-    ctx.fillStyle = '#f3ecdb';
+    ctx.fillStyle = '#3a352d';
     ctx.fillRect(rx, ry, rw, rh);
-    ctx.strokeStyle = '#a98438';
+    ctx.strokeStyle = '#c9a44b';
     ctx.lineWidth = 3;
     ctx.strokeRect(rx, ry, rw, rh);
-    ctx.fillStyle = '#44403c';
+    ctx.fillStyle = '#e5ddcc';
     ctx.font = '700 24px Inter, sans-serif';
     ctx.fillText(room.name.toUpperCase(), rx + rw / 2, ry + rh / 2 + 8);
   }
@@ -326,11 +326,11 @@ export function drawGuideBoard(rooms: RoomInfo[]): HTMLCanvasElement {
   ctx.beginPath();
   ctx.arc(px(0), py(17), 12, 0, Math.PI * 2);
   ctx.fill();
-  ctx.fillStyle = '#84682d';
+  ctx.fillStyle = '#e3c06c';
   ctx.font = '700 24px Inter, sans-serif';
   ctx.fillText('BURADASINIZ', px(0), py(17) + 44);
 
-  ctx.strokeStyle = '#29252418';
+  ctx.strokeStyle = '#f5edd916';
   ctx.lineWidth = 2;
   ctx.strokeRect(28, 28, W - 56, H - 56);
   return canvas;

@@ -41,13 +41,13 @@ export function Portrait({ hovered, lite }: PortraitProps) {
 
   return (
     <group ref={groupRef} position={placement.position} rotation-y={placement.rotationY}>
-      {/* Dış çerçeve — koyu bronz */}
+      {/* Dış çerçeve — pirinç/altın; koyu duvardan net ayrışır */}
       <mesh position={[0, 0, 0.035]} castShadow>
         <boxGeometry args={[width + 0.26, height + 0.26, 0.07]} />
         <meshStandardMaterial
-          color="#2e2a23"
-          metalness={0.6}
-          roughness={0.42}
+          color="#8a6f3f"
+          metalness={0.75}
+          roughness={0.35}
           emissive="#c9a44b"
           emissiveIntensity={hovered ? 0.32 : 0}
         />
@@ -57,10 +57,10 @@ export function Portrait({ hovered, lite }: PortraitProps) {
         <planeGeometry args={[width + 0.14, height + 0.14]} />
         <meshStandardMaterial color="#c9a44b" metalness={0.8} roughness={0.32} />
       </mesh>
-      {/* Paspartu */}
+      {/* Paspartu — duvardan ayrışan sıcak keten tonu */}
       <mesh position={[0, 0, 0.071]}>
         <planeGeometry args={[width + 0.08, height + 0.08]} />
-        <meshStandardMaterial color="#f8f4ea" roughness={0.9} />
+        <meshStandardMaterial color="#8c8172" roughness={0.9} />
       </mesh>
       {/* Portre */}
       <mesh position={[0, 0, 0.075]}>
@@ -72,14 +72,14 @@ export function Portrait({ hovered, lite }: PortraitProps) {
       <group position={[0, -height / 2 - 0.42, 0.02]}>
         <mesh>
           <boxGeometry args={[1.1, 0.3, 0.02]} />
-          <meshStandardMaterial color={hovered ? '#f6efdd' : '#f1ece0'} roughness={0.7} />
+          <meshStandardMaterial color={hovered ? '#3a352d' : '#2b2721'} roughness={0.7} />
         </mesh>
         <Text
           font={OUTFIT}
           position={[0, 0.055, 0.015]}
           fontSize={0.062}
           letterSpacing={0.1}
-          color="#292524"
+          color="#e8e1d2"
           anchorX="center"
           anchorY="middle"
         >
@@ -90,7 +90,7 @@ export function Portrait({ hovered, lite }: PortraitProps) {
           position={[0, -0.055, 0.015]}
           fontSize={0.038}
           letterSpacing={0.04}
-          color="#8a8378"
+          color="#a79d8d"
           anchorX="center"
           anchorY="middle"
         >
