@@ -208,7 +208,7 @@ export function TouchControls({ visible, touchRef, onInteract }: TouchControlsPr
 
       {/* İpucu — sağ altta zıplamanın üstünde, ilk saniyelerde kaybolan değil kalıcı ince yazı */}
       <div
-        className="absolute text-[9px] font-semibold uppercase tracking-[0.2em] text-stone-500/70 text-right leading-relaxed pointer-events-none"
+        className="absolute text-[9px] font-semibold uppercase tracking-[0.2em] text-stone-300/70 text-right leading-relaxed pointer-events-none"
         style={{
           right: 'calc(1.75rem + env(safe-area-inset-right, 0px))',
           bottom: 'calc(8.5rem + env(safe-area-inset-bottom, 0px))',

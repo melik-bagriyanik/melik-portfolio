@@ -27,14 +27,14 @@ export function Hud({
     // aksi halde mobildeki müzik/SFX butonları dokunuş alamıyor. Katman pointer-events-none
     // olduğundan buton dışı dokunuşlar alttaki bakış katmanına geçer.
     <div className="pointer-events-none fixed inset-0 z-40 select-none">
-      {/* İsim */}
-      <div className="absolute top-5 left-6 text-lg font-display font-black tracking-tighter text-stone-800/90">
-        MELİK <span className="text-gold-600 italic font-light">BAĞRIYANIK</span>
+      {/* İsim — parlak ışıklıkların önünde de okunması için koyu kapsül üstünde */}
+      <div className="absolute top-5 left-6 text-lg font-display font-black tracking-tighter text-stone-100 px-3.5 py-1.5 rounded-full bg-stone-900/50 backdrop-blur-sm">
+        MELİK <span className="text-gold-400 italic font-light">BAĞRIYANIK</span>
       </div>
 
       {/* Duraklatma + müzik ipuçları / mobil ses düğmeleri */}
       {!isTouch ? (
-        <div className="absolute top-6 right-6 flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-500/80">
+        <div className="absolute top-6 right-6 flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-300/80">
           <span>M — Müzik {musicOn ? '♪' : '✕'}</span>
           <span>ESC — Duraklat</span>
         </div>
@@ -70,14 +70,14 @@ export function Hud({
         <div className="relative flex items-center justify-center">
           <span
             className={`block rounded-full transition-all duration-200 ${
-              hovered ? 'w-2 h-2 bg-gold-500' : 'w-1.5 h-1.5 bg-stone-800/70'
+              hovered ? 'w-2 h-2 bg-gold-500' : 'w-1.5 h-1.5 bg-white/80'
             }`}
           />
           <span
             className={`absolute rounded-full border transition-all duration-200 ${
               hovered
                 ? 'w-9 h-9 border-gold-500/80'
-                : 'w-5 h-5 border-stone-800/25'
+                : 'w-5 h-5 border-white/30'
             }`}
           />
         </div>
@@ -93,7 +93,7 @@ export function Hud({
               <span className="px-3 py-1 rounded-full bg-stone-900/85 text-white text-[11px] font-bold tracking-wide backdrop-blur">
                 {hovered.label}
               </span>
-              <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-stone-700/90">
+              <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-stone-200/90">
                 {isTouch ? 'İncele — dokun' : 'İncele — tıkla'}
               </span>
             </motion.div>

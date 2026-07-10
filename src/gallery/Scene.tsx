@@ -82,8 +82,8 @@ const GUIDE_META: TargetMeta = {
 export function Scene({ hoveredId, objectsRef, lite }: SceneProps) {
   return (
     <InteractionProvider objectsRef={objectsRef}>
-      <color attach="background" args={['#f2eee3']} />
-      <fog attach="fog" args={['#f2eee3', 26, 62]} />
+      <color attach="background" args={['#221f1b']} />
+      <fog attach="fog" args={['#221f1b', 26, 62]} />
 
       <Room />
 
@@ -140,7 +140,7 @@ export function Scene({ hoveredId, objectsRef, lite }: SceneProps) {
 
       <EnvBoundary>
         <Suspense fallback={null}>
-          <Environment preset="apartment" />
+          <Environment preset="city" />
         </Suspense>
       </EnvBoundary>
     </InteractionProvider>

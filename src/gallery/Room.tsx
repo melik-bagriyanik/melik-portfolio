@@ -15,7 +15,7 @@ import {
 const H = ROOM.height;
 const T = WALL_THICKNESS;
 
-const WALL_COLOR = '#f6f1e6';
+const WALL_COLOR = '#45403a'; // sıcak koyu gri — modern galeri, siyaha kaçmadan
 const OUTFIT = '/fonts/outfit-700.ttf';
 
 function WallBox({ seg }: { seg: WallSegment }) {
@@ -43,7 +43,7 @@ function WallBox({ seg }: { seg: WallSegment }) {
               : [T + 0.05, bbH, bbLen]
           }
         />
-        <meshStandardMaterial color="#3a352c" roughness={0.6} />
+        <meshStandardMaterial color="#161310" roughness={0.6} />
       </mesh>
     </group>
   );
@@ -90,9 +90,9 @@ function Skylight({
     <mesh rotation-x={Math.PI / 2} position={[x, H - 0.015, z]}>
       <planeGeometry args={[sx, sz]} />
       <meshStandardMaterial
-        color="#ffffff"
-        emissive="#fff3d6"
-        emissiveIntensity={1.5}
+        color="#fff6e0"
+        emissive="#ffedc9"
+        emissiveIntensity={1.25}
         toneMapped={false}
       />
     </mesh>
@@ -120,7 +120,7 @@ function ArrowSign({ sign }: { sign: ArrowSignEntry }) {
         position={[flip * -0.1, 0, 0]}
         fontSize={0.082}
         letterSpacing={0.16}
-        color="#84682d"
+        color="#d3aa54"
         anchorX={sign.dir === 'right' ? 'right' : 'left'}
         anchorY="middle"
       >
@@ -133,21 +133,21 @@ function ArrowSign({ sign }: { sign: ArrowSignEntry }) {
 export function Room() {
   return (
     <group>
-      {/* Zemin — cilalı taş (tüm kompleksi kaplar) */}
+      {/* Zemin — koyu cilalı beton (tüm kompleksi kaplar) */}
       <mesh rotation-x={-Math.PI / 2} receiveShadow>
         <planeGeometry args={[39.2, 41.2]} />
         <meshStandardMaterial
-          color="#dfd6c3"
-          roughness={0.32}
-          metalness={0.06}
-          envMapIntensity={0.55}
+          color="#403b34"
+          roughness={0.3}
+          metalness={0.08}
+          envMapIntensity={0.6}
         />
       </mesh>
 
-      {/* Tavan */}
+      {/* Tavan — duvarlardan bir tık açık sıcak gri; ışıklıklar çevresi okunur kalır */}
       <mesh rotation-x={Math.PI / 2} position={[0, H, 0]}>
         <planeGeometry args={[39.2, 41.2]} />
-        <meshStandardMaterial color="#fbf8f0" roughness={0.95} />
+        <meshStandardMaterial color="#5a544b" roughness={0.95} />
       </mesh>
 
       {/* Oda ışıklıkları */}
@@ -178,7 +178,7 @@ export function Room() {
         position={[0, 4.5, -5.82]}
         fontSize={0.46}
         letterSpacing={0.14}
-        color="#292524"
+        color="#f7f1e2"
         anchorX="center"
         anchorY="middle"
       >
@@ -189,7 +189,7 @@ export function Room() {
         position={[0, 3.98, -5.82]}
         fontSize={0.14}
         letterSpacing={0.42}
-        color="#a98438"
+        color="#e3c06c"
         anchorX="center"
         anchorY="middle"
       >
@@ -210,7 +210,7 @@ export function Room() {
           rotation-y={sign.rotationY}
           fontSize={sign.size ?? 0.13}
           letterSpacing={0.32}
-          color={sign.size && sign.size > 0.2 ? '#57534e' : '#a98438'}
+          color={sign.size && sign.size > 0.2 ? '#b7b0a2' : '#d3aa54'}
           anchorX="center"
           anchorY="middle"
         >
@@ -218,13 +218,14 @@ export function Room() {
         </Text>
       ))}
 
-      {/* Işıklandırma */}
-      <ambientLight intensity={0.5} color="#fff8ec" />
-      <hemisphereLight args={['#fffbf0', '#cfc2a6', 0.55]} />
+      {/* Işıklandırma — kısık genel ışık; sahneyi spotlar ve ışıklıklar taşır */}
+      <ambientLight intensity={0.42} color="#ffeedd" />
+      {/* Alt ton tavanın aldığı ışığı belirler (tavan aşağı bakar) — siyaha çekme */}
+      <hemisphereLight args={['#8a8175', '#39342d', 0.55]} />
       <directionalLight
         position={[5, 9, 4]}
-        intensity={1.3}
-        color="#fff6e2"
+        intensity={0.75}
+        color="#ffe9c8"
         castShadow
         shadow-mapSize={[2048, 2048]}
         shadow-camera-left={-24}
@@ -236,9 +237,9 @@ export function Room() {
         onUpdate={(self) => self.shadow.camera.updateProjectionMatrix()}
       />
       {/* Oda dolgu ışıkları (spotu olmayan bölgeler) */}
-      <pointLight position={[-13, 4.2, 2]} intensity={14} distance={17} decay={1.8} color="#fff2d9" />
-      <pointLight position={[0, 4.2, -13]} intensity={14} distance={17} decay={1.8} color="#fff2d9" />
-      <pointLight position={[0, 4.2, 15]} intensity={10} distance={13} decay={1.8} color="#fff2d9" />
+      <pointLight position={[-13, 4.2, 2]} intensity={13} distance={17} decay={1.8} color="#ffe6bb" />
+      <pointLight position={[0, 4.2, -13]} intensity={13} distance={17} decay={1.8} color="#ffe6bb" />
+      <pointLight position={[0, 4.2, 15]} intensity={9} distance={13} decay={1.8} color="#ffe6bb" />
     </group>
   );
 }

@@ -178,7 +178,7 @@ export default function GalleryExperience() {
   const walking = phase === 'walk';
 
   return (
-    <div className="fixed inset-0 bg-[#f2eee3]">
+    <div className="fixed inset-0 bg-[#221f1b]">
       <Canvas
         shadows={!isTouch}
         dpr={isTouch ? [1, 1.5] : [1, 1.75]}
