@@ -100,7 +100,7 @@ export function Hud({
 
       {/* Kontrol ipuçları */}
       {!isTouch && (
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2">
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden lg:flex items-center gap-2">
           {[
             ['W A S D', 'Yürü'],
             ['Fare', 'Bak'],

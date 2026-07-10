@@ -79,15 +79,32 @@ export function PictureSpot({
     if (spotRef.current && targetRef.current) {
       spotRef.current.target = targetRef.current;
     }
-  }, []);
+  }, [lite]);
 
   const ceilY = ROOM.height - centerY;
   const lightY = ceilY - SPOT_HEAD_DROP;
   const headTilt = Math.atan2(SPOT_WALL_DIST, lightY);
-  const beamAngle = Math.min(
-    0.6,
-    Math.atan((Math.hypot(width, height) / 2 + 0.1) / Math.hypot(lightY, SPOT_WALL_DIST))
-  );
+  // Koni açısı: ışıktan çerçevenin dört köşesine bakılarak kesin hesaplanır —
+  // eğik eksene göre yaklaşık (köşegen/mesafe) formülü üst köşeleri karanlıkta bırakıyordu.
+  const beamAngle = useMemo(() => {
+    const pad = 0.26; // çerçeve payı (portrenin geniş çerçevesini de kapsar)
+    const hx = (width + pad) / 2;
+    const hy = (height + pad) / 2;
+    const axLen = Math.hypot(lightY, SPOT_WALL_DIST);
+    const ay = -lightY / axLen;
+    const az = -SPOT_WALL_DIST / axLen;
+    let max = 0;
+    for (const sx of [-1, 1]) {
+      for (const sy of [-1, 1]) {
+        const vx = sx * hx;
+        const vy = sy * hy - lightY;
+        const vz = -SPOT_WALL_DIST;
+        const cos = (vy * ay + vz * az) / Math.hypot(vx, vy, vz);
+        max = Math.max(max, Math.acos(Math.min(1, Math.max(-1, cos))));
+      }
+    }
+    return Math.min(0.72, max + 0.06);
+  }, [width, height, lightY]);
 
   return (
     <>
@@ -120,7 +137,7 @@ export function PictureSpot({
             ref={spotRef}
             position={[0, lightY, SPOT_WALL_DIST]}
             angle={beamAngle}
-            penumbra={0.5}
+            penumbra={0.4}
             intensity={hovered ? hoverIntensity : intensity}
             distance={9}
             decay={1.7}

@@ -288,8 +288,8 @@ export const PAINTINGS: PaintingEntry[] = [
       note: 'Kurumsal proje — kaynak kodu gizlilik kapsamında.',
       year: '2024',
     },
-    // commersee.png 2772×1480 → yatay ekran görüntüsü oranı korunur
-    placement: faceNorth(15.5, 10, 3.0, 1.6),
+    // commersee.png 2692×1480 → yatay ekran görüntüsü oranı korunur
+    placement: faceNorth(15.5, 10, 3.0, 1.65),
   },
 ];
 

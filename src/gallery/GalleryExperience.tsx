@@ -15,6 +15,8 @@ import { Hud } from './ui/Hud';
 import { InfoPanel } from './ui/InfoPanel';
 import { PausedOverlay } from './ui/PausedOverlay';
 import { TouchControls } from './ui/TouchControls';
+import { Minimap, MinimapTracker } from './ui/Minimap';
+import { createMinimapState } from './ui/minimapState';
 import { CONTACT } from './data';
 import { galleryAudio } from './audio';
 
@@ -56,6 +58,7 @@ export default function GalleryExperience() {
   const playerApi = useRef<PlayerApi | null>(null);
   const interactApi = useRef<{ trigger: (ndc?: { x: number; y: number }) => void } | null>(null);
   const touchRef = useRef(createTouchState());
+  const minimapRef = useRef(createMinimapState());
   const phaseRef = useRef(phase);
   phaseRef.current = phase;
 
@@ -204,6 +207,7 @@ export default function GalleryExperience() {
           returning={phase === 'returning'}
           onReturned={onReturned}
         />
+        <MinimapTracker stateRef={minimapRef} />
       </Canvas>
 
       {/* DOM katmanları */}
@@ -232,6 +236,7 @@ export default function GalleryExperience() {
         touchRef={touchRef}
         onInteract={(ndc) => interactApi.current?.trigger(ndc)}
       />
+      <Minimap visible={walking && !isTouch} stateRef={minimapRef} />
       <PausedOverlay
         visible={phase === 'paused'}
         onResume={enter}
