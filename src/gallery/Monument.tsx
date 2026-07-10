@@ -35,7 +35,7 @@ export function Monument({ hovered }: { hovered: boolean }) {
     () => ({
       id: MONUMENT.id,
       kind: 'about',
-      label: 'Hakkımda · Anıt',
+      label: 'Hakkımda',
       center: [mx, 1.7, mz],
       width: 1.7,
     }),

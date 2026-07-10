@@ -52,14 +52,18 @@ export function IntroOverlay({
             pointerEvents: 'none',
             transition: { duration: 0.9, ease: 'easeInOut' },
           }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-[#faf8f2]/92 backdrop-blur-md"
+          className={`fixed inset-0 z-50 overflow-y-auto ${
+            // Mobil GPU'da canlı sahne üzerinde backdrop-blur çok pahalı — dokunmatikte opak zemin
+            isTouch ? 'bg-[#f8f5ec]' : 'bg-[#faf8f2]/92 backdrop-blur-md'
+          }`}
         >
-          <div className="max-w-2xl mx-auto px-8 text-center">
+          <div className="min-h-full flex items-center justify-center px-6 py-10">
+          <div className="max-w-2xl mx-auto text-center">
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gold-500/30 bg-gold-500/10 mb-8"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gold-500/30 bg-gold-500/10 mb-6 sm:mb-8"
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold-500 opacity-75" />
@@ -74,7 +78,7 @@ export function IntroOverlay({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              className="text-5xl md:text-7xl font-display font-black tracking-tighter text-stone-900 mb-4"
+              className="text-4xl sm:text-5xl md:text-7xl font-display font-black tracking-tighter text-stone-900 mb-4"
             >
               MELİK <span className="italic font-light text-gold-600">BAĞRIYANIK</span>
             </motion.h1>
@@ -83,7 +87,7 @@ export function IntroOverlay({
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.3 }}
-              className="text-xs font-bold tracking-[0.4em] text-stone-500 uppercase mb-8"
+              className="text-[10px] sm:text-xs font-bold tracking-[0.3em] sm:tracking-[0.4em] text-stone-500 uppercase mb-6 sm:mb-8"
             >
               Full Stack Developer · React & Mobile · İstanbul
             </motion.p>
@@ -92,7 +96,7 @@ export function IntroOverlay({
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.4 }}
-              className="text-stone-600 text-base md:text-lg leading-relaxed mb-10 max-w-lg mx-auto"
+              className="text-stone-600 text-sm sm:text-base md:text-lg leading-relaxed mb-7 sm:mb-10 max-w-lg mx-auto"
             >
               Projelerim bir galerinin duvarlarında sergileniyor. İçeride özgürce dolaş;
               bir eserin önünde durup incelediğinde hikayesi, canlı önizlemesi ve kaynak
@@ -104,7 +108,7 @@ export function IntroOverlay({
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.5 }}
-              className="flex flex-wrap items-center justify-center gap-3 mb-12"
+              className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-8 sm:mb-12"
             >
               {(isTouch
                 ? [
@@ -168,6 +172,7 @@ export function IntroOverlay({
             >
               En iyi deneyim için masaüstü önerilir
             </motion.p>
+          </div>
           </div>
         </motion.div>
       )}

@@ -27,7 +27,7 @@ function WebGLFallback() {
     <div className="fixed inset-0 flex items-center justify-center bg-[#faf8f2] p-8">
       <div className="max-w-md text-center">
         <h1 className="text-3xl font-display font-black text-stone-900 mb-3">
-          MELİK<span className="text-gold-600 italic">.AI</span>
+          MELİK <span className="text-gold-600 italic font-light">BAĞRIYANIK</span>
         </h1>
         <p className="text-stone-600 mb-6">
           Bu galeri WebGL gerektiriyor ancak tarayıcın desteklemiyor görünüyor. Yine de bana
@@ -182,7 +182,10 @@ export default function GalleryExperience() {
       <Canvas
         shadows={!isTouch}
         dpr={isTouch ? [1, 1.5] : [1, 1.75]}
-        gl={{ antialias: true, powerPreference: 'high-performance' }}
+        // Kapak ekranında sahneyi sürekli çizme (mobilde takılmanın ana kaynağı);
+        // varlıklar yine arka planda yüklenir, yürüyüşe geçince döngü açılır.
+        frameloop={phase === 'intro' ? 'demand' : 'always'}
+        gl={{ antialias: !isTouch, powerPreference: 'high-performance' }}
         camera={{ fov: 70, near: 0.1, far: 90 }}
         fallback={<WebGLFallback />}
       >

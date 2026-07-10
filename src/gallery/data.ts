@@ -616,7 +616,7 @@ export interface RoomInfo {
 
 export const ROOMS_INFO: RoomInfo[] = [
   { name: 'Giriş Holü', blurb: 'Sergi planı · Ziyaretçi defteri', rect: [-4, 10, 4, 20] },
-  { name: 'Ana Salon', blurb: 'Sanatçı portresi · Anıt · İletişim', rect: [-7, -6, 7, 10] },
+  { name: 'Ana Salon', blurb: 'Sanatçı portresi · Hakkımda · İletişim', rect: [-7, -6, 7, 10] },
   { name: 'Kariyer Kanadı', blurb: 'İş deneyimi ve eğitim panoları', rect: [-19, -6, -7, 10] },
   { name: 'Proje Galerisi', blurb: 'Kişisel ve kurumsal projeler', rect: [7, -6, 19, 10] },
   { name: 'Teknoloji Salonu', blurb: 'Yetenek heykelleri', rect: [-7, -20, 7, -6] },

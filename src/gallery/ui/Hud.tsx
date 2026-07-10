@@ -23,10 +23,13 @@ export function Hud({
   if (!visible) return null;
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-30 select-none">
-      {/* Logo */}
+    // z-40: TouchControls'un tam ekran dokunma katmanının (z-30) üzerinde kalmalı —
+    // aksi halde mobildeki müzik/SFX butonları dokunuş alamıyor. Katman pointer-events-none
+    // olduğundan buton dışı dokunuşlar alttaki bakış katmanına geçer.
+    <div className="pointer-events-none fixed inset-0 z-40 select-none">
+      {/* İsim */}
       <div className="absolute top-5 left-6 text-lg font-display font-black tracking-tighter text-stone-800/90">
-        MELİK<span className="text-gold-600 italic">.AI</span>
+        MELİK <span className="text-gold-600 italic font-light">BAĞRIYANIK</span>
       </div>
 
       {/* Duraklatma + müzik ipuçları / mobil ses düğmeleri */}
